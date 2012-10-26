@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget32"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/report_total"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="您目前还没有报告生成\n保存报告后会显示报告数量"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/widget34"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="您当前已经连接的网络是："
+        android:textColor="@color/black" />
+
+    <TableRow
+        android:id="@+id/widget43"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/widget45"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="WIFI"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="无"
+            android:textColor="@color/black" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/widget44"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/widget46"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="GPRS"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/widget48"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="应用已经为你自动开启"
+            android:textColor="@color/black" />
+    </TableRow>
+
+    <TextView
+        android:id="@+id/widget51"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="如果WIFI为“无”，说明你未连接无线网络。\n请点击下方的“设置”按钮进入选择合适的wlan进行连接 "/>
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="CMCC"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/to_cmcc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进入"
+            android:visibility="invisible" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="CHINANET"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/to_chinanet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="进入" />
+
+    </TableRow>
+        <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/wlan_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置" />
+
+    </TableRow>
+
+</LinearLayout>

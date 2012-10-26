@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="本页面旨在测试浏览器的登陆可行性,请将账号密码填入,完成“上线——下线”操作后点击“测试完成”"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    
+                <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="账号"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <EditText
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="139123456789" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="复制到粘贴板"
+            android:textSize="10sp" />
+
+    </TableRow>
+    
+                
+                
+                
+                                <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="密码"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <EditText
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="123456789" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="复制到粘贴板" 
+            android:textSize="10sp"/>
+
+    </TableRow>
+
+                                <WebView
+                                    android:id="@+id/webView1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="261dp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical" >
+
+                                    <Button
+                                        android:id="@+id/complete"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="生成报告" />
+
+                                </LinearLayout>
+
+</LinearLayout>
