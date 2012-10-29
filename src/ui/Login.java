@@ -31,7 +31,7 @@ public class Login extends Activity{
 	
 	
 	
-	
+	 
 	public void init(){
 		id1=(Button)findViewById(R.id.id1);
 		id2=(Button)findViewById(R.id.id2);
