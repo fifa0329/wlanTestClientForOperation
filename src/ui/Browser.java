@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,11 +39,7 @@ public class Browser extends Activity {
     }
     
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+
     
     
     public void init(){
@@ -156,5 +153,32 @@ public class Browser extends Activity {
 	    } 
 	    
 	}
+	
+	
+	protected void onStart() { 
+		 
+		super.onStart(); 
+		 
+		MyApplication mApp = (MyApplication)getApplication(); 
+		 
+		if (mApp.isExit()) { 
+		 
+		finish(); 
+		 
+		} 
+		 
+		}
+	
+	
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			
+		}
+		return true;
+		
+	}
+	
     
 }

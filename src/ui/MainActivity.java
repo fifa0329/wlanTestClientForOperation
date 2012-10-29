@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,137 +46,138 @@ public class MainActivity extends Activity {
 	Button to_cmcc;
 	Button to_chinanet;
 	Button wlansetting;
+	Button exit;
 	TextView ssid;
 	ConnectivityManager mConnectivityManager;
 	TextView report_total;
 	MyApplication mApp;
-	private static final int MESSAGE_FAILED		= 0;
-	private static final int MESSAGE_FINISH		= 1;
-	private static final int MESSAGE_LENGTH		= 2;
-	private static final int MESSAGE_PROGRESS	= 3;
-	private static final int MESSAGE_UNZIP		= 4;
-	private static final int MESSAGE_UPDATE		= 5;
-	private static final int MESSAGE_NO_UPDATE	= 6;
+	private static final int MESSAGE_FAILED = 0;
+	private static final int MESSAGE_FINISH = 1;
+	private static final int MESSAGE_LENGTH = 2;
+	private static final int MESSAGE_PROGRESS = 3;
+	private static final int MESSAGE_UNZIP = 4;
+	private static final int MESSAGE_UPDATE = 5;
+	private static final int MESSAGE_NO_UPDATE = 6;
 	private Handler progressHandler;
 	private ProgressDialog progress;
 	private Context context;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    	init();
-        
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		init();
 
-    }
-    
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
-    
-    
-    public void init(){
-    	mApp = (MyApplication)getApplication();
-    	to_cmcc=(Button)findViewById(R.id.to_cmcc);
-        to_cmcc.setOnClickListener(new OnClickListener() {
-		
-		public void onClick(View arg0) {
-			mApp.setCarrier(MyApplication.CMCC);
-			Intent intent=new Intent();
-			intent.setClass(MainActivity.this, Login.class);
-			startActivity(intent);
-			
-		}
-	});
-    to_chinanet=(Button)findViewById(R.id.to_chinanet);
-    to_chinanet.setOnClickListener(new OnClickListener() {
-		
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			mApp.setCarrier(MyApplication.CHINANET);
-			Intent intent=new Intent();
-			intent.setClass(MainActivity.this, Login.class);
-			startActivity(intent);
-			
-		}
-	});
-    wlansetting=(Button)findViewById(R.id.wlan_setting);
-    wlansetting.setOnClickListener(new OnClickListener() {
-		
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-//    		mWifiAdmin.connect();
-//    		startActivityForResult(new Intent(
-//    				android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
-    		startActivity(new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS));
-//			gprsEnable(false);
-		}
-	});
-    ssid=(TextView)findViewById(R.id.ssid);
-    report_total=(TextView)findViewById(R.id.report_total);
-    
-    
-    
-    
-	File filetotal=new File("mnt/sdcard/wlantest/report/");
-	
-	if(filetotal.listFiles().length!=0)
-	{
-		report_total.setText("当前你已经保存"+filetotal.listFiles().length+"条报告"+"\n"+"上传请点我");
-		report_total.setOnClickListener(new OnClickListener() {
-			
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+	public void init() {
+		mApp = (MyApplication) getApplication();
+		mApp.setExit(false);
+		to_cmcc = (Button) findViewById(R.id.to_cmcc);
+		to_cmcc.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View arg0) {
+				mApp.setCarrier(MyApplication.CMCC);
+				Intent intent = new Intent();
+				intent.setClass(MainActivity.this, Login.class);
+				startActivity(intent);
+
+			}
+		});
+		to_chinanet = (Button) findViewById(R.id.to_chinanet);
+		to_chinanet.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mApp.setCarrier(MyApplication.CHINANET);
+				Intent intent = new Intent();
+				intent.setClass(MainActivity.this, Login.class);
+				startActivity(intent);
+
+			}
+		});
+		wlansetting = (Button) findViewById(R.id.wlan_setting);
+		wlansetting.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				// mWifiAdmin.connect();
+				// startActivityForResult(new Intent(
+				// android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
+				startActivity(new Intent(
+						android.provider.Settings.ACTION_WIFI_SETTINGS));
+				// gprsEnable(false);
+			}
+		});
+		ssid = (TextView) findViewById(R.id.ssid);
+		report_total = (TextView) findViewById(R.id.report_total);
+
+		Button exit = (Button) findViewById(R.id.exit);
+		exit.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				final Builder builder=new AlertDialog.Builder(MainActivity.this);
-				builder.setTitle("上传报告");
-				builder.setMessage("是否进行上传？");
-				builder.setPositiveButton("确定", new DialogInterface.OnClickListener() 
-				{
-					public void onClick(DialogInterface dialog, int which)
-					{
-						//进度对话框的秒显用法
-						uploadLog();
-					}
-	
-				});
-				builder.setNegativeButton("取消",new DialogInterface.OnClickListener() 
-				{
-					public void onClick(DialogInterface dialog, int which)
-					{
-						return;
-					}
-				});
-				builder.create().show();;  //创建对话框
+				MyApplication mApp = (MyApplication) getApplication();
+
+				mApp.setExit(true);
+
+				finish();
+			}
+		});
+
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
+				+ "/report/").mkdirs();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
+				+ "/current/").mkdirs();
+
+		File filetotal = new File("mnt/sdcard/wlantest/report/");
+
+		if (filetotal.listFiles().length != 0) {
+			report_total.setText("当前你已经保存" + filetotal.listFiles().length
+					+ "条报告" + "\n" + "上传请点我");
+			report_total.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// TODO Auto-generated method stub
+					final Builder builder = new AlertDialog.Builder(
+							MainActivity.this);
+					builder.setTitle("上传报告");
+					builder.setMessage("是否进行上传？");
+					builder.setPositiveButton("确定",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// 进度对话框的秒显用法
+									uploadLog();
+								}
+
+							});
+					builder.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									return;
+								}
+							});
+					builder.create().show();
+					; // 创建对话框
 				}
 			});
 		}
-    
 
-    
-    
+	}
 
-    }
-
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-//    以下模块用于管理gprs的自动开启
+	// 以下模块用于管理gprs的自动开启
 	public final void setMobileNetEnable() {
-		
+
 		mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		Object[] arg = null;
 		try {
@@ -183,19 +185,17 @@ public class MainActivity extends Activity {
 					arg);
 			if (!isMobileDataEnable) {
 				invokeBooleanArgMethod("setMobileDataEnabled", true);
-				
+
 			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
-		
+
 	}
 
-	
-	
 	public final void setMobileNetUnable() {
-		 mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		Object[] arg = null;
 		try {
 			boolean isMobileDataEnable = invokeMethod("getMobileDataEnabled",
@@ -242,112 +242,131 @@ public class MainActivity extends Activity {
 
 		return method.invoke(mConnectivityManager, value);
 	}
-	
-	
-//	GPRS自动开启结束
-	
-	
-	
-//    用来监听wifi的变化，改变标题栏的报告数量	
-    public void onResume()
-    {
-    	Log.v("test", "这里有resume");
-    	super.onResume();
-        WifiManager mWifiManager = (WifiManager) getSystemService(WIFI_SERVICE); 
-        WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-        ssid=(TextView)findViewById(R.id.ssid);
-    	ssid.setText(mWifiInfo.getSSID());
-    	//setMobileNetEnable();
-    	new File(Environment.getExternalStorageDirectory() + "/wlantest/"+"/report/").mkdirs();
-    	new File(Environment.getExternalStorageDirectory() + "/wlantest/"+"/current/").mkdirs();
-        
-    	
-//    	下述代码用于根据条件判断按钮的可选择性
-//    	这里要注意，有个BUG，没有开启WIFI的话，是会出错的,因此增加了try，catch版块
-    	try{
-    	if (mWifiInfo.getSSID().equals((String)"ENICE-1B3F-AP1"))
-        {
-            to_cmcc.setVisibility(View.VISIBLE); 
-        }
-    	}
-    	catch (Exception e) {
-			// TODO: handle exception
-		}//SHOW the button
-    	
-    	File filetotal=new File("mnt/sdcard/wlantest/report/");
-    	if(filetotal.listFiles().length!=0)
-    	{
-    		report_total.setText("当前你已经保存"+filetotal.listFiles().length+"条报告"+"\n"+"上传请点我");
-    	}
-    	
 
-    	}
-    
-    
-    
-    
-    
+	// GPRS自动开启结束
+
+	
+	
+	
+	
+	
+	// 用来监听wifi的变化，改变标题栏的报告数量
+	public void onResume() {
+		Log.v("test", "这里有resume");
+		super.onResume();
+		WifiManager mWifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+		ssid = (TextView) findViewById(R.id.ssid);
+		ssid.setText(mWifiInfo.getSSID());
+		// setMobileNetEnable();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
+				+ "/report/").mkdirs();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
+				+ "/current/").mkdirs();
+
+		// 下述代码用于根据条件判断按钮的可选择性
+		// 这里要注意，有个BUG，没有开启WIFI的话，是会出错的,因此增加了try，catch版块
+		try {
+			if (mWifiInfo.getSSID().equals((String) "CMCC")) {
+				to_cmcc.setVisibility(View.VISIBLE);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}// SHOW the button
+
+		File filetotal = new File("mnt/sdcard/wlantest/report/");
+		if (filetotal.listFiles().length != 0) {
+			report_total.setText("当前你已经保存" + filetotal.listFiles().length
+					+ "条报告" + "\n" + "上传请点我");
+		}
+
+	}
+
 	public void uploadLog() {
-	/*
-		progress = new ProgressDialog(context);
-		progress.setTitle("上传日志");
-		progress.setMessage("正在上传，请等待...");
-		progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		progress.show();
-		*/
+		/*
+		 * progress = new ProgressDialog(context); progress.setTitle("上传日志");
+		 * progress.setMessage("正在上传，请等待...");
+		 * progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		 * progress.show();
+		 */
 		new Thread(new Runnable() {
+			private int i;
+
 			@Override
 			public void run() {
-				
-					HttpClient client = new DefaultHttpClient();
-					HttpPost post = new HttpPost(UPLOAD_LOG_URL);
-					InputStreamEntity reqEntity;
-					try {
-						reqEntity = new InputStreamEntity(
-								new FileInputStream(Environment.getExternalStorageDirectory()
-										+ "/wlantest/" +"/report/"+ "1351490719879" + ".zip"), -1);
-						reqEntity.setContentType("application/x-zip-compressed");
-						reqEntity.setChunked(true);
-						post.setEntity(reqEntity);
-						//post.setHeader("Content-Length", ""+new File(Environment.getExternalStorageDirectory()
-						//		+ "/wlantest/" +"/report/"+ "1351490719879" + ".zip").length());
-						HttpResponse response = client.execute(post);
-						Log.v("test", ""+response.getStatusLine().toString());
-						Log.v("test", ""+response.getStatusLine().getStatusCode());
-						if (response.getStatusLine().getStatusCode() == 200) {
-							
-						}
-						
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClientProtocolException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
+				HttpClient client = new DefaultHttpClient();
+				HttpPost post = new HttpPost(UPLOAD_LOG_URL);
+				InputStreamEntity reqEntity;
+				try {
+					File file=new File(Environment.getExternalStorageDirectory()
+							+ "/wlantest/" + "/report/");
+					File[] files=file.listFiles();
+					for(int i=0;i<files.length;i++)
+					{
+						reqEntity = new InputStreamEntity(new FileInputStream(
+								files[i].getCanonicalPath()), -1);
+						Log.v("test", "" + files[i].getCanonicalPath());
+					reqEntity.setContentType("application/x-zip-compressed");
+					reqEntity.setChunked(true);
+					post.setEntity(reqEntity);
+					HttpResponse response = client.execute(post);
+					Log.v("test", "" + response.getStatusLine().toString());
+					Log.v("test", "" + response.getStatusLine().getStatusCode());
+					if (response.getStatusLine().getStatusCode() == 200) {
+//						Toast.makeText(MainActivity.this, "第"+(i+1)+"条报告已经上传成功", Toast.LENGTH_SHORT).show();
+//这条出错，不能再新线程里面动UI
+					}
+					
 					}
 
-						/*
-						sendMesssage(MESSAGE_FINISH, 0);
-					} else {
-						sendMesssage(MESSAGE_FAILED, 0);
-					}
-				} catch (IOException e) {
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
-					sendMesssage(MESSAGE_FAILED, 0);
+				} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				*/
-			
-		}
-	}).start();
+
+				/*
+				 * sendMesssage(MESSAGE_FINISH, 0); } else {
+				 * sendMesssage(MESSAGE_FAILED, 0); } } catch (IOException e) {
+				 * e.printStackTrace(); sendMesssage(MESSAGE_FAILED, 0); }
+				 */
+
+			}
+		}).start();
 	}
-	
-	public void sendMesssage(int what, int value) {
-        Message message = new Message();
-        message.what = what;
-        message.arg1 = value;
-        progressHandler.sendMessage(message);
-    }
+
+
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			MyApplication mApp = (MyApplication) getApplication();
+
+			mApp.setExit(true);
+
+			finish();
+		}
+		return true;
+
+	}
+
+	protected void onStart() {
+
+		super.onStart();
+
+		MyApplication mApp = (MyApplication) getApplication();
+
+		if (mApp.isExit()) {
+
+			finish();
+
+		}
+
+	}
 }

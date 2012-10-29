@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -22,7 +23,6 @@ public class LoginProcess extends Activity{
 	Button logout;
 	Button browser;
 	StringBuilder builder=new StringBuilder();
-	String FLAG;
 	
 	
 	
@@ -42,6 +42,9 @@ public class LoginProcess extends Activity{
 	report=(Button) findViewById(R.id.report);
 	browser=(Button) findViewById(R.id.browser);
 	logout=(Button) findViewById(R.id.logout);
+	builder.append("正在登录中。。。"+"\n");
+	show.setText(builder.toString());
+	/*
 	FLAG = getIntent().getStringExtra("FLAG");
 	int a=Integer.parseInt(FLAG);
 	switch(a){
@@ -67,7 +70,7 @@ public class LoginProcess extends Activity{
 		show.setText(builder);
 		break;
 	}
-	
+	*/
 	new Thread(login_runnable).start();
 	
 	
@@ -101,10 +104,7 @@ public class LoginProcess extends Activity{
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			builder.append("正在下线。。。"+"\n");
-			//builder.append("下线成功");
 			show.setText(builder);
-			report.setVisibility(View.VISIBLE);
-			logout.setVisibility(View.INVISIBLE);
 			new Thread(logout_runnable).start();
 		}
 	});
@@ -136,13 +136,21 @@ public class LoginProcess extends Activity{
 					@Override
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登陆成功", Toast.LENGTH_LONG).show();
+						builder.append("登录成功！"+"\n");
+						builder.append("请进行下线测试！"+"\n");
+						logout.setVisibility(View.VISIBLE);
+						show.setText(builder);
 					}
 				});
 			} else {
 				LoginProcess.this.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						Toast.makeText(LoginProcess.this, "登陆失败", Toast.LENGTH_LONG).show();
+						Toast.makeText(LoginProcess.this, "登录失败", Toast.LENGTH_LONG).show();
+						builder.append("登录失败！"+"\n");
+						builder.append("请进行浏览器测试！"+"\n");
+						browser.setVisibility(View.VISIBLE);
+						show.setText(builder);
 					}
 				});
 			}
@@ -165,6 +173,11 @@ public class LoginProcess extends Activity{
 					@Override
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登出成功", Toast.LENGTH_LONG).show();
+						builder.append("登出成功！"+"\n");
+						builder.append("请生成报告！"+"\n");
+						show.setText(builder.toString());
+						report.setVisibility(View.VISIBLE);
+						logout.setVisibility(View.INVISIBLE);
 					}
 				});
 			} else {
@@ -172,9 +185,38 @@ public class LoginProcess extends Activity{
 					@Override
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登出失败，直接下线", Toast.LENGTH_LONG).show();
+						builder.append("登出失败！"+"\n");
+						builder.append("请生成报告！"+"\n");
+						show.setText(builder.toString());
+						report.setVisibility(View.VISIBLE);
+						logout.setVisibility(View.INVISIBLE);
 					}
 				});
 			}
 		}
 	};
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if(keyCode == KeyEvent.KEYCODE_BACK) {
+			
+		}
+		return true;
+		
+	}
+	
+	
+	protected void onStart() { 
+		 
+		super.onStart(); 
+		 
+		MyApplication mApp = (MyApplication)getApplication(); 
+		 
+		if (mApp.isExit()) { 
+		 
+		finish(); 
+		 
+		} 
+		 
+		}
 }

@@ -32,6 +32,7 @@ public class Logger {
 	public void writeLog(String log) {
 		try {
 			oStream.write(log.getBytes());
+			oStream.write("\n".getBytes());
 			oStream.flush();
 		} catch (Exception e) {
 			e.printStackTrace();

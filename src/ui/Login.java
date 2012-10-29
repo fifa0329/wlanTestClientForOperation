@@ -18,7 +18,6 @@ public class Login extends Activity{
 	EditText account;
 	EditText password;
 	Button login;
-	String FLAG="0";
 	
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,8 +48,6 @@ public class Login extends Activity{
 
 				account.setText("13951832086");
 				password.setText("719930");
-				FLAG="1";
-				
 			}
 		});
 //		具体多账号还可以再使用其他的东西
@@ -73,7 +70,6 @@ public class Login extends Activity{
 				 **/
 				account.setText("13951681329");
 				password.setText("900329");
-				FLAG="2";
 			}
 		});
 		
@@ -87,7 +83,6 @@ public class Login extends Activity{
 				mApp.setPassword(password.getText().toString());
 				Intent intent=new Intent();
 				intent.setClass(Login.this, LoginProcess.class);
-				intent.putExtra("FLAG", FLAG);
 				startActivity(intent);
 				
 			}
@@ -99,5 +94,23 @@ public class Login extends Activity{
 		
 		
 	}
+	
+	
+	
+	protected void onStart() { 
+		 
+		super.onStart(); 
+		 
+		MyApplication mApp = (MyApplication)getApplication(); 
+		 
+		if (mApp.isExit()) { 
+		 
+		finish(); 
+		 
+		} 
+		 
+		}
+	
+
 
 }

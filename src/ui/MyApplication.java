@@ -8,29 +8,23 @@ public static int CMCC = 0;
 public static int CHINANET = 1;
 	
 // 程序退出标记 ,用于一键退出used to one-key exit
-private int reportTotal = 0;
+private static boolean isProgramExit = false; 
+
+public void setExit(boolean exit) { 
+ 
+isProgramExit = exit; 
+ 
+} 
+ 
+public boolean isExit() { 
+ 
+return isProgramExit; 
+ 
+} 
 private int carrier;
 private String user;
 private String password;
 
-public void addTotal() { 
-
-	reportTotal = reportTotal+1; 
-
-} 
-
-public void clearTotal() { 
-
-	reportTotal = 0; 
-
-}
-
-
-public int getTotal() { 
-
-	return reportTotal; 
-
-}
 
 public int getCarrier() {
 	return carrier;

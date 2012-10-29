@@ -41,7 +41,7 @@
             android:id="@+id/ssid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="无"
+            android:text="无"
             android:textColor="@color/black" />
     </TableRow>
 
@@ -56,14 +56,16 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="GPRS"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/widget48"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="应用已经为你自动开启"
-            android:textColor="@color/black" />
+            android:textColor="@color/black" 
+            android:visibility="invisible"/>
     </TableRow>
 
     <TextView
@@ -71,7 +73,7 @@
         android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:text="如果WIFI为“无”，说明你未连接无线网络。\n请点击下方的“设置”按钮进入选择合适的wlan进行连接 "/>
+        android:text="如果WIFI为“无”，说明你未连接无线网络。\n请点击下方的“设置”按钮，\n进入选择合适的wlan进行连接 "/>
 
     <TableRow
         android:id="@+id/tableRow1"
@@ -131,5 +133,12 @@
             android:text="设置" />
 
     </TableRow>
+
+        <Button
+            android:layout_gravity="bottom"
+            android:id="@+id/exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="退出测试客户端" />
 
 </LinearLayout>
