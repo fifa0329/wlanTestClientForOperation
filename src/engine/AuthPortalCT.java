@@ -23,7 +23,6 @@ import org.apache.http.params.HttpProtocolParams;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 public class AuthPortalCT {
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
@@ -129,15 +128,15 @@ public class AuthPortalCT {
 	public boolean login(String user, String password) {
 		this.user = user;
 		this.password = password;
-		Log.i("WLANEngine", "CT Account Location: " + getAccountLocation(user));
+		Logger.getInstance().writeLog("CT Account Location: " + getAccountLocation(user));
 		try {			
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = stream2String(response.getEntity().getContent());
-			Log.v("WLANEngine", "Http Request:\n" + LOGIN_TEST_URL);
-			Log.v("WLANEngine", "HTTP Response:\n" + output);
+			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
+			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
 			if (output.contains(LOGIN_TEST_URL)) {
-				Log.i("WLANEngine", "Already loginned!");
+				Logger.getInstance().writeLog("Already loginned!");
 				return true;
 			}
 			
@@ -145,19 +144,19 @@ public class AuthPortalCT {
 				nextAction = parseAuthenPage(output);
 				response = httpClient.execute(new HttpPost(nextAction));
 				output = stream2String(response.getEntity().getContent());
-				Log.v("WLANEngine", "Http Request:\n" + nextAction);
-				Log.v("WLANEngine", "HTTP Response:\n" + output);
+				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
+				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
 				if (codeMatcher.find()) {
 					int code = Integer.valueOf(codeMatcher.group(1));
 					if (code == 50) {
 						nextAction = parseLogoutURL(output);  // prepare action parameters for logout
-						Log.i("WLANEngine", "Login success!");
+						Logger.getInstance().writeLog("Login success!");
 						return true;
 					}
 				}
 			} else {
-				Log.i("WLANEngine", "Can't get login page!");
+				Logger.getInstance().writeLog("Can't get login page!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,13 +168,13 @@ public class AuthPortalCT {
 		try {
 			HttpResponse response = httpClient.execute(new HttpPost(nextAction));
 			String output = stream2String(response.getEntity().getContent());
-			Log.v("WLANEngine", "Http Request:\n" + nextAction);
-			Log.v("WLANEngine", "HTTP Response:\n" + output);
+			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
+			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
 			if (codeMatcher.find()) {
 				int code = Integer.valueOf(codeMatcher.group(1));
 				if (code == 150) {
-					Log.i("WLANEngine", "Logout success!");
+					Logger.getInstance().writeLog("Logout success!");
 					return true;
 				}
 			}
@@ -194,7 +193,7 @@ public class AuthPortalCT {
 				response = httpClient.execute(new HttpGet("http://118.85.203.210:9010/wlan/WiFiAction.do?nowtime=0&userAccount=" + user + "&validateCode=" + code));
 			}
 			String output = stream2String(response.getEntity().getContent());
-			Log.i("WLANEngine", "getDynamicPassword result: " + output);
+			Logger.getInstance().writeLog("getDynamicPassword result: " + output);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

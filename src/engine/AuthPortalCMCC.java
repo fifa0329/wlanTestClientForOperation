@@ -34,8 +34,6 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.CharArrayBuffer;
 
-import android.util.Log;
-
 public class AuthPortalCMCC {
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
@@ -136,11 +134,11 @@ public class AuthPortalCMCC {
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = stream2String(response.getEntity().getContent());
-			Log.v("WLANEngine", "Http Request:\n" + LOGIN_TEST_URL);
-			Log.v("WLANEngine", "HTTP Response:\n" + output);
+			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
+			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
 			if (output.contains(LOGIN_TEST_SIGNATURE)) {
-				Log.i("WLANEngine", "Already loginned!");
+				Logger.getInstance().writeLog("Already loginned!");
 				return true;
 			}
 			
@@ -149,10 +147,10 @@ public class AuthPortalCMCC {
 				if (nextAction != null) {
 					response = client.execute(new HttpGet(nextAction));
 					output = stream2String(response.getEntity().getContent());
-					Log.v("WLANEngine", "Http Request:\n" + nextAction);
-					Log.v("WLANEngine", "HTTP Response:\n" + output);
+					Logger.getInstance().writeLog("Http Request:\n" + nextAction);
+					Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				} else {
-					Log.i("WLANEngine", "Can't get redirect page!");
+					Logger.getInstance().writeLog("Can't get redirect page!");
 					return false;
 				}
 			}
@@ -161,19 +159,19 @@ public class AuthPortalCMCC {
 				nextAction = parseAuthenPage(output);
 				response = client.execute(new HttpPost(nextAction));
 				output = stream2String(response.getEntity().getContent());
-				Log.v("WLANEngine", "Http Request:\n" + nextAction);
-				Log.v("WLANEngine", "HTTP Response:\n" + output);
+				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
+				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
 				if (codeMatcher.find()) {
 					int code = parseCode(codeMatcher.group(1));
 					if (code == 0) {
 						nextAction = parseAuthenPage(output);  // prepare action parameters for logout
-						Log.i("WLANEngine", "Login success!");
+						Logger.getInstance().writeLog("Login success!");
 						return true;
 					}
 				}
 			} else {
-				Log.i("WLANEngine", "Can't get login page!");
+				Logger.getInstance().writeLog("Can't get login page!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,13 +184,13 @@ public class AuthPortalCMCC {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(new HttpPost(nextAction));
 			String output = stream2String(response.getEntity().getContent());
-			Log.v("WLANEngine", "Http Request:\n" + nextAction);
-			Log.v("WLANEngine", "HTTP Response:\n" + output);
+			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
+			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
 			if (codeMatcher.find()) {
 				int code = parseCode(codeMatcher.group(1));
 				if (code == 0) {
-					Log.i("WLANEngine", "Logout success!");
+					Logger.getInstance().writeLog("Logout success!");
 					return true;
 				}
 			}
