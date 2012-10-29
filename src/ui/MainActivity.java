@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
         to_cmcc.setOnClickListener(new OnClickListener() {
 		
 		public void onClick(View arg0) {
-			// TODO Auto-generated method stub
+			mApp.setCarrier(MyApplication.CMCC);
 			Intent intent=new Intent();
 			intent.setClass(MainActivity.this, Login.class);
 			startActivity(intent);
@@ -64,6 +64,7 @@ public class MainActivity extends Activity {
 		
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			mApp.setCarrier(MyApplication.CHINANET);
 			Intent intent=new Intent();
 			intent.setClass(MainActivity.this, Login.class);
 			startActivity(intent);

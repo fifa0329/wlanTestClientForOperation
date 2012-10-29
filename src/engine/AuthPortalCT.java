@@ -4,31 +4,37 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 public class AuthPortalCT {
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
-	private static String LOGIN_REQUEST_SIGNATURE = "http://wlan.ct10000.com";
+	private static String LOGIN_REQUEST_SIGNATURE = "<LoginURL>";
 	private static String LOGIN_URL_PATTERN =  "<LoginURL>(.*?)</LoginURL>";
 	private static String LOGOUT_URL_PATTERN =  "<LogoffURL>(.*?)</LogoffURL>";
 	private static String LOGIN_RESPONSE_CODE_PATTERN = "<ResponseCode>(.*?)</ResponseCode>";
 	private static String LOGOUT_RESPONSE_CODE_PATTERN = "<ResponseCode>(.*?)</ResponseCode>";
 	
 	private static AuthPortalCT instance = null;
+	private HttpClient httpClient = null;
 	private String nextAction = null;
 	private String user = "";
 	private String password = "";
@@ -38,6 +44,9 @@ public class AuthPortalCT {
 	private Pattern logoutCodePattern = null;
 	
 	private AuthPortalCT() {
+		final HttpParams params = new BasicHttpParams();
+		HttpProtocolParams.setUserAgent(params, "CDMA+WLAN");
+		httpClient = new DefaultHttpClient(params);
 		loginUrlPattern = Pattern.compile(LOGIN_URL_PATTERN);
 		logoutUrlPattern = Pattern.compile(LOGOUT_URL_PATTERN);
 		loginCodePattern = Pattern.compile(LOGIN_RESPONSE_CODE_PATTERN);
@@ -66,17 +75,26 @@ public class AuthPortalCT {
 		if (inputMatcher.find()) {
 			StringBuffer action = new StringBuffer();
 			action.append(inputMatcher.group(1));
-			action.append("?button=Login&FNAME=0&OriginatingServer=http://www.akazam.com");
+			if (action.toString().contains("?")) {
+				action.append("&");
+			} else {
+				action.append("?");
+			}
+			action.append("button=Login&FNAME=0&OriginatingServer=http://www.akazam.com");
 			String province = getAccountLocation(user);
 			action.append("&UserName=").append(user).append("@").append(province);
 			action.append("&province=").append(province);
 			action.append("&Password=").append(password);
-			if (user.toLowerCase().startsWith("CH")) {
+			if (user.toUpperCase().startsWith("CH")) {
 				action.append("&UserType=1&isChCardUser=true&isWCardUser=false");
-			} else if (user.toLowerCase().startsWith("W")) {
+			} else if (user.toUpperCase().startsWith("W")) {
 				action.append("&UserType=1&isChCardUser=false&isWCardUser=true");
 			} else {
-				action.append("&UserType=2");
+				if (Pattern.compile("(18[09]|13[35])\\d{8}").matcher(user).find()) {
+					action.append("&UserType=2");
+				} else {
+					action.append("&UserType=3");
+				}
 			}
 			return action.toString();
 		}
@@ -112,13 +130,11 @@ public class AuthPortalCT {
 		this.user = user;
 		this.password = password;
 		Log.i("WLANEngine", "CT Account Location: " + getAccountLocation(user));
-		try {
-			final HttpParams params = new BasicHttpParams();
-			HttpProtocolParams.setUserAgent(params, "CDMA+WLAN");
-			HttpClient client = new DefaultHttpClient(params);
-			
-			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
+		try {			
+			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = stream2String(response.getEntity().getContent());
+			Log.v("WLANEngine", "Http Request:\n" + LOGIN_TEST_URL);
+			Log.v("WLANEngine", "HTTP Response:\n" + output);
 			
 			if (output.contains(LOGIN_TEST_URL)) {
 				Log.i("WLANEngine", "Already loginned!");
@@ -127,8 +143,10 @@ public class AuthPortalCT {
 			
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
 				nextAction = parseAuthenPage(output);
-				response = client.execute(new HttpPost(nextAction));
+				response = httpClient.execute(new HttpPost(nextAction));
 				output = stream2String(response.getEntity().getContent());
+				Log.v("WLANEngine", "Http Request:\n" + nextAction);
+				Log.v("WLANEngine", "HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
 				if (codeMatcher.find()) {
 					int code = Integer.valueOf(codeMatcher.group(1));
@@ -149,9 +167,10 @@ public class AuthPortalCT {
 	
 	public boolean logout() {
 		try {
-			HttpClient client = new DefaultHttpClient();
-			HttpResponse response = client.execute(new HttpPost(nextAction));
+			HttpResponse response = httpClient.execute(new HttpPost(nextAction));
 			String output = stream2String(response.getEntity().getContent());
+			Log.v("WLANEngine", "Http Request:\n" + nextAction);
+			Log.v("WLANEngine", "HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
 			if (codeMatcher.find()) {
 				int code = Integer.valueOf(codeMatcher.group(1));
@@ -166,15 +185,39 @@ public class AuthPortalCT {
 		return false;
 	}
 	
-	public void getDynamicPassword(String user) {
+	public boolean getDynamicPassword(String user, String code) {
 		try {
-			HttpClient client = new DefaultHttpClient();
-			HttpResponse response = client.execute(new HttpGet("https://wlan.ct10000.com/getPassword.jsp?command=getpassword&phonenumber=" + user + "@" + getAccountLocation(user)));
+			HttpResponse response = null;
+			if (Pattern.compile("(18[09]|13[35])\\d{8}").matcher(user).find()) {
+				response = httpClient.execute(new HttpGet("https://wlan.ct10000.com/getPassword.jsp?command=getpassword&phonenumber=" + user + "@" + getAccountLocation(user)));
+			} else {
+				response = httpClient.execute(new HttpGet("http://118.85.203.210:9010/wlan/WiFiAction.do?nowtime=0&userAccount=" + user + "&validateCode=" + code));
+			}
 			String output = stream2String(response.getEntity().getContent());
 			Log.i("WLANEngine", "getDynamicPassword result: " + output);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
+	}
+	
+	public Bitmap getVerifyCodeImage() {
+		try {
+	        URL url = new URL("http://118.85.203.210:9010/wlan/img_code.jpg");
+	        HttpGet httpRequest = new HttpGet(url.toURI());
+	
+	        HttpResponse response = (HttpResponse) httpClient.execute(httpRequest);
+	        HttpEntity entity = response.getEntity();
+	        BufferedHttpEntity b_entity = new BufferedHttpEntity(entity);
+	        InputStream input = b_entity.getContent();
+	
+	        Bitmap bitmap = BitmapFactory.decodeStream(input);
+	        return bitmap;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		return null;
 	}
 	
 	@SuppressWarnings("serial")

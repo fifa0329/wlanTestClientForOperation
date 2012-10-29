@@ -2,13 +2,19 @@ package ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.testclient.R;
+
+import engine.AuthPortalCMCC;
+import engine.AuthPortalCT;
 
 public class LoginProcess extends Activity{
 	TextView show;
@@ -61,7 +67,8 @@ public class LoginProcess extends Activity{
 		show.setText(builder);
 		break;
 	}
-
+	
+	new Thread(login_runnable).start();
 	
 	
 	report.setOnClickListener(new OnClickListener() {
@@ -94,11 +101,11 @@ public class LoginProcess extends Activity{
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			builder.append("正在下线。。。"+"\n");
-			builder.append("下线成功");
+			//builder.append("下线成功");
 			show.setText(builder);
 			report.setVisibility(View.VISIBLE);
 			logout.setVisibility(View.INVISIBLE);
-			
+			new Thread(logout_runnable).start();
 		}
 	});
 	
@@ -110,4 +117,64 @@ public class LoginProcess extends Activity{
 	
 	
 	}
+	
+	private Runnable login_runnable = new Runnable() {
+		@Override
+		public void run() {
+			boolean result = false;
+			MyApplication mApp = (MyApplication)getApplication();
+			int carrier = mApp.getCarrier();
+			String user = mApp.getUser();
+			String password = mApp.getPassword();
+			if (carrier == MyApplication.CMCC) {
+				result = AuthPortalCMCC.getInstance().login(user, password);
+			} else if (carrier == MyApplication.CHINANET) {
+				result = AuthPortalCT.getInstance().login(user, password);
+			}
+			if (result) {
+				LoginProcess.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(LoginProcess.this, "登陆成功", Toast.LENGTH_LONG).show();
+					}
+				});
+			} else {
+				LoginProcess.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(LoginProcess.this, "登陆失败", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		}
+	};
+	
+	private Runnable logout_runnable = new Runnable() {
+		@Override
+		public void run() {
+			boolean result = false;
+			MyApplication mApp = (MyApplication)getApplication();
+			int carrier = mApp.getCarrier();
+			if (carrier == MyApplication.CMCC) {
+				result = AuthPortalCMCC.getInstance().logout();
+			} else if (carrier == MyApplication.CHINANET) {
+				result = AuthPortalCT.getInstance().logout();
+			}
+			if (result) {
+				LoginProcess.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(LoginProcess.this, "登出成功", Toast.LENGTH_LONG).show();
+					}
+				});
+			} else {
+				LoginProcess.this.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(LoginProcess.this, "登出失败，直接下线", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		}
+	};
 }

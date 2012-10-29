@@ -1,4 +1,5 @@
 package engine;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -135,6 +136,8 @@ public class AuthPortalCMCC {
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = stream2String(response.getEntity().getContent());
+			Log.v("WLANEngine", "Http Request:\n" + LOGIN_TEST_URL);
+			Log.v("WLANEngine", "HTTP Response:\n" + output);
 			
 			if (output.contains(LOGIN_TEST_SIGNATURE)) {
 				Log.i("WLANEngine", "Already loginned!");
@@ -146,6 +149,8 @@ public class AuthPortalCMCC {
 				if (nextAction != null) {
 					response = client.execute(new HttpGet(nextAction));
 					output = stream2String(response.getEntity().getContent());
+					Log.v("WLANEngine", "Http Request:\n" + nextAction);
+					Log.v("WLANEngine", "HTTP Response:\n" + output);
 				} else {
 					Log.i("WLANEngine", "Can't get redirect page!");
 					return false;
@@ -156,6 +161,8 @@ public class AuthPortalCMCC {
 				nextAction = parseAuthenPage(output);
 				response = client.execute(new HttpPost(nextAction));
 				output = stream2String(response.getEntity().getContent());
+				Log.v("WLANEngine", "Http Request:\n" + nextAction);
+				Log.v("WLANEngine", "HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
 				if (codeMatcher.find()) {
 					int code = parseCode(codeMatcher.group(1));
@@ -179,6 +186,8 @@ public class AuthPortalCMCC {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(new HttpPost(nextAction));
 			String output = stream2String(response.getEntity().getContent());
+			Log.v("WLANEngine", "Http Request:\n" + nextAction);
+			Log.v("WLANEngine", "HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
 			if (codeMatcher.find()) {
 				int code = parseCode(codeMatcher.group(1));
