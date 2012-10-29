@@ -9,7 +9,7 @@ import java.io.RandomAccessFile;
 import android.os.Environment;
 
 public class MyIO {
-	String FILE_NAME = "/crazyit.txt";
+	String FILE_NAME = "/informations.txt";
 	
 	
 	public MyIO(String name) {

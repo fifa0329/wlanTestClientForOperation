@@ -83,6 +83,11 @@ public class WifiAdmin {
 
 	/**
 	 * 得到扫描结果
+	 * public String	BSSID	The address of the access point.
+	 * public String	SSID	The network name.
+	 * public String	capabilities	Describes the authentication, key management, and encryption schemes supported by the access point.
+	 * public int	frequency	The frequency in MHz of the channel over which the client is communicating with the access point.
+	 * public int	level	The detected signal level in dBm.
 	 */
 	public String getScanResult() {
 		// 每次点击扫描之前清空上一次的扫描结果
@@ -96,12 +101,12 @@ public class WifiAdmin {
 			for (int i = 0; i < listResult.size(); i++) {
 				mScanResult = listResult.get(i);
 				mStringBuffer = mStringBuffer.append("NO.").append(i + 1)
-						.append(" :").append(mScanResult.SSID).append("->")
-						.append(mScanResult.BSSID).append("->")
-						.append(mScanResult.capabilities).append("->")
-						.append(mScanResult.frequency).append("->")
-						.append(mScanResult.level).append("->")
-						.append(mScanResult.describeContents()).append("\n\n");
+						.append(" :").append("\n").append("SSID:").append(mScanResult.SSID).append("\n")
+						.append("BSSID:").append(mScanResult.BSSID).append("\n")
+						.append("capabilities:").append(mScanResult.capabilities).append("\n")
+						.append("frequency:").append(mScanResult.frequency).append("MHz").append("\n")
+						.append("level:").append(mScanResult.level).append("dBm").append("\n")
+						.append("describeContents:").append(mScanResult.describeContents()).append("\n\n");
 			}
 		}
 		Log.i(TAG, mStringBuffer.toString());

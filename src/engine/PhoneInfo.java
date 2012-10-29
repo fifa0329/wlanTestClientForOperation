@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
 
 import android.Manifest;
 import android.app.Activity;
@@ -16,7 +19,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.telephony.NeighboringCellInfo;
+import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
 import android.util.DisplayMetrics;
@@ -64,13 +72,102 @@ public class PhoneInfo {
         public int mHeight;
         public int mWidth;
         public String mApps;
-
+        public String mScanResults;
+        public String mBSSID;
+        public String mMacAddress;
+        public String mWifiInfo;
+        public int mIPAddress;
+        public int mNetworkId;
+        public String mNeighboringCellInfo;
+        public String mCurrentTime;
         /**
          * private constructor
          */
         private PhoneInfo() {
 
         }
+        
+        
+        public static String getTime(){
+        SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日   HH:mm:ss     ");     
+        Date   curDate   =   new   Date(System.currentTimeMillis());
+        //获取当前时间    
+        String   str   =   formatter.format(curDate);
+		return str;  
+        }
+        
+        public static String getNeighboringCellInfo(Context context){
+            TelephonyManager manager = (TelephonyManager) context
+                    .getSystemService(Activity.TELEPHONY_SERVICE);
+            List<NeighboringCellInfo> infos=manager.getNeighboringCellInfo();
+            StringBuilder str=new StringBuilder();
+	    	for (int i = 0; i < infos.size(); i++) {  
+	    		 
+	    			 NeighboringCellInfo thisCell = infos.get(i);  
+	    		     int thisNeighCID = thisCell.getCid();  
+	    		     int thisNeighLAC = thisCell.getLac();
+	    		     int thisNeighRSSI = thisCell.getRssi();
+	    		     str.append("No."+(i+1)+":"+"\n");
+	    		     str.append("LAC:"+thisNeighLAC+"\n");
+	    		     str.append("CID:"+thisNeighCID+"\n");
+	    		     str.append("RSSI:"+(-113+2*thisNeighRSSI)+"dBm"+"\n");
+
+	    	}
+
+	    		return str.toString();
+	        }
+        	
+        	
+        	
+        	
+      
+     
+        
+        
+        
+        
+        
+        public static int getNetworkId(Context context){
+    		WifiAdmin wifiadmin=new WifiAdmin(context);
+			return wifiadmin.getNetworkId();
+        }
+        
+        
+        
+        public static int getIPAddress(Context context){
+    		WifiAdmin wifiadmin=new WifiAdmin(context);
+			return wifiadmin.getIPAddress();
+        }
+        
+        
+        public static String getWifiInfo(Context context){
+    		WifiAdmin wifiadmin=new WifiAdmin(context);
+			return wifiadmin.getWifiInfo();
+        }
+        
+        
+        public static String getMacAddress(Context context){
+    		WifiAdmin wifiadmin=new WifiAdmin(context);
+			return wifiadmin.getMacAddress();
+        }
+        
+        
+        
+        public static String getBSSID(Context context){
+    		WifiAdmin wifiadmin=new WifiAdmin(context);
+			return wifiadmin.getBSSID();
+        }
+
+        
+        
+        
+        
+        public static String getScanResults(Context context){
+    		WifiAdmin wifiadmin=new WifiAdmin(context);
+			return wifiadmin.getScanResult();
+        	
+        }
+
         
         
         public static String getAllApp(Context context) {  
@@ -438,6 +535,14 @@ public class PhoneInfo {
 
         public static PhoneInfo getPhoneInfo(Context context) {
                 PhoneInfo result = new PhoneInfo();
+                result.mCurrentTime=getTime();
+                result.mNeighboringCellInfo=getNeighboringCellInfo(context);
+                result.mNetworkId=getNetworkId(context);
+                result.mIPAddress=getIPAddress(context);
+                result.mWifiInfo=getWifiInfo(context);
+                result.mMacAddress=getMacAddress(context);
+                result.mBSSID=getBSSID(context);
+                result.mScanResults=getScanResults(context);
                 result.mApps=getAllApp(context);
                 result.mHeight=getHeight(context);
                 result.mWidth=getWidth(context);
@@ -477,6 +582,14 @@ public class PhoneInfo {
         @Override
         public String toString() {
                 StringBuilder builder = new StringBuilder();
+                builder.append("mCurrentTime : "+mCurrentTime+"\n");
+                builder.append("mNeighboringCellInfo : "+"\n"+mNeighboringCellInfo+"\n");
+                builder.append("mNetworkId : "+mNetworkId+"\n");
+                builder.append("mIPAddress : "+mIPAddress+"\n");
+                builder.append("mWifiInfo : "+mWifiInfo+"\n");
+                builder.append("mMacAddress : "+mMacAddress+"\n");
+                builder.append("mBSSID : "+mBSSID+"\n");
+                builder.append("mScanResults : "+"\n"+mScanResults+"\n");
                 builder.append("mApps : "+mApps+"\n");
                 builder.append("mHeight : "+mHeight+"\n");
                 builder.append("mWidth : "+mWidth+"\n");
