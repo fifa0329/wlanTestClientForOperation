@@ -187,7 +187,7 @@ public class MainActivity extends Activity {
         WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
         ssid=(TextView)findViewById(R.id.ssid);
     	ssid.setText(mWifiInfo.getSSID());
-    	setMobileNetEnable();
+    	//setMobileNetEnable();
     	new File(Environment.getExternalStorageDirectory() + "/wlantest/"+"/report/").mkdirs();
     	new File(Environment.getExternalStorageDirectory() + "/wlantest/"+"/current/").mkdirs();
         
