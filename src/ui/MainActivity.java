@@ -17,6 +17,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.example.testclient.R;
 
+import engine.WifiAdmin;
+
 import android.R.string;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiInfo;
@@ -170,6 +172,9 @@ public class MainActivity extends Activity {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// 进度对话框的秒显用法
+									progress = new ProgressDialog(MainActivity.this);  
+									progress.setMessage("请稍候……"); 
+									progress.show();
 									uploadLog();
 								}
 
@@ -266,12 +271,17 @@ public class MainActivity extends Activity {
 	
 	// 用来监听wifi的变化，改变标题栏的报告数量
 	public void onResume() {
-		Log.v("test", "这里有resume");
+		ssid.setText("无");
 		super.onResume();
+		to_cmcc.setVisibility(View.INVISIBLE);
+		to_chinanet.setVisibility(View.INVISIBLE);
 		WifiManager mWifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
 		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+		if(mWifiManager.isWifiEnabled())
+		{
 		ssid = (TextView) findViewById(R.id.ssid);
 		ssid.setText(mWifiInfo.getSSID());
+		}
 		// setMobileNetEnable();
 		new File(Environment.getExternalStorageDirectory() + "/wlantest/report/").mkdirs();
 		new File(Environment.getExternalStorageDirectory() + "/wlantest/current/").mkdirs();
@@ -294,6 +304,17 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}// SHOW the button
+		
+		
+		try {
+			if (mWifiInfo.getSSID().equals((String) "CMCC-EDU")) {
+				to_cmcc.setVisibility(View.VISIBLE);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}// SHOW the button
+		
+		
 
 		File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
 		if (filetotal.listFiles().length != 0) {
@@ -304,17 +325,11 @@ public class MainActivity extends Activity {
 	}
 
 	public void uploadLog() {
-		/*
-		 * progress = new ProgressDialog(context); progress.setTitle("上传日志");
-		 * progress.setMessage("正在上传，请等待...");
-		 * progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		 * progress.show();
-		 */
+		
 		new Thread(new Runnable() {
-			private int i;
-
 			@Override
 			public void run() {
+
 
 				HttpClient client = new DefaultHttpClient();
 				HttpPost post = new HttpPost(UPLOAD_LOG_URL);
@@ -336,11 +351,27 @@ public class MainActivity extends Activity {
 					Log.v("test", "" + response.getStatusLine().toString());
 					Log.v("test", "" + response.getStatusLine().getStatusCode());
 					if (response.getStatusLine().getStatusCode() == 200) {
-//						Toast.makeText(MainActivity.this, "第"+(i+1)+"条报告已经上传成功", Toast.LENGTH_SHORT).show();
-//这条出错，不能再新线程里面动UI
+						MainActivity.this.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(MainActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+								File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
+								if (filetotal.listFiles().length != 0) {
+									report_total.setText("当前你已经保存" + filetotal.listFiles().length
+											+ "条报告" + "\n" + "上传请点我");
+								}
+								else {
+									report_total.setText("您目前还没有报告生成\n保存报告后会显示报告数量");
+									progress.dismiss();
+								}
+
+							}
+						});
 					}
+					files[i].delete();
 					
 					}
+					
 
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

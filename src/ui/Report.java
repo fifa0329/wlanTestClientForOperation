@@ -25,7 +25,7 @@ import android.widget.EditText;
 
 public class Report extends Activity {
     Button save;
-	
+    ProgressDialog progressdialog;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,40 +57,49 @@ public class Report extends Activity {
 			
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				ProgressDialog progressdialog = new ProgressDialog(Report.this);  
+				progressdialog = new ProgressDialog(Report.this);  
 				progressdialog.setMessage("«Î…‘∫Ú°≠°≠"); 
 				progressdialog.show();
-				Logger.getInstance().stopLogger();
-				String str=engine.PhoneInfo.getPhoneInfo(getApplicationContext()).toString();
-				MyIO myio=new MyIO("/informations.txt");
-				myio.write(str);
-				StringBuilder builder=new StringBuilder();
-				builder.append("name:").append(name.getText()).append("\n");
-				builder.append("address:").append(address.getText()).append("\n");
-				builder.append("comments:").append(comments.getText()).append("\n");
-				myio.write(builder.toString());
-				try{
-				if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-				{
-				File zipfile=new File(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/report/"+System.currentTimeMillis()+".zip");
-				File directory=new File(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/current/");
-				Log.v("CanonicalPath", Environment.getExternalStorageDirectory().getCanonicalPath());
-				Log.v("getAbsolutePath", Environment.getExternalStorageDirectory().getAbsolutePath());
-				Log.v("zipfile.getAbsolutePath", zipfile.getAbsolutePath());
-				Log.v("zipfile.getCanonicalPath()", zipfile.getCanonicalPath());
-				Log.v("zipfile.getCanonicalPath()", Environment.getExternalStorageDirectory()
-						+ "/wlantest/" + "/report/");
-				ZipUtility.zipDirectory(directory, zipfile);
-				DirDel.delAllFile(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/current/");
-				}
-				}
-				catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-				Intent intent=new Intent();
-				intent.setClass(Report.this, MainActivity.class);
-				startActivity(intent);
+				new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						Logger.getInstance().stopLogger();
+						String str=engine.PhoneInfo.getPhoneInfo(getApplicationContext()).toString();
+						MyIO myio=new MyIO("/informations.txt");
+						myio.write(str);
+						StringBuilder builder=new StringBuilder();
+						builder.append("name:").append(name.getText()).append("\n");
+						builder.append("address:").append(address.getText()).append("\n");
+						builder.append("comments:").append(comments.getText()).append("\n");
+						myio.write(builder.toString());
+						try{
+						if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+						{
+						File zipfile=new File(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/report/"+System.currentTimeMillis()+".zip");
+						File directory=new File(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/current/");
+						Log.v("CanonicalPath", Environment.getExternalStorageDirectory().getCanonicalPath());
+						Log.v("getAbsolutePath", Environment.getExternalStorageDirectory().getAbsolutePath());
+						Log.v("zipfile.getAbsolutePath", zipfile.getAbsolutePath());
+						Log.v("zipfile.getCanonicalPath()", zipfile.getCanonicalPath());
+						Log.v("zipfile.getCanonicalPath()", Environment.getExternalStorageDirectory()
+								+ "/wlantest/" + "/report/");
+						ZipUtility.zipDirectory(directory, zipfile);
+						DirDel.delAllFile(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/current/");
+						}
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+							e.printStackTrace();
+						}
+						
+						Intent intent=new Intent();
+						intent.setClass(Report.this, MainActivity.class);
+						startActivity(intent);
+					}
+				}).start();
+
 
 			}
 		});
