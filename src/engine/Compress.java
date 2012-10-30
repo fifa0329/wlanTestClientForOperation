@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.util.zip.ZipEntry; 
 import java.util.zip.ZipOutputStream; 
  
-//这个类没有用到，不过还蛮灵活的 
+//这个类在这个工程里没有用到，不过还蛮灵活的，可以零散的压缩文件夹 
 public class Compress { 
   private static final int BUFFER = 2048; 
  

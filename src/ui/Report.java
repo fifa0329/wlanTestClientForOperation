@@ -6,6 +6,7 @@ import java.io.IOException;
 import com.example.testclient.R;
 
 import engine.DirDel;
+import engine.Logger;
 import engine.MyIO;
 import engine.ZipUtility;
 
@@ -13,6 +14,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -57,6 +60,7 @@ public class Report extends Activity {
 				ProgressDialog progressdialog = new ProgressDialog(Report.this);  
 				progressdialog.setMessage("«Î…‘∫Ú°≠°≠"); 
 				progressdialog.show();
+				Logger.getInstance().stopLogger();
 				String str=engine.PhoneInfo.getPhoneInfo(getApplicationContext()).toString();
 				MyIO myio=new MyIO("/informations.txt");
 				myio.write(str);
@@ -65,15 +69,25 @@ public class Report extends Activity {
 				builder.append("address:").append(address.getText()).append("\n");
 				builder.append("comments:").append(comments.getText()).append("\n");
 				myio.write(builder.toString());
-				File zipfile=new File("mnt/sdcard/wlantest/report/"+System.currentTimeMillis()+".zip");
-				File directory=new File("mnt/sdcard/wlantest/current/");
-				try {
-					ZipUtility.zipDirectory(directory, zipfile);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+				try{
+				if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+				{
+				File zipfile=new File(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/report/"+System.currentTimeMillis()+".zip");
+				File directory=new File(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/current/");
+				Log.v("CanonicalPath", Environment.getExternalStorageDirectory().getCanonicalPath());
+				Log.v("getAbsolutePath", Environment.getExternalStorageDirectory().getAbsolutePath());
+				Log.v("zipfile.getAbsolutePath", zipfile.getAbsolutePath());
+				Log.v("zipfile.getCanonicalPath()", zipfile.getCanonicalPath());
+				Log.v("zipfile.getCanonicalPath()", Environment.getExternalStorageDirectory()
+						+ "/wlantest/" + "/report/");
+				ZipUtility.zipDirectory(directory, zipfile);
+				DirDel.delAllFile(Environment.getExternalStorageDirectory().getCanonicalPath()+"/wlantest/current/");
+				}
+				}
+				catch (Exception e) {
+					// TODO: handle exception
 					e.printStackTrace();
 				}
-				DirDel.delAllFile("mnt/sdcard/wlantest/current/");
 				Intent intent=new Intent();
 				intent.setClass(Report.this, MainActivity.class);
 				startActivity(intent);

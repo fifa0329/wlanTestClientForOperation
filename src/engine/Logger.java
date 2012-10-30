@@ -20,6 +20,9 @@ public class Logger {
 	}
 	
 	private Logger() {
+	}
+	
+	public void startLogger() {
 		File outputFile = new File(outputFileName);
     	try {
 			outputFile.createNewFile();
@@ -34,6 +37,14 @@ public class Logger {
 			oStream.write(log.getBytes());
 			oStream.write("\n".getBytes());
 			oStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void stopLogger() {
+    	try {
+			oStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

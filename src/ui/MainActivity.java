@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
 	Button to_chinanet;
 	Button wlansetting;
 	Button exit;
+	Button to_else;
 	TextView ssid;
 	ConnectivityManager mConnectivityManager;
 	TextView report_total;
@@ -131,13 +132,26 @@ public class MainActivity extends Activity {
 				finish();
 			}
 		});
+		
+		to_else=(Button) findViewById(R.id.to_else);
+		to_else.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent();
+				intent.setClass(MainActivity.this, Browser.class);
+				startActivity(intent);
+				
+			}
+		});
+		
 
-		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
-				+ "/report/").mkdirs();
-		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
-				+ "/current/").mkdirs();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/report/").mkdirs();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/current/").mkdirs();
 
-		File filetotal = new File("mnt/sdcard/wlantest/report/");
+		File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/"
+				+ "/report/");
 
 		if (filetotal.listFiles().length != 0) {
 			report_total.setText("当前你已经保存" + filetotal.listFiles().length
@@ -259,10 +273,8 @@ public class MainActivity extends Activity {
 		ssid = (TextView) findViewById(R.id.ssid);
 		ssid.setText(mWifiInfo.getSSID());
 		// setMobileNetEnable();
-		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
-				+ "/report/").mkdirs();
-		new File(Environment.getExternalStorageDirectory() + "/wlantest/"
-				+ "/current/").mkdirs();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/report/").mkdirs();
+		new File(Environment.getExternalStorageDirectory() + "/wlantest/current/").mkdirs();
 
 		// 下述代码用于根据条件判断按钮的可选择性
 		// 这里要注意，有个BUG，没有开启WIFI的话，是会出错的,因此增加了try，catch版块
@@ -273,8 +285,17 @@ public class MainActivity extends Activity {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}// SHOW the button
+		
+		
+		try {
+			if (mWifiInfo.getSSID().equals((String) "ChinaNet")) {
+				to_chinanet.setVisibility(View.VISIBLE);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}// SHOW the button
 
-		File filetotal = new File("mnt/sdcard/wlantest/report/");
+		File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
 		if (filetotal.listFiles().length != 0) {
 			report_total.setText("当前你已经保存" + filetotal.listFiles().length
 					+ "条报告" + "\n" + "上传请点我");
@@ -300,7 +321,8 @@ public class MainActivity extends Activity {
 				InputStreamEntity reqEntity;
 				try {
 					File file=new File(Environment.getExternalStorageDirectory()
-							+ "/wlantest/" + "/report/");
+							+ "/wlantest/report/");
+					Log.v("report/", file.getCanonicalPath());
 					File[] files=file.listFiles();
 					for(int i=0;i<files.length;i++)
 					{

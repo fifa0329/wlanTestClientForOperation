@@ -28,7 +28,7 @@ public class MyIO {
 				File sdCardDir = Environment.getExternalStorageDirectory();
 				// 获取指定文件对应的输入流
 				FileInputStream fis = new FileInputStream(sdCardDir
-						.getCanonicalPath()+"/wlantest/"+"/current/"
+						.getCanonicalPath()+"/wlantest/current/"
 						+ FILE_NAME);
 				// 将指定输入流包装成BufferedReader
 				BufferedReader br = new BufferedReader(new InputStreamReader(
@@ -53,7 +53,7 @@ public class MyIO {
 					Environment.MEDIA_MOUNTED)) {
 				// 获取SD卡的目录
 				File sdCardDir = Environment.getExternalStorageDirectory();
-				File targetFile = new File(sdCardDir.getCanonicalPath()+"/wlantest/"+"/current/"
+				File targetFile = new File(sdCardDir.getCanonicalPath()+"/wlantest/current/"
 						+ FILE_NAME);
 				// 以指定文件创建 RandomAccessFile对象
 				RandomAccessFile raf = new RandomAccessFile(targetFile, "rw");

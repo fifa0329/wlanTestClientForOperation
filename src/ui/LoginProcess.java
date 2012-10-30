@@ -16,6 +16,7 @@ import com.example.testclient.R;
 
 import engine.AuthPortalCMCC;
 import engine.AuthPortalCT;
+import engine.Logger;
 
 public class LoginProcess extends Activity{
 	TextView show;
@@ -71,6 +72,7 @@ public class LoginProcess extends Activity{
 		break;
 	}
 	*/
+	Logger.getInstance().startLogger();
 	new Thread(login_runnable).start();
 	
 	
