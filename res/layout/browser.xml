@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textView1"
-        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="本页面旨在测试浏览器的登陆可行性,请将账号密码填入,完成“上线——下线”操作后点击“测试完成”"
         android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -14,6 +15,7 @@
     
                 <TableRow
         android:id="@+id/tableRow1"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -44,6 +46,7 @@
                 
                                 <TableRow
         android:id="@+id/tableRow1"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -69,14 +72,13 @@
 
     </TableRow>
 
-                                <WebView
-                                    android:id="@+id/webView1"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="261dp" />
+
 
                                 <LinearLayout
+                                    android:id="@+id/button_group"
+                                    android:layout_alignParentBottom="true"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
+                                    android:layout_height="wrap_content"
                                     android:orientation="vertical" >
 
                                     <Button
@@ -86,5 +88,13 @@
                                         android:text="生成报告" />
 
                                 </LinearLayout>
+                                
+                                <WebView
+                                    android:id="@+id/webView1"
+                                    android:layout_width="fill_parent"
+        							android:layout_height="fill_parent"
+        							android:layout_below="@id/textView1" 
+                                    android:layout_above="@id/button_group" 
+                                     />
 
-</LinearLayout>
+</RelativeLayout>

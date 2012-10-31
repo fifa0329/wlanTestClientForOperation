@@ -72,6 +72,7 @@ public class Browser extends Activity {
             }
         });
         mWebView.loadUrl("http://www.baidu.com/");
+        mWebView.requestFocus();
     }
     
 	private class HtmlOutJavaScript {

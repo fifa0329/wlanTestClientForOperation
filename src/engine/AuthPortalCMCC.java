@@ -1,9 +1,5 @@
 package engine;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +29,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.CharArrayBuffer;
+import org.apache.http.util.EntityUtils;
 
 public class AuthPortalCMCC {
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
@@ -64,16 +61,6 @@ public class AuthPortalCMCC {
 			instance = new AuthPortalCMCC();
 		}
 		return instance;
-	}
-	
-	private String stream2String(InputStream istream) throws IOException {
-		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
-		StringBuilder total = new StringBuilder();
-		String line;
-		while ((line = r.readLine()) != null) {
-		    total.append(line);
-		}
-		return total.toString();
 	}
 	
 	private String parseAuthenPage(String output) {
@@ -133,7 +120,7 @@ public class AuthPortalCMCC {
 			HttpClient client = new DefaultHttpClient(connectionManager, params);
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity());
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -146,7 +133,7 @@ public class AuthPortalCMCC {
 				nextAction = parseRedirectPage(output);
 				if (nextAction != null) {
 					response = client.execute(new HttpGet(nextAction));
-					output = stream2String(response.getEntity().getContent());
+					output = EntityUtils.toString(response.getEntity());
 					Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 					Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				} else {
@@ -158,7 +145,7 @@ public class AuthPortalCMCC {
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
 				nextAction = parseAuthenPage(output);
 				response = client.execute(new HttpPost(nextAction));
-				output = stream2String(response.getEntity().getContent());
+				output = EntityUtils.toString(response.getEntity());
 				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
@@ -183,7 +170,7 @@ public class AuthPortalCMCC {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(new HttpPost(nextAction));
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity());
 			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
