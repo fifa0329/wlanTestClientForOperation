@@ -1,9 +1,6 @@
 package engine;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,10 +56,10 @@ public class AuthPortalCT {
 		// in milliseconds which is the timeout for waiting for data.
 		HttpConnectionParams.setSoTimeout(params, 20000);
 		httpClient = new DefaultHttpClient(params);
-		loginUrlPattern = Pattern.compile(LOGIN_URL_PATTERN);
-		logoutUrlPattern = Pattern.compile(LOGOUT_URL_PATTERN);
-		loginCodePattern = Pattern.compile(LOGIN_RESPONSE_CODE_PATTERN);
-		logoutCodePattern = Pattern.compile(LOGOUT_RESPONSE_CODE_PATTERN);
+		loginUrlPattern = Pattern.compile(LOGIN_URL_PATTERN, Pattern.DOTALL);
+		logoutUrlPattern = Pattern.compile(LOGOUT_URL_PATTERN, Pattern.DOTALL);
+		loginCodePattern = Pattern.compile(LOGIN_RESPONSE_CODE_PATTERN, Pattern.DOTALL);
+		logoutCodePattern = Pattern.compile(LOGOUT_RESPONSE_CODE_PATTERN, Pattern.DOTALL);
 	}
 	
 	public static AuthPortalCT getInstance() {
@@ -122,7 +119,7 @@ public class AuthPortalCT {
 	public boolean testConnection() {
 		try {			
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -134,16 +131,6 @@ public class AuthPortalCT {
 			e.printStackTrace();
 		}
 		return false;
-	}
-	
-	private String stream2String(InputStream istream) throws IOException {
-		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
-		StringBuilder total = new StringBuilder();
-		String line;
-		while ((line = r.readLine()) != null) {
-		    total.append(line);
-		}
-		return total.toString();
 	}
 	
 	private String parseAuthenPage(String output) {
@@ -208,7 +195,7 @@ public class AuthPortalCT {
 		Logger.getInstance().writeLog("CT Account Location: " + getAccountLocation(user));
 		try {			
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = EntityUtils.toString(response.getEntity());
+			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -220,7 +207,7 @@ public class AuthPortalCT {
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
 				nextAction = parseAuthenPage(output);
 				response = httpClient.execute(new HttpPost(nextAction));
-				output = EntityUtils.toString(response.getEntity());
+				output = EntityUtils.toString(response.getEntity(), "GBK");
 				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
@@ -245,7 +232,7 @@ public class AuthPortalCT {
 	public int logout() {
 		try {
 			HttpResponse response = httpClient.execute(new HttpPost(nextAction));
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
@@ -271,7 +258,7 @@ public class AuthPortalCT {
 			} else {
 				response = httpClient.execute(new HttpGet("http://118.85.203.210:9010/wlan/WiFiAction.do?nowtime=0&userAccount=" + user + "&validateCode=" + code));
 			}
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("getDynamicPassword result: " + output);
 			return true;
 		} catch (Exception e) {

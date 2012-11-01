@@ -1,9 +1,5 @@
 package engine;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,10 +55,10 @@ public class AuthPortalCMCC {
 	private Pattern logoutCodePattern = null;
 	
 	private AuthPortalCMCC() {
-		formPattern = Pattern.compile(LOGIN_FORM_PATTERN);
-		inputPattern = Pattern.compile(LOGIN_INPUT_PATTERN);
-		loginCodePattern = Pattern.compile(LOGIN_RESPONSE_CODE_PATTERN);
-		logoutCodePattern = Pattern.compile(LOGOUT_RESPONSE_CODE_PATTERN);
+		formPattern = Pattern.compile(LOGIN_FORM_PATTERN, Pattern.DOTALL);
+		inputPattern = Pattern.compile(LOGIN_INPUT_PATTERN, Pattern.DOTALL);
+		loginCodePattern = Pattern.compile(LOGIN_RESPONSE_CODE_PATTERN, Pattern.DOTALL);
+		logoutCodePattern = Pattern.compile(LOGOUT_RESPONSE_CODE_PATTERN, Pattern.DOTALL);
 	}
 	
 	public static AuthPortalCMCC getInstance() {
@@ -73,7 +69,7 @@ public class AuthPortalCMCC {
 	}
 	
 	public String getDescription(int code) {
-		String ret = "δ֪�������" + code;
+		String ret = "未知错误代码" + code;
 		switch (code) {
 		case RET_OTHER:
 			ret = "异常错误，请联系10086";
@@ -175,16 +171,6 @@ public class AuthPortalCMCC {
 		return null;
 	}
 	
-	private String stream2String(InputStream istream) throws IOException {
-		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
-		StringBuilder total = new StringBuilder();
-		String line;
-		while ((line = r.readLine()) != null) {
-		    total.append(line);
-		}
-		return total.toString();
-	}
-	
 	public int login(String user, String password) {
 		this.user = user;
 		this.password = password;
@@ -204,7 +190,7 @@ public class AuthPortalCMCC {
 			HttpClient client = new DefaultHttpClient(connectionManager, params);
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -217,7 +203,7 @@ public class AuthPortalCMCC {
 				nextAction = parseRedirectPage(output);
 				if (nextAction != null) {
 					response = client.execute(new HttpGet(nextAction));
-					output = stream2String(response.getEntity().getContent());
+					output = EntityUtils.toString(response.getEntity(), "GBK");
 					Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 					Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				} else {
@@ -229,7 +215,7 @@ public class AuthPortalCMCC {
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
 				nextAction = parseAuthenPage(output);
 				response = client.execute(new HttpPost(nextAction));
-				output = stream2String(response.getEntity().getContent());
+				output = EntityUtils.toString(response.getEntity(), "GBK");
 				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
@@ -255,7 +241,7 @@ public class AuthPortalCMCC {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(new HttpPost(nextAction));
-			String output = stream2String(response.getEntity().getContent());
+			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
