@@ -359,6 +359,9 @@ public class MainActivity extends Activity {
 		 */
 		new Thread(new Runnable() {
 			private int i;
+			File file=new File(Environment.getExternalStorageDirectory()
+					+ "/wlantest/" + "/report/");
+			File[] files=file.listFiles();
 
 			@Override
 			public void run() {
@@ -367,10 +370,10 @@ public class MainActivity extends Activity {
 					url = new URL(UPLOAD_LOG_URL);
 					
 					
-					File file=new File(Environment.getExternalStorageDirectory()
-							+ "/wlantest/" + "/report/");
-					File[] files=file.listFiles();
-					for(int i=0;i<files.length;i++){
+
+					for(i=0;i<files.length;i++){
+		    			Log.v("test", "" + files.length);
+
 						HttpURLConnection httpConn;
 						httpConn = (HttpURLConnection)url.openConnection();
 						httpConn.setDoOutput(true);
@@ -397,11 +400,16 @@ public class MainActivity extends Activity {
 							MainActivity.this.runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
+									files[i].delete();
 									File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
-									if (filetotal.listFiles().length != 0) {
+									if (filetotal.listFiles().length != 0) 
+									
+									{
 										report_total.setText("当前报告数：" + filetotal.listFiles().length
 												+ "" + "\n" + "点我上传");
+										Log.v("test", "" + filetotal.listFiles().length);	
 									}
+									
 									else {
 										report_total.setText("当前报告数：0\n点我上传");
 										progress.dismiss();
@@ -410,14 +418,19 @@ public class MainActivity extends Activity {
 								}
 							});
 			    		}
-//						files[i].delete();
+			    		else {
+			    			Toast.makeText(MainActivity.this, "网络质量不佳", Toast.LENGTH_SHORT).show();
+						}
+						
 //						Toast.makeText(MainActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 						try {
 							Thread.sleep(2000);
+							
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						
 					}
 
 				} catch (MalformedURLException e) {
@@ -428,58 +441,6 @@ public class MainActivity extends Activity {
 					e.printStackTrace();
 				}
 				
-				
-
-				/*HttpClient client = new DefaultHttpClient();
-				HttpPost post = new HttpPost(UPLOAD_LOG_URL);
-				InputStreamEntity reqEntity;
-				try {
-					File file=new File(Environment.getExternalStorageDirectory()
-							+ "/wlantest/" + "/report/");
-					File[] files=file.listFiles();
-					for(int i=0;i<files.length;i++)
-					{
-						reqEntity = new InputStreamEntity(new FileInputStream(
-								files[i].getCanonicalPath()), -1);
-						Log.v("test", "" + files[i].getCanonicalPath());
-					//reqEntity.setContentType("application/x-zip-compressed");
-					//reqEntity.setChunked(true);
-					
-				    //post.setHeader("Content-Length", "56719");
-					post.setHeader("Accept-Encoding", "identity");
-					
-					post.setEntity(reqEntity);
-					HttpResponse response = client.execute(post);
-					Log.v("test", "" + response.getStatusLine().toString());
-					Log.v("test", "" + response.getStatusLine().getStatusCode());
-					if (response.getStatusLine().getStatusCode() == 200) {
-//						Toast.makeText(MainActivity.this, "第"+(i+1)+"条报告已经上传成功", Toast.LENGTH_SHORT).show();
-//这条出错，不能再新线程里面动UI
-					}
-					
-					}
-
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-				
-				
-				
-				
-
-				/*
-				 * sendMesssage(MESSAGE_FINISH, 0); } else {
-				 * sendMesssage(MESSAGE_FAILED, 0); } } catch (IOException e) {
-				 * e.printStackTrace(); sendMesssage(MESSAGE_FAILED, 0); }
-				 */
-
 			}
 		}).start();
 	}
