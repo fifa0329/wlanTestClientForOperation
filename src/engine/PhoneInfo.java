@@ -23,6 +23,7 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.telephony.CellLocation;
 import android.telephony.NeighboringCellInfo;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -203,18 +204,26 @@ public class PhoneInfo {
         public static int getLac(Context context) {
             TelephonyManager manager = (TelephonyManager) context
                             .getSystemService(Activity.TELEPHONY_SERVICE);
-            GsmCellLocation gsm = (GsmCellLocation) manager.getCellLocation();
-            return gsm.getLac();
+            CellLocation location = manager.getCellLocation();
+            if (location instanceof GsmCellLocation) {
+            	return ((GsmCellLocation)location).getLac();
+            } else {
+            	return 0;
             }
+        }
         
         
         
         public static int getCi(Context context) {
             TelephonyManager manager = (TelephonyManager) context
                             .getSystemService(Activity.TELEPHONY_SERVICE);
-            GsmCellLocation gsm = (GsmCellLocation) manager.getCellLocation();
-            return gsm.getCid();
+            CellLocation location = manager.getCellLocation();
+            if (location instanceof GsmCellLocation) {
+            	return ((GsmCellLocation)location).getCid();
+            } else {
+            	return 0;
             }
+        }
         
         
         
