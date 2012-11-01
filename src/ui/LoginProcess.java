@@ -124,21 +124,35 @@ public class LoginProcess extends Activity{
 		@Override
 		public void run() {
 			boolean result = false;
+			int code = -2;
+			String description = null;
 			MyApplication mApp = (MyApplication)getApplication();
 			int carrier = mApp.getCarrier();
 			String user = mApp.getUser();
 			String password = mApp.getPassword();
 			if (carrier == MyApplication.CMCC) {
-				result = AuthPortalCMCC.getInstance().login(user, password);
+				code = AuthPortalCMCC.getInstance().login(user, password);
+				result = (code == 0);
+				description = AuthPortalCMCC.getInstance().getDescription(code);
 			} else if (carrier == MyApplication.CHINANET) {
-				result = AuthPortalCT.getInstance().login(user, password);
+				code = AuthPortalCT.getInstance().login(user, password);
+				result = (code == 50);
+				description = AuthPortalCT.getInstance().getDescription(code);
 			}
+			final String desc = description;
+			final boolean connectionReady = AuthPortalCT.getInstance().testConnection();
 			if (result) {
 				LoginProcess.this.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登陆成功", Toast.LENGTH_LONG).show();
 						builder.append("登录成功！"+"\n");
+						builder.append(desc + "\n");
+						if (connectionReady) {
+							builder.append("测试百度页面打开成功\n");
+						} else {
+							builder.append("测试百度页面打开失败\n");
+						}
 						builder.append("请进行下线测试！"+"\n");
 						logout.setVisibility(View.VISIBLE);
 						show.setText(builder);
@@ -150,6 +164,12 @@ public class LoginProcess extends Activity{
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登录失败", Toast.LENGTH_LONG).show();
 						builder.append("登录失败！"+"\n");
+						builder.append(desc + "\n");
+						if (connectionReady) {
+							builder.append("测试百度页面打开成功\n");
+						} else {
+							builder.append("测试百度页面打开失败\n");
+						}
 						builder.append("请进行浏览器测试！"+"\n");
 						browser.setVisibility(View.VISIBLE);
 						show.setText(builder);
@@ -163,19 +183,27 @@ public class LoginProcess extends Activity{
 		@Override
 		public void run() {
 			boolean result = false;
+			int code = -2;
+			String description = null;
 			MyApplication mApp = (MyApplication)getApplication();
 			int carrier = mApp.getCarrier();
 			if (carrier == MyApplication.CMCC) {
-				result = AuthPortalCMCC.getInstance().logout();
+				code = AuthPortalCMCC.getInstance().logout();
+				result = (code == 0);
+				description = AuthPortalCMCC.getInstance().getDescription(code);
 			} else if (carrier == MyApplication.CHINANET) {
-				result = AuthPortalCT.getInstance().logout();
+				code = AuthPortalCT.getInstance().logout();
+				result = (code == 150);
+				description = AuthPortalCT.getInstance().getDescription(code);
 			}
+			final String desc = description;
 			if (result) {
 				LoginProcess.this.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登出成功", Toast.LENGTH_LONG).show();
 						builder.append("登出成功！"+"\n");
+						builder.append(desc + "\n");
 						builder.append("请生成报告！"+"\n");
 						show.setText(builder.toString());
 						report.setVisibility(View.VISIBLE);
@@ -188,6 +216,7 @@ public class LoginProcess extends Activity{
 					public void run() {
 						Toast.makeText(LoginProcess.this, "登出失败，直接下线", Toast.LENGTH_LONG).show();
 						builder.append("登出失败！"+"\n");
+						builder.append(desc + "\n");
 						builder.append("请生成报告！"+"\n");
 						show.setText(builder.toString());
 						report.setVisibility(View.VISIBLE);

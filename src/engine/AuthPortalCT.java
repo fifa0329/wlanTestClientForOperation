@@ -1,9 +1,6 @@
 package engine;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.EntityUtils;
@@ -26,7 +24,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class AuthPortalCT {
+	private final static int RET_OTHER		= -1;
+	private final static int RET_UNKNOWN	= -2;
+	private final static int RET_ALREADY	= -3;
+	
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
+	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	private static String LOGIN_REQUEST_SIGNATURE = "<LoginURL>";
 	private static String LOGIN_URL_PATTERN =  "<LoginURL>(.*?)</LoginURL>";
 	private static String LOGOUT_URL_PATTERN =  "<LogoffURL>(.*?)</LogoffURL>";
@@ -46,6 +49,12 @@ public class AuthPortalCT {
 	private AuthPortalCT() {
 		final HttpParams params = new BasicHttpParams();
 		HttpProtocolParams.setUserAgent(params, "CDMA+WLAN");
+		// Set the timeout in milliseconds until a connection is established.
+		// The default value is zero, that means the timeout is not used.
+		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		// Set the default socket timeout (SO_TIMEOUT)
+		// in milliseconds which is the timeout for waiting for data.
+		HttpConnectionParams.setSoTimeout(params, 20000);
 		httpClient = new DefaultHttpClient(params);
 		loginUrlPattern = Pattern.compile(LOGIN_URL_PATTERN);
 		logoutUrlPattern = Pattern.compile(LOGOUT_URL_PATTERN);
@@ -58,6 +67,70 @@ public class AuthPortalCT {
 			instance = new AuthPortalCT();
 		}
 		return instance;
+	}
+	
+	public String getDescription(int code) {
+		String ret = "未知错误代码" + code;
+		switch (code) {
+		case RET_OTHER:
+			ret = "其他错误代码";
+			break;
+		case RET_UNKNOWN:
+			ret = "未知网络错误";
+			break;
+		case RET_ALREADY:
+			ret = "已经在线，无需重复登录（是否上次登录未下线？）";
+			break;
+		case 0:
+			ret = "没有错误";
+			break;
+		case 50:
+			ret = "登录成功";
+			break;
+		case 100:
+			ret = "登录失败";
+			break;
+		case 102:
+			ret = "无法连接Radius";
+			break;
+		case 105:
+			ret = "网络配置错误";
+			break;
+		case 150:
+			ret = "登出成功";
+			break;
+		case 151:
+			ret = "登录中止";
+			break;
+		case 200:
+			ret = "代理检测";
+			break;
+		case 201:
+			ret = "认证等待";
+			break;
+		case 255:
+			ret = "内部错误";
+			break;
+		}
+		Logger.getInstance().writeLog("Get description " + ret + " for code " + code);
+		return ret;
+	}
+	
+	public boolean testConnection() {
+		try {			
+			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
+			String output = EntityUtils.toString(response.getEntity());
+			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
+			Logger.getInstance().writeLog("HTTP Response:\n" + output);
+			
+			if (output.contains(LOGIN_TEST_SIGNATURE)) {
+				Logger.getInstance().writeLog("Already loginned!");
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	private String parseAuthenPage(String output) {
@@ -116,7 +189,7 @@ public class AuthPortalCT {
 		return null; 
 	}
 	
-	public boolean login(String user, String password) {
+	public int login(String user, String password) {
 		this.user = user;
 		this.password = password;
 		Logger.getInstance().writeLog("CT Account Location: " + getAccountLocation(user));
@@ -126,9 +199,9 @@ public class AuthPortalCT {
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
-			if (output.contains(LOGIN_TEST_URL)) {
+			if (output.contains(LOGIN_TEST_SIGNATURE)) {
 				Logger.getInstance().writeLog("Already loginned!");
-				return true;
+				return RET_ALREADY;
 			}
 			
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
@@ -143,8 +216,9 @@ public class AuthPortalCT {
 					if (code == 50) {
 						nextAction = parseLogoutURL(output);  // prepare action parameters for logout
 						Logger.getInstance().writeLog("Login success!");
-						return true;
 					}
+					Logger.getInstance().writeLog("Login code=" + code);
+					return code;
 				}
 			} else {
 				Logger.getInstance().writeLog("Can't get login page!");
@@ -152,10 +226,10 @@ public class AuthPortalCT {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return RET_UNKNOWN;
 	}
 	
-	public boolean logout() {
+	public int logout() {
 		try {
 			HttpResponse response = httpClient.execute(new HttpPost(nextAction));
 			String output = EntityUtils.toString(response.getEntity());
@@ -166,13 +240,14 @@ public class AuthPortalCT {
 				int code = Integer.valueOf(codeMatcher.group(1));
 				if (code == 150) {
 					Logger.getInstance().writeLog("Logout success!");
-					return true;
 				}
+				Logger.getInstance().writeLog("Logout code=" + code);
+				return code;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return RET_UNKNOWN;
 	}
 	
 	public boolean getDynamicPassword(String user, String code) {
@@ -1866,4 +1941,5 @@ public class AuthPortalCT {
 			add("^(W|w)(1|2|9)[0-9]{10}$");
 		}});
 	}};
+	
 }

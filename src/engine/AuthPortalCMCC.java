@@ -26,12 +26,17 @@ import org.apache.http.io.SessionInputBuffer;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicLineParser;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
 public class AuthPortalCMCC {
+	private final static int RET_OTHER		= -1;
+	private final static int RET_UNKNOWN	= -2;
+	private final static int RET_ALREADY	= -3;
+	
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	private static String LOGIN_REQUEST_SIGNATURE = "cmcccs|login_req";
@@ -61,6 +66,65 @@ public class AuthPortalCMCC {
 			instance = new AuthPortalCMCC();
 		}
 		return instance;
+	}
+	
+	public String getDescription(int code) {
+		String ret = "未知错误代码" + code;
+		switch (code) {
+		case RET_OTHER:
+			ret = "异常错误，请联系10086";
+			break;
+		case RET_UNKNOWN:
+			ret = "未知网络错误";
+			break;
+		case RET_ALREADY:
+			ret = "已经在线，无需重复登录（是否上次登录未下线？）";
+			break;
+		case 0:
+			ret = "操作成功";
+			break;
+		case 1:
+			ret = "用户未注册该业务";
+			break;
+		case 2:
+			ret = "用户当前处于非正常状态";
+			break;
+		case 3:
+			ret = "用户密码错误";
+			break;
+		case 7:
+			ret = "用户IP地址不匹配";
+			break;
+		case 8:
+			ret = "AC名称不匹配";
+			break;
+		case 15:
+			ret = "用户认证被拒绝，同一用户在线中";
+			break;
+		case 17:
+			ret = "同一用户正在认证中";
+			break;
+		case 26:
+			ret = "用户与在线用户名不一致";
+			break;
+		case 40:
+			ret = "用户免认证到期或者失败";
+			break;
+		case 55:
+			ret = "同一用户在线中";
+			break;
+		case 105:
+			ret = "登录失败，请联系10086";
+			break;
+		case 106:
+			ret = "认证前踢同一用户下线失败，请联系10086";
+			break;
+		case 107:
+			ret = "您当前在线终端数已经超过3个";
+			break;
+		}
+		Logger.getInstance().writeLog("Get description " + ret + " for code " + code);
+		return ret;
 	}
 	
 	private String parseAuthenPage(String output) {
@@ -107,7 +171,7 @@ public class AuthPortalCMCC {
 		return null;
 	}
 	
-	public boolean login(String user, String password) {
+	public int login(String user, String password) {
 		this.user = user;
 		this.password = password;
 		try {
@@ -116,7 +180,13 @@ public class AuthPortalCMCC {
 			SchemeRegistry schemeRegistry = new SchemeRegistry();
 			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 			schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-			MyClientConnManager connectionManager = new MyClientConnManager(params, schemeRegistry); 
+			MyClientConnManager connectionManager = new MyClientConnManager(params, schemeRegistry);
+			// Set the timeout in milliseconds until a connection is established.
+			// The default value is zero, that means the timeout is not used.
+			HttpConnectionParams.setConnectionTimeout(params, 5000);
+			// Set the default socket timeout (SO_TIMEOUT)
+			// in milliseconds which is the timeout for waiting for data.
+			HttpConnectionParams.setSoTimeout(params, 20000);
 			HttpClient client = new DefaultHttpClient(connectionManager, params);
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
@@ -126,7 +196,7 @@ public class AuthPortalCMCC {
 			
 			if (output.contains(LOGIN_TEST_SIGNATURE)) {
 				Logger.getInstance().writeLog("Already loginned!");
-				return true;
+				return RET_ALREADY;
 			}
 			
 			if (!output.contains(LOGIN_REQUEST_SIGNATURE)) {
@@ -138,7 +208,7 @@ public class AuthPortalCMCC {
 					Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				} else {
 					Logger.getInstance().writeLog("Can't get redirect page!");
-					return false;
+					return RET_UNKNOWN;
 				}
 			}
 			
@@ -154,8 +224,9 @@ public class AuthPortalCMCC {
 					if (code == 0) {
 						nextAction = parseAuthenPage(output);  // prepare action parameters for logout
 						Logger.getInstance().writeLog("Login success!");
-						return true;
 					}
+					Logger.getInstance().writeLog("Login code=" + code);
+					return code;
 				}
 			} else {
 				Logger.getInstance().writeLog("Can't get login page!");
@@ -163,10 +234,10 @@ public class AuthPortalCMCC {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return RET_UNKNOWN;
 	}
 	
-	public boolean logout() {
+	public int logout() {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(new HttpPost(nextAction));
@@ -178,17 +249,18 @@ public class AuthPortalCMCC {
 				int code = parseCode(codeMatcher.group(1));
 				if (code == 0) {
 					Logger.getInstance().writeLog("Logout success!");
-					return true;
 				}
+				Logger.getInstance().writeLog("Logout code=" + code);
+				return code;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return RET_UNKNOWN;
 	}
 	
 	private int parseCode(String codeString) {
-		int code = -1;
+		int code = RET_OTHER;
 		if (codeString != null) {
 			try {
 				code = Integer.parseInt(codeString);
@@ -248,4 +320,5 @@ public class AuthPortalCMCC {
 	        return new MyClientConnectionOperator(sr);
 	    }
 	}
+
 }
