@@ -1,5 +1,9 @@
 package engine;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,58 +73,58 @@ public class AuthPortalCMCC {
 	}
 	
 	public String getDescription(int code) {
-		String ret = "Î´Öª´íÎó´úÂë" + code;
+		String ret = "Î´Öªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" + code;
 		switch (code) {
 		case RET_OTHER:
-			ret = "Òì³£´íÎó£¬ÇëÁªÏµ10086";
+			ret = "å¼‚å¸¸é”™è¯¯ï¼Œè¯·è”ç³»10086";
 			break;
 		case RET_UNKNOWN:
-			ret = "Î´ÖªÍøÂç´íÎó";
+			ret = "æœªçŸ¥ç½‘ç»œé”™è¯¯";
 			break;
 		case RET_ALREADY:
-			ret = "ÒÑ¾­ÔÚÏß£¬ÎŞĞèÖØ¸´µÇÂ¼£¨ÊÇ·ñÉÏ´ÎµÇÂ¼Î´ÏÂÏß£¿£©";
+			ret = "å·²ç»åœ¨çº¿ï¼Œæ— éœ€é‡å¤ç™»å½•ï¼ˆæ˜¯å¦ä¸Šæ¬¡ç™»å½•æœªä¸‹çº¿ï¼Ÿï¼‰";
 			break;
 		case 0:
-			ret = "²Ù×÷³É¹¦";
+			ret = "æ“ä½œæˆåŠŸ";
 			break;
 		case 1:
-			ret = "ÓÃ»§Î´×¢²á¸ÃÒµÎñ";
+			ret = "ç”¨æˆ·æœªæ³¨å†Œè¯¥ä¸šåŠ¡";
 			break;
 		case 2:
-			ret = "ÓÃ»§µ±Ç°´¦ÓÚ·ÇÕı³£×´Ì¬";
+			ret = "ç”¨æˆ·å½“å‰å¤„äºéæ­£å¸¸çŠ¶æ€";
 			break;
 		case 3:
-			ret = "ÓÃ»§ÃÜÂë´íÎó";
+			ret = "ç”¨æˆ·å¯†ç é”™è¯¯";
 			break;
 		case 7:
-			ret = "ÓÃ»§IPµØÖ·²»Æ¥Åä";
+			ret = "ç”¨æˆ·IPåœ°å€ä¸åŒ¹é…";
 			break;
 		case 8:
-			ret = "ACÃû³Æ²»Æ¥Åä";
+			ret = "ACåç§°ä¸åŒ¹é…";
 			break;
 		case 15:
-			ret = "ÓÃ»§ÈÏÖ¤±»¾Ü¾ø£¬Í¬Ò»ÓÃ»§ÔÚÏßÖĞ";
+			ret = "ç”¨æˆ·è®¤è¯è¢«æ‹’ç»ï¼ŒåŒä¸€ç”¨æˆ·åœ¨çº¿ä¸­";
 			break;
 		case 17:
-			ret = "Í¬Ò»ÓÃ»§ÕıÔÚÈÏÖ¤ÖĞ";
+			ret = "åŒä¸€ç”¨æˆ·æ­£åœ¨è®¤è¯ä¸­";
 			break;
 		case 26:
-			ret = "ÓÃ»§ÓëÔÚÏßÓÃ»§Ãû²»Ò»ÖÂ";
+			ret = "ç”¨æˆ·ä¸åœ¨çº¿ç”¨æˆ·åä¸ä¸€è‡´";
 			break;
 		case 40:
-			ret = "ÓÃ»§ÃâÈÏÖ¤µ½ÆÚ»òÕßÊ§°Ü";
+			ret = "ç”¨æˆ·å…è®¤è¯åˆ°æœŸæˆ–è€…å¤±è´¥";
 			break;
 		case 55:
-			ret = "Í¬Ò»ÓÃ»§ÔÚÏßÖĞ";
+			ret = "åŒä¸€ç”¨æˆ·åœ¨çº¿ä¸­";
 			break;
 		case 105:
-			ret = "µÇÂ¼Ê§°Ü£¬ÇëÁªÏµ10086";
+			ret = "ç™»å½•å¤±è´¥ï¼Œè¯·è”ç³»10086";
 			break;
 		case 106:
-			ret = "ÈÏÖ¤Ç°ÌßÍ¬Ò»ÓÃ»§ÏÂÏßÊ§°Ü£¬ÇëÁªÏµ10086";
+			ret = "è®¤è¯å‰è¸¢åŒä¸€ç”¨æˆ·ä¸‹çº¿å¤±è´¥ï¼Œè¯·è”ç³»10086";
 			break;
 		case 107:
-			ret = "Äúµ±Ç°ÔÚÏßÖÕ¶ËÊıÒÑ¾­³¬¹ı3¸ö";
+			ret = "æ‚¨å½“å‰åœ¨çº¿ç»ˆç«¯æ•°å·²ç»è¶…è¿‡3ä¸ª";
 			break;
 		}
 		Logger.getInstance().writeLog("Get description " + ret + " for code " + code);
@@ -171,6 +175,16 @@ public class AuthPortalCMCC {
 		return null;
 	}
 	
+	private String stream2String(InputStream istream) throws IOException {
+		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
+		StringBuilder total = new StringBuilder();
+		String line;
+		while ((line = r.readLine()) != null) {
+		    total.append(line);
+		}
+		return total.toString();
+	}
+	
 	public int login(String user, String password) {
 		this.user = user;
 		this.password = password;
@@ -190,7 +204,7 @@ public class AuthPortalCMCC {
 			HttpClient client = new DefaultHttpClient(connectionManager, params);
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = EntityUtils.toString(response.getEntity());
+			String output = stream2String(response.getEntity().getContent());
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -203,7 +217,7 @@ public class AuthPortalCMCC {
 				nextAction = parseRedirectPage(output);
 				if (nextAction != null) {
 					response = client.execute(new HttpGet(nextAction));
-					output = EntityUtils.toString(response.getEntity());
+					output = stream2String(response.getEntity().getContent());
 					Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 					Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				} else {
@@ -215,7 +229,7 @@ public class AuthPortalCMCC {
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
 				nextAction = parseAuthenPage(output);
 				response = client.execute(new HttpPost(nextAction));
-				output = EntityUtils.toString(response.getEntity());
+				output = stream2String(response.getEntity().getContent());
 				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 				Matcher codeMatcher = loginCodePattern.matcher(output);
@@ -241,7 +255,7 @@ public class AuthPortalCMCC {
 		try {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = client.execute(new HttpPost(nextAction));
-			String output = EntityUtils.toString(response.getEntity());
+			String output = stream2String(response.getEntity().getContent());
 			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);

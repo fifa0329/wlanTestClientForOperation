@@ -1,6 +1,9 @@
 package engine;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -70,46 +73,46 @@ public class AuthPortalCT {
 	}
 	
 	public String getDescription(int code) {
-		String ret = "æœªçŸ¥é”™è¯¯ä»£ç " + code;
+		String ret = "Î´Öª´íÎó´úÂë" + code;
 		switch (code) {
 		case RET_OTHER:
-			ret = "å…¶ä»–é”™è¯¯ä»£ç ";
+			ret = "ÆäËû´íÎó´úÂë";
 			break;
 		case RET_UNKNOWN:
-			ret = "æœªçŸ¥ç½‘ç»œé”™è¯¯";
+			ret = "Î´ÖªÍøÂç´íÎó";
 			break;
 		case RET_ALREADY:
-			ret = "å·²ç»åœ¨çº¿ï¼Œæ— éœ€é‡å¤ç™»å½•ï¼ˆæ˜¯å¦ä¸Šæ¬¡ç™»å½•æœªä¸‹çº¿ï¼Ÿï¼‰";
+			ret = "ÒÑ¾­ÔÚÏß£¬ÎŞĞèÖØ¸´µÇÂ¼£¨ÊÇ·ñÉÏ´ÎµÇÂ¼Î´ÏÂÏß£¿£©";
 			break;
 		case 0:
-			ret = "æ²¡æœ‰é”™è¯¯";
+			ret = "Ã»ÓĞ´íÎó";
 			break;
 		case 50:
-			ret = "ç™»å½•æˆåŠŸ";
+			ret = "µÇÂ¼³É¹¦";
 			break;
 		case 100:
-			ret = "ç™»å½•å¤±è´¥";
+			ret = "µÇÂ¼Ê§°Ü";
 			break;
 		case 102:
-			ret = "æ— æ³•è¿æ¥Radius";
+			ret = "ÎŞ·¨Á¬½ÓRadius";
 			break;
 		case 105:
-			ret = "ç½‘ç»œé…ç½®é”™è¯¯";
+			ret = "ÍøÂçÅäÖÃ´íÎó";
 			break;
 		case 150:
-			ret = "ç™»å‡ºæˆåŠŸ";
+			ret = "µÇ³ö³É¹¦";
 			break;
 		case 151:
-			ret = "ç™»å½•ä¸­æ­¢";
+			ret = "µÇÂ¼ÖĞÖ¹";
 			break;
 		case 200:
-			ret = "ä»£ç†æ£€æµ‹";
+			ret = "´úÀí¼ì²â";
 			break;
 		case 201:
-			ret = "è®¤è¯ç­‰å¾…";
+			ret = "ÈÏÖ¤µÈ´ı";
 			break;
 		case 255:
-			ret = "å†…éƒ¨é”™è¯¯";
+			ret = "ÄÚ²¿´íÎó";
 			break;
 		}
 		Logger.getInstance().writeLog("Get description " + ret + " for code " + code);
@@ -119,7 +122,7 @@ public class AuthPortalCT {
 	public boolean testConnection() {
 		try {			
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = EntityUtils.toString(response.getEntity());
+			String output = stream2String(response.getEntity().getContent());
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -131,6 +134,16 @@ public class AuthPortalCT {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	private String stream2String(InputStream istream) throws IOException {
+		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
+		StringBuilder total = new StringBuilder();
+		String line;
+		while ((line = r.readLine()) != null) {
+		    total.append(line);
+		}
+		return total.toString();
 	}
 	
 	private String parseAuthenPage(String output) {
@@ -232,7 +245,7 @@ public class AuthPortalCT {
 	public int logout() {
 		try {
 			HttpResponse response = httpClient.execute(new HttpPost(nextAction));
-			String output = EntityUtils.toString(response.getEntity());
+			String output = stream2String(response.getEntity().getContent());
 			Logger.getInstance().writeLog("Http Request:\n" + nextAction);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			Matcher codeMatcher = logoutCodePattern.matcher(output);
@@ -258,7 +271,7 @@ public class AuthPortalCT {
 			} else {
 				response = httpClient.execute(new HttpGet("http://118.85.203.210:9010/wlan/WiFiAction.do?nowtime=0&userAccount=" + user + "&validateCode=" + code));
 			}
-			String output = EntityUtils.toString(response.getEntity());
+			String output = stream2String(response.getEntity().getContent());
 			Logger.getInstance().writeLog("getDynamicPassword result: " + output);
 			return true;
 		} catch (Exception e) {
