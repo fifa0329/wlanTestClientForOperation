@@ -51,10 +51,10 @@ public class AuthPortalCT {
 		HttpProtocolParams.setUserAgent(params, "CDMA+WLAN");
 		// Set the timeout in milliseconds until a connection is established.
 		// The default value is zero, that means the timeout is not used.
-		HttpConnectionParams.setConnectionTimeout(params, 5000);
+		HttpConnectionParams.setConnectionTimeout(params, 20000);
 		// Set the default socket timeout (SO_TIMEOUT)
 		// in milliseconds which is the timeout for waiting for data.
-		HttpConnectionParams.setSoTimeout(params, 20000);
+		HttpConnectionParams.setSoTimeout(params, 40000);
 		httpClient = new DefaultHttpClient(params);
 		loginUrlPattern = Pattern.compile(LOGIN_URL_PATTERN, Pattern.DOTALL);
 		logoutUrlPattern = Pattern.compile(LOGOUT_URL_PATTERN, Pattern.DOTALL);
