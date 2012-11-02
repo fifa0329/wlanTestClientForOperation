@@ -15,14 +15,16 @@ import com.example.testclient.R;
 import com.nullwire.trace.ExceptionHandler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -71,6 +73,44 @@ public class Browser extends Activity {
             	new File(Environment.getExternalStorageDirectory() + HTML_HOME).mkdirs();
             	mWebView.loadUrl("javascript:window.HTMLOUT.getAll();");
             }
+        });
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+                new AlertDialog.Builder(view.getContext())
+	                .setMessage(message)
+	                .setPositiveButton(android.R.string.ok,
+	                    new AlertDialog.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int which) {
+	                            result.confirm();
+	                        }
+	                    })
+	                .setCancelable(false)
+	                .create()
+	                .show();
+                return true;
+            };
+            
+            @Override
+            public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+                new AlertDialog.Builder(view.getContext())
+                    .setMessage(message)
+                    .setPositiveButton(android.R.string.ok, 
+	                    new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int which) {
+	                            result.confirm();
+	                        }
+	                    })
+                    .setNegativeButton(android.R.string.cancel, 
+	                    new DialogInterface.OnClickListener() {
+	                        public void onClick(DialogInterface dialog, int which) {
+	                            result.cancel();
+	                        }
+	                    })
+	                .create()
+	                .show();
+                return true;
+            };
         });
         mWebView.loadUrl("http://www.baidu.com/");
         mWebView.requestFocus();
