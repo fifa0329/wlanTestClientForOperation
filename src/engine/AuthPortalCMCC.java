@@ -176,18 +176,22 @@ public class AuthPortalCMCC {
 		this.password = password;
 		try {
 			final HttpParams params = new BasicHttpParams();
-			HttpProtocolParams.setUserAgent(params, "G3WLAN");
-			SchemeRegistry schemeRegistry = new SchemeRegistry();
-			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-			schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-			MyClientConnManager connectionManager = new MyClientConnManager(params, schemeRegistry);
+			// This line causes CMCC-EDU no response.
+			//HttpProtocolParams.setUserAgent(params, "G3WLAN");
+			
+			// The following lines are for Guangdong AC bug. No use now.
+			//SchemeRegistry schemeRegistry = new SchemeRegistry();
+			//schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
+			//schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
+			//MyClientConnManager connectionManager = new MyClientConnManager(params, schemeRegistry);
+			
 			// Set the timeout in milliseconds until a connection is established.
 			// The default value is zero, that means the timeout is not used.
 			HttpConnectionParams.setConnectionTimeout(params, 20000);
 			// Set the default socket timeout (SO_TIMEOUT)
 			// in milliseconds which is the timeout for waiting for data.
 			HttpConnectionParams.setSoTimeout(params, 40000);
-			HttpClient client = new DefaultHttpClient(connectionManager, params);
+			HttpClient client = new DefaultHttpClient(params);
 			
 			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = EntityUtils.toString(response.getEntity(), "GBK");
