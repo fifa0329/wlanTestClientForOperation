@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.example.testclient.R;
+import com.nullwire.trace.ExceptionHandler;
 
 import engine.DirDel;
 import engine.Logger;
@@ -31,7 +32,6 @@ public class Report extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report);
     	init();
-        
         
 
     }

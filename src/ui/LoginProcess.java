@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testclient.R;
+import com.nullwire.trace.ExceptionHandler;
 
 import engine.AuthPortalCMCC;
 import engine.AuthPortalCT;

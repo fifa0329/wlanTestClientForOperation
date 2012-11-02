@@ -90,7 +90,7 @@ public class PhoneInfo {
         
         
         public static String getTime(){
-        SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy年MM月dd日   HH:mm:ss     ");     
+        SimpleDateFormat   formatter   =   new   SimpleDateFormat   ("yyyy-MM-dd HH:mm:ss     ");     
         Date   curDate   =   new   Date(System.currentTimeMillis());
         //获取当前时间    
         String   str   =   formatter.format(curDate);

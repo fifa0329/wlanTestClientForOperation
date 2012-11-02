@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.example.testclient.R;
+import com.nullwire.trace.ExceptionHandler;
 
 import android.app.Activity;
 import android.content.Intent;

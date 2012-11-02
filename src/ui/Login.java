@@ -2,6 +2,7 @@ package ui;
 
 
 import com.example.testclient.R;
+import com.nullwire.trace.ExceptionHandler;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -38,7 +39,6 @@ public class Login extends Activity{
 		account=(EditText)findViewById(R.id.account);
 		password=(EditText)findViewById(R.id.password);
 		login=(Button)findViewById(R.id.login);
-		
 		
 		
 		id1.setOnClickListener(new OnClickListener() {
