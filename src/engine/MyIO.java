@@ -3,8 +3,11 @@ package engine;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
+import java.io.Writer;
 
 import android.os.Environment;
 
@@ -55,13 +58,20 @@ public class MyIO {
 				File sdCardDir = Environment.getExternalStorageDirectory();
 				File targetFile = new File(sdCardDir.getCanonicalPath()+"/wlantest/current/"
 						+ FILE_NAME);
+				/*
 				// 以指定文件创建 RandomAccessFile对象
 				RandomAccessFile raf = new RandomAccessFile(targetFile, "rw");
 				// 将文件记录指针移动到最后
 				raf.seek(targetFile.length());
 				// 输出文件内容
-				raf.write(content.getBytes());
+				raf.writeUTF(content);
 				raf.close();
+				*/
+				FileOutputStream fos = new FileOutputStream(targetFile, true);
+				Writer out = new OutputStreamWriter(fos, "UTF-8");
+				out.write(content);
+				out.close();
+				fos.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -56,11 +56,7 @@ public class MainActivity extends Activity {
 //    	ExceptionHandler.register(this, "http://192.168.6.60/loginbsp/devexception.php"); 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
+
 
 	public void init() {
 		mApp = (MyApplication) getApplication();

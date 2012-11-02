@@ -591,7 +591,7 @@ public class PhoneInfo {
         public String toString() {
                 StringBuilder builder = new StringBuilder();
                 builder.append("mCurrentTime : "+mCurrentTime+"\n");
-                builder.append("mNeighboringCellInfo : "+"\n"+mNeighboringCellInfo+"\n");
+                builder.append("mNeighboringCellInfo : "+mNeighboringCellInfo+"\n");
                 builder.append("mNetworkId : "+mNetworkId+"\n");
                 builder.append("mIPAddress : "+mIPAddress+"\n");
                 builder.append("mWifiInfo : "+mWifiInfo+"\n");
