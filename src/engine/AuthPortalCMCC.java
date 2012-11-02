@@ -176,7 +176,7 @@ public class AuthPortalCMCC {
 		this.password = password;
 		try {
 			final HttpParams params = new BasicHttpParams();
-			HttpProtocolParams.setUserAgent(params, "G3WLAN");
+//			HttpProtocolParams.setUserAgent(params, "G3WLAN");
 			SchemeRegistry schemeRegistry = new SchemeRegistry();
 			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
 			schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));

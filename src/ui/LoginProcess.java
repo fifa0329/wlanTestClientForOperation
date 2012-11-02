@@ -45,33 +45,6 @@ public class LoginProcess extends Activity{
 	logout=(Button) findViewById(R.id.logout);
 	builder.append("正在登录中。。。"+"\n");
 	show.setText(builder.toString());
-	/*
-	FLAG = getIntent().getStringExtra("FLAG");
-	int a=Integer.parseInt(FLAG);
-	switch(a){
-	case 1:
-		builder.append("正在登录中。。。"+"\n");
-		builder.append("登录成功！"+"\n");
-		logout.setVisibility(View.VISIBLE);
-		show.setText(builder);
-		break;
-	case 2:
-		builder.append("正在登录中。。。"+"\n");
-		builder.append("登录失败！"+"\n");
-		builder.append("请进行浏览器测试！"+"\n");
-		browser.setVisibility(View.VISIBLE);
-		show.setText(builder);
-		break;
-	case 0:
-		builder.append("亲"+"\n");
-		builder.append("别捣乱好吗"+"\n");
-		browser.setVisibility(View.VISIBLE);
-		logout.setVisibility(View.VISIBLE);
-		report.setVisibility(View.VISIBLE);
-		show.setText(builder);
-		break;
-	}
-	*/
 	Logger.getInstance().startLogger();
 	new Thread(login_runnable).start();
 	

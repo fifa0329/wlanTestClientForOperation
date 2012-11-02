@@ -108,10 +108,9 @@ public class PhoneInfo {
 	    		     int thisNeighCID = thisCell.getCid();  
 	    		     int thisNeighLAC = thisCell.getLac();
 	    		     int thisNeighRSSI = thisCell.getRssi();
-	    		     str.append("No."+(i+1)+":"+"\n");
-	    		     str.append("LAC:"+thisNeighLAC+"\n");
-	    		     str.append("CID:"+thisNeighCID+"\n");
-	    		     str.append("RSSI:"+(-113+2*thisNeighRSSI)+"dBm"+"\n");
+	    		     str.append("LAC: "+thisNeighLAC+", ");
+	    		     str.append("CID: "+thisNeighCID+", ");
+	    		     str.append("RSSI: "+(-113+2*thisNeighRSSI)+"dBm"+", ");
 
 	    	}
 
@@ -598,7 +597,7 @@ public class PhoneInfo {
                 builder.append("mWifiInfo : "+mWifiInfo+"\n");
                 builder.append("mMacAddress : "+mMacAddress+"\n");
                 builder.append("mBSSID : "+mBSSID+"\n");
-                builder.append("mScanResults : "+"\n"+mScanResults+"\n");
+                builder.append("mScanResults : "+mScanResults+"\n");
                 builder.append("mApps : "+mApps+"\n");
                 builder.append("mHeight : "+mHeight+"\n");
                 builder.append("mWidth : "+mWidth+"\n");
