@@ -100,13 +100,12 @@ public class WifiAdmin {
 		if (listResult != null) {
 			for (int i = 0; i < listResult.size(); i++) {
 				mScanResult = listResult.get(i);
-				mStringBuffer = mStringBuffer.append("NO.").append(i + 1)
-						.append(" :").append("\n").append("SSID:").append(mScanResult.SSID).append("\n")
-						.append("BSSID:").append(mScanResult.BSSID).append("\n")
-						.append("capabilities:").append(mScanResult.capabilities).append("\n")
-						.append("frequency:").append(mScanResult.frequency).append("MHz").append("\n")
-						.append("level:").append(mScanResult.level).append("dBm").append("\n")
-						.append("describeContents:").append(mScanResult.describeContents()).append("\n\n");
+				mStringBuffer = mStringBuffer.append("SSID: ").append(mScanResult.SSID).append(", ")
+						.append("BSSID: ").append(mScanResult.BSSID).append(", ")
+						.append("capabilities: ").append(mScanResult.capabilities).append(", ")
+						.append("frequency: ").append(mScanResult.frequency).append("MHz").append(", ")
+						.append("level: ").append(mScanResult.level).append("dBm").append(", ")
+						.append("describeContents: ").append(mScanResult.describeContents()).append("; ");
 			}
 		}
 		Log.i(TAG, mStringBuffer.toString());

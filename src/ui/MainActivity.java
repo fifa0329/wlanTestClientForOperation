@@ -61,6 +61,7 @@ public class MainActivity extends Activity {
 	Button report_total;
 	MyApplication mApp;
 	private ProgressDialog progress;
+	private long mExitTime;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -446,18 +447,27 @@ public class MainActivity extends Activity {
 	}
 
 
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			MyApplication mApp = (MyApplication) getApplication();
 
-			mApp.setExit(true);
 
-			finish();
-		}
-		return true;
+	        public boolean onKeyDown(int keyCode, KeyEvent event) {
+	                if (keyCode == KeyEvent.KEYCODE_BACK) {
+	                        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+	                                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+	                                mExitTime = System.currentTimeMillis();
 
-	}
+	                        } else {
+	                        	MyApplication mApp = (MyApplication) getApplication();
+
+	                			mApp.setExit(true);
+
+	                			finish();    
+	                        	finish();
+	                        }
+	                        return true;
+	                }
+	                return super.onKeyDown(keyCode, event);
+	        }
+	
 
 	protected void onStart() {
 
