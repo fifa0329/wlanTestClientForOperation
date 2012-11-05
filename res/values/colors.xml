@@ -1,3 +1,12 @@
+cac9c9
+cac9c9
+cac9c9
+cac9c9
+cac9c9
+cac9c9
+cac9c9
+cac9c9
+cac9c9
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <color name="darkgray">#ff404040</color>
@@ -8,7 +17,7 @@
 <color name="white">#ffffffff</color>
 <color name="yellow">#ffffff00</color>
 <color name="blue">#ff0000ff</color>
-<color name="gray">#ff808080</color>
+<color name="gray">#ffcac9c9</color>
 <color name="magenta">#ffff00ff</color>
 <color name="cyan">#ff00ffff</color>
 </resources>
