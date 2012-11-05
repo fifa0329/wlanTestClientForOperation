@@ -275,14 +275,11 @@ public class MainActivity extends Activity {
 		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
 		if(mWifiManager.isWifiEnabled())
 		{
-			if(mWifiInfo.getSSID().equals((String)""))
-			{
-				ssid.setText("нч");
+			String ssidName = mWifiInfo.getSSID();
+			if(ssidName == null || ssidName.equals("")) {
+				String ssid = "нч";
 			}
-			else
-			{
-			ssid.setText(mWifiInfo.getSSID());
-			}
+			ssid.setText(ssidName);
 		}
 		// setMobileNetEnable();
 
