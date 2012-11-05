@@ -158,11 +158,6 @@
     </TableRow>
         
 
-        <Button
-            android:layout_gravity="bottom"
-            android:id="@+id/exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="退出测试客户端" />
+
 
 </LinearLayout>
