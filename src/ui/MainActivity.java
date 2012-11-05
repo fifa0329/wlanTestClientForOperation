@@ -100,19 +100,7 @@ public class MainActivity extends Activity {
 		ssid = (TextView) findViewById(R.id.ssid);
 		report_total = (Button) findViewById(R.id.report_total);
 
-		Button exit = (Button) findViewById(R.id.exit);
-		exit.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				MyApplication mApp = (MyApplication) getApplication();
-
-				mApp.setExit(true);
-
-				finish();
-			}
-		});
 		
 		to_else=(Button) findViewById(R.id.to_else);
 		to_else.setOnClickListener(new OnClickListener() {
