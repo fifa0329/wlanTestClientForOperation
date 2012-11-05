@@ -27,7 +27,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -53,7 +52,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		init();
-//    	ExceptionHandler.register(this, "http://192.168.6.60/loginbsp/devexception.php"); 
+    	ExceptionHandler.register(this); 
 	}
 
 
