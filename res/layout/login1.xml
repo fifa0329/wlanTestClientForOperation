@@ -87,7 +87,7 @@
         >
         
                         <EditText 
-                           android:id="@+id/enter_id"
+                           android:id="@+id/account"
                            android:layout_height="match_parent"
                            android:layout_width="0dp" 
                            android:layout_weight="1"
@@ -117,7 +117,7 @@
         
                                 
                                 <EditText 
-                                   android:id="@+id/enter_password"
+                                   android:id="@+id/password"
                                    android:layout_height="match_parent" 
                                                               android:layout_width="0dp" 
                            android:layout_weight="1"/>
@@ -144,12 +144,20 @@
         
          
         <TableRow
-        android:id="@+id/tableRow1"
+        
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="70"
         android:background="@drawable/login1">
-        
+                    <ImageView 
+                        
+                        
+        android:layout_height="match_parent"
+        android:layout_width="0dp"                
+         android:layout_weight="1"                  
+             android:id="@+id/login"           
+                        
+        android:background="@drawable/login1"/> 
 
     
     
@@ -191,14 +199,14 @@
         
                  
         <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/click1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80" 
         android:background="@drawable/show_id">
         
                     <TableRow
-        android:id="@+id/tableRow1"
+        
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="80" >
@@ -268,14 +276,13 @@
         
         
         <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/click2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80" 
         android:background="@drawable/show_id">
         
                     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="80" >
@@ -345,7 +352,7 @@
         
         
         <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/click3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80" 

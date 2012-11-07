@@ -33,6 +33,7 @@ import android.widget.Button;
 public class Browser extends Activity {
     private Button complete;
     private WebView mWebView;
+	private MyApplication appState;
     private static String HTML_HOME = "/wlantest/current/html/";
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class Browser extends Activity {
     
     
     public void init(){
+
     	complete=(Button) findViewById(R.id.complete);
     	complete.setOnClickListener(new OnClickListener() {
 			
@@ -196,20 +198,7 @@ public class Browser extends Activity {
 	    
 	}
 	
-	
-	protected void onStart() { 
-		 
-		super.onStart(); 
-		 
-		MyApplication mApp = (MyApplication)getApplication(); 
-		 
-		if (mApp.isExit()) { 
-		 
-		finish(); 
-		 
-		} 
-		 
-		}
+
 	
 	
 	/*

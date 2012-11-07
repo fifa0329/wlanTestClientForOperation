@@ -212,4 +212,32 @@ public class WifiAdmin {
 		mWifiManager.enableNetwork(wcgID, true);
 		return wcgID;
 	}
+	
+//	自动连接想要的AP
+	public void addApProfile(String ssid) {
+		
+		for (WifiConfiguration config : mWifiManager.getConfiguredNetworks()) {
+			Log.v("测试", mWifiManager.getConfiguredNetworks().toString());
+
+			if(config.SSID==null ){
+				mWifiManager.removeNetwork(config.networkId);
+			}
+			if (config.SSID!=null&&config.SSID.equals(ssid)) {
+				mWifiManager.enableNetwork(config.networkId, true);
+				return;
+			}
+		}
+		
+		Log.i("WLANEngine", "addApProfile:" + ssid);
+		WifiConfiguration config = new WifiConfiguration();
+		config.SSID = ssid;
+		config.priority = 20;
+		config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+		
+		int networkId = mWifiManager.addNetwork(config);
+		if (networkId != -1) {
+			mWifiManager.enableNetwork(networkId, true);
+			mWifiManager.saveConfiguration();
+		}
+	}
 }

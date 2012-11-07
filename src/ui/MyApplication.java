@@ -1,54 +1,63 @@
 package ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
 import android.app.Application;
 
-public class MyApplication extends Application { 
+public class MyApplication extends Application {
 
-public static int CMCC = 0;
-public static int CHINANET = 1;
-	
-// 程序退出标记 ,用于一键退出used to one-key exit
-private static boolean isProgramExit = false; 
+	public static int CMCC = 0;
+	public static int CHINANET = 1;
 
-public void setExit(boolean exit) { 
- 
-isProgramExit = exit; 
- 
-} 
- 
-public boolean isExit() { 
- 
-return isProgramExit; 
- 
-} 
-private int carrier;
-private String user;
-private String password;
+	private List<Activity> mainActivity = new ArrayList<Activity>();
+
+	public List<Activity> MainActivity() {
+		return mainActivity;
+	}
+
+	public void addActivity(Activity act) {
+		mainActivity.add(act);
+	}
+
+	public void finishAll() {
+		for (Activity act : mainActivity) {
+			if (!act.isFinishing()) {
+				act.finish();
+			}
+		}
+		mainActivity = null;
+	}
 
 
-public int getCarrier() {
-	return carrier;
-}
 
-public void setCarrier(int carrier) {
-	this.carrier = carrier;
-}
+	private int carrier;
+	private String user;
+	private String password;
 
-public String getUser() {
-	return user;
-}
+	public int getCarrier() {
+		return carrier;
+	}
 
-public void setUser(String user) {
-	this.user = user;
-}
+	public void setCarrier(int carrier) {
+		this.carrier = carrier;
+	}
 
-public String getPassword() {
-	return password;
-}
+	public String getUser() {
+		return user;
+	}
 
-public void setPassword(String password) {
-	this.password = password;
-}
+	public void setUser(String user) {
+		this.user = user;
+	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 }

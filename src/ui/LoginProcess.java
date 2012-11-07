@@ -25,6 +25,7 @@ public class LoginProcess extends Activity{
 	Button logout;
 	Button browser;
 	StringBuilder builder=new StringBuilder();
+	private MyApplication appState;
 	
 	
 	
@@ -201,27 +202,10 @@ public class LoginProcess extends Activity{
 		}
 	};
 	
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			
-		}
-		return true;
-		
-	}
+
+	
+
 	
 	
-	protected void onStart() { 
-		 
-		super.onStart(); 
-		 
-		MyApplication mApp = (MyApplication)getApplication(); 
-		 
-		if (mApp.isExit()) { 
-		 
-		finish(); 
-		 
-		} 
-		 
-		}
+
 }

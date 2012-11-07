@@ -32,6 +32,7 @@
         android:layout_height="match_parent"
         android:layout_weight="60">
         <TextView
+            android:id="@+id/report_total"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="0"
@@ -51,7 +52,7 @@
         android:layout_weight="60"
         >
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/upload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/upload" />
@@ -364,10 +365,10 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/open1"
+            android:id="@+id/text_open1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="星巴克" 
+            android:text="开放1" 
             android:gravity="center"/>
             
     </TableRow>
@@ -432,10 +433,10 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/open2"
+            android:id="@+id/text_open2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="开放1" 
+            android:text="开放2" 
             android:gravity="center"/>
             
     </TableRow>
@@ -499,10 +500,10 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/open3"
+            android:id="@+id/text_open3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="开放2" 
+            android:text="开放3" 
             android:gravity="center"/>
             
     </TableRow>
@@ -569,10 +570,10 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/open4"
+            android:id="@+id/text_open4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="开放3" 
+            android:text="开放4" 
             android:gravity="center"/>
             
     </TableRow>
@@ -640,10 +641,10 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/open5"
+            android:id="@+id/text_open5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="开放4" 
+            android:text="开放5" 
             android:gravity="center"/>
             
     </TableRow>

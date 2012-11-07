@@ -27,6 +27,7 @@ import android.widget.EditText;
 public class Report extends Activity {
     Button save;
     ProgressDialog progressdialog;
+	private MyApplication appState;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,8 @@ public class Report extends Activity {
     
     
     public void init(){
-    	
+    	appState = (MyApplication)this.getApplication();
+        appState.addActivity(this);
     	
     	
     	final EditText name=(EditText) findViewById(R.id.name);
@@ -110,21 +112,8 @@ public class Report extends Activity {
     }
 
     
-	
-	
-	protected void onStart() { 
-		 
-		super.onStart(); 
-		 
-		MyApplication mApp = (MyApplication)getApplication(); 
-		 
-		if (mApp.isExit()) { 
-		 
-		finish(); 
-		 
-		} 
-		 
-		}
+
+
    
     
     
