@@ -117,7 +117,7 @@ public class AuthPortalCT {
 	}
 	
 	public boolean testConnection() {
-		try {			
+		try {
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
@@ -128,6 +128,7 @@ public class AuthPortalCT {
 				return true;
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return false;
@@ -224,6 +225,7 @@ public class AuthPortalCT {
 				Logger.getInstance().writeLog("Can't get login page!");
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return RET_UNKNOWN;
@@ -245,6 +247,7 @@ public class AuthPortalCT {
 				return code;
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return RET_UNKNOWN;
@@ -262,6 +265,7 @@ public class AuthPortalCT {
 			Logger.getInstance().writeLog("getDynamicPassword result: " + output);
 			return true;
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return false;
@@ -280,6 +284,7 @@ public class AuthPortalCT {
 	        Bitmap bitmap = BitmapFactory.decodeStream(input);
 	        return bitmap;
 	    } catch (Exception e) {
+	    	Logger.getInstance().writeLog(e.toString());
 	        e.printStackTrace();
 	    }
 		return null;

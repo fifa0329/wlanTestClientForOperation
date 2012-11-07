@@ -266,6 +266,7 @@ public class AuthPortalCMCC {
 				Logger.getInstance().writeLog("Can't get login page!");
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return RET_UNKNOWN;
@@ -288,6 +289,7 @@ public class AuthPortalCMCC {
 				return code;
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return RET_UNKNOWN;
