@@ -105,7 +105,7 @@ public class LoginProcess extends Activity{
 			String user = mApp.getUser();
 			String password = mApp.getPassword();
 			if (carrier == MyApplication.CMCC) {
-				code = AuthPortalCMCC.getInstance().login(user, password);
+				code = AuthPortalCMCC.getInstance().login(user, password, LoginProcess.this);
 				result = (code == 0);
 				description = AuthPortalCMCC.getInstance().getDescription(code);
 			} else if (carrier == MyApplication.CHINANET) {

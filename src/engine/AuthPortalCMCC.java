@@ -32,6 +32,11 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
+
 public class AuthPortalCMCC {
 	private final static int RET_OTHER		= -1;
 	private final static int RET_UNKNOWN	= -2;
@@ -171,7 +176,7 @@ public class AuthPortalCMCC {
 		return null;
 	}
 	
-	public int login(String user, String password) {
+	public int login(String user, String password, Context context) {
 		this.user = user;
 		this.password = password;
 		try {
@@ -192,9 +197,33 @@ public class AuthPortalCMCC {
 			// in milliseconds which is the timeout for waiting for data.
 			HttpConnectionParams.setSoTimeout(params, 40000);
 			HttpClient client = new DefaultHttpClient(params);
+			HttpResponse response = null;
+			String output = null;
 			
-			HttpResponse response = client.execute(new HttpGet(LOGIN_TEST_URL));
-			String output = EntityUtils.toString(response.getEntity(), "GBK");
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			String bssid = prefs.getString("lastBssid", null);
+			if (bssid != null) {
+				if (bssid.equals(((WifiManager)context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getBSSID())) {
+					nextAction = prefs.getString("lastAction", null);
+					response = client.execute(new HttpPost(nextAction));
+					output = EntityUtils.toString(response.getEntity(), "GBK");
+					Logger.getInstance().writeLog("Http Request:\n" + nextAction);
+					Logger.getInstance().writeLog("HTTP Response:\n" + output);
+					Matcher codeMatcher = loginCodePattern.matcher(output);
+					if (codeMatcher.find()) {
+						int code = parseCode(codeMatcher.group(1));
+						if (code == 0) {
+							nextAction = parseAuthenPage(output);  // prepare action parameters for logout
+							Logger.getInstance().writeLog("Fast login success!");
+							return code;
+						}
+						Logger.getInstance().writeLog("Fast login code=" + code);
+					}
+				}
+			}
+			
+			response = client.execute(new HttpGet(LOGIN_TEST_URL));
+			output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 			
@@ -218,6 +247,7 @@ public class AuthPortalCMCC {
 			
 			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
 				nextAction = parseAuthenPage(output);
+				prefs.edit().putString("lastAction", nextAction).putString("lastBssid", ((WifiManager)context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getBSSID()).commit();
 				response = client.execute(new HttpPost(nextAction));
 				output = EntityUtils.toString(response.getEntity(), "GBK");
 				Logger.getInstance().writeLog("Http Request:\n" + nextAction);
