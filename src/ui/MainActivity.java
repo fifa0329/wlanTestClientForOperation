@@ -7,6 +7,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.example.testclient.R;
 import com.nullwire.trace.ExceptionHandler;
@@ -14,16 +18,21 @@ import com.nullwire.trace.ExceptionHandler;
 import engine.WifiAdmin;
 
 import android.net.ConnectivityManager;
+import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
@@ -36,11 +45,10 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	protected static final String UPLOAD_LOG_URL = "http://wuxiantao.sinaapp.com/wlanlog.php";
-	ImageView start_cmcc;
-	ImageView start_chinanet;
-	ImageView start_cmccedu;
+	ImageView to_cmcc;
+	ImageView to_chinanet;
+	ImageView to_cmccedu;
 	ImageView wlansetting;
-	ImageView start_open1;
 	ConnectivityManager mConnectivityManager;
 	TextView report_total;
 	MyApplication mApp;
@@ -48,26 +56,35 @@ public class MainActivity extends Activity {
 	private long mExitTime;
 	private ImageView upload;
 	private WifiAdmin mWifiAdmin;
+	TextView[] text_open=new TextView[5];
+	ImageView[] to_open=new ImageView[5];
+	ImageView[] view_open=new ImageView[5];
+	ArrayList<String> text_opens;
+	ImageView view_cmcc;
+	ImageView view_cmccedu;
+	ImageView view_chinanet;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main1);
 		init();
-		ExceptionHandler.register(this);
-//    	ExceptionHandler.register(this, "http://192.168.6.60/loginbsp/devexception.php"); 
+//		ExceptionHandler.register(this);
 	}
 
 
 
 	public void init() {
+
+		
+		
 		mWifiAdmin = new WifiAdmin(MainActivity.this);
 
 
 		mApp=(MyApplication) getApplication();
 		upload=(ImageView) findViewById(R.id.upload);
 		
-		start_cmcc = (ImageView) findViewById(R.id.start_cmcc);
-		start_cmcc.setOnClickListener(new OnClickListener() {
+		to_cmcc = (ImageView) findViewById(R.id.to_cmcc);
+		to_cmcc.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
 				mApp.setCarrier(MyApplication.CMCC);
@@ -78,8 +95,8 @@ public class MainActivity extends Activity {
 
 			}
 		});
-		start_chinanet = (ImageView) findViewById(R.id.start_chinanet);
-		start_chinanet.setOnClickListener(new OnClickListener() {
+		to_chinanet = (ImageView) findViewById(R.id.to_chinanet);
+		to_chinanet.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -91,8 +108,8 @@ public class MainActivity extends Activity {
 
 			}
 		});
-		start_cmccedu = (ImageView) findViewById(R.id.start_cmccedu);
-		start_cmccedu.setOnClickListener(new OnClickListener() {
+		to_cmccedu = (ImageView) findViewById(R.id.to_cmccedu);
+		to_cmccedu.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
 				mApp.setCarrier(MyApplication.CMCC);
@@ -109,39 +126,43 @@ public class MainActivity extends Activity {
 		
 		
 		
-		
-		/*
-		wlansetting = (Button) findViewById(R.id.wlan_setting);
-		wlansetting.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				// mWifiAdmin.connect();
-				// startActivityForResult(new Intent(
-				// android.provider.Settings.ACTION_WIFI_SETTINGS), 0);
-				startActivity(new Intent(
-						android.provider.Settings.ACTION_WIFI_SETTINGS));
-				// gprsEnable(false);
-			}
-		});
-		
-		*/
 		report_total = (TextView) findViewById(R.id.report_total);
 
+		text_open[0] = (TextView) findViewById(R.id.text_open0);
+		text_open[1] = (TextView) findViewById(R.id.text_open1);
+		text_open[2] = (TextView) findViewById(R.id.text_open2);
+		text_open[3] = (TextView) findViewById(R.id.text_open3);
+		text_open[4] = (TextView) findViewById(R.id.text_open4);
+		
+		
+		
+		
+		to_open[0] =(ImageView) findViewById(R.id.to_open0);
+		to_open[1] =(ImageView) findViewById(R.id.to_open1);
+		to_open[2] =(ImageView) findViewById(R.id.to_open2);
+		to_open[3] =(ImageView) findViewById(R.id.to_open3);
+		to_open[4] =(ImageView) findViewById(R.id.to_open4);
+		
+		
+		view_open[0] =(ImageView) findViewById(R.id.view_open0);
+		view_open[1] =(ImageView) findViewById(R.id.view_open1);
+		view_open[2] =(ImageView) findViewById(R.id.view_open2);
+		view_open[3] =(ImageView) findViewById(R.id.view_open3);
+		view_open[4] =(ImageView) findViewById(R.id.view_open4);
+		
+		
+		view_cmcc =(ImageView) findViewById(R.id.view_cmcc);
+		view_cmccedu =(ImageView) findViewById(R.id.view_cmccedu);
+		view_chinanet =(ImageView) findViewById(R.id.view_chinanet);
 
 		
-		start_open1=(ImageView) findViewById(R.id.open1);
-		start_open1.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, Browser.class);
-				startActivity(intent);
-				
-			}
-		});
+
+
+
+
+		
+
 		
 		
 		
@@ -155,7 +176,8 @@ public class MainActivity extends Activity {
 				File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/"
 						+ "/report/");
 
-				if (filetotal.listFiles().length != 0) {
+				if (filetotal.listFiles().length != 0) 
+				{
 					report_total.setText(""+filetotal.listFiles().length);
 					upload.setOnClickListener(new OnClickListener() {
 
@@ -190,6 +212,11 @@ public class MainActivity extends Activity {
 						}
 					});
 				}
+				else
+				{
+					report_total.setText(""+filetotal.listFiles().length);
+					upload.setImageResource(R.drawable.uploaded);
+				}
 			}
 			else
 			{
@@ -201,6 +228,203 @@ public class MainActivity extends Activity {
 			// TODO: handle exception
 		}
 			
+		
+		
+		
+		final Handler myhandler=new Handler(){
+			public void handleMessage(Message msg) {
+				if (msg.what == 0){
+					WifiAdmin wifiadmin=new WifiAdmin(MainActivity.this);
+					wifiadmin.scan();
+					List<ScanResult> listResult;
+					listResult = wifiadmin.getWifiManager().getScanResults();
+					view_cmcc.setImageResource(R.drawable.wifi3);
+					view_cmccedu.setImageResource(R.drawable.wifi3);
+					view_chinanet.setImageResource(R.drawable.wifi3);
+					to_cmcc.setImageResource(R.drawable.start_test1);
+					to_cmccedu.setImageResource(R.drawable.start_test1);
+					to_chinanet.setImageResource(R.drawable.start_test1);
+					text_opens=new ArrayList<String>();
+					if (listResult != null) {
+						for (int i = 0; i < listResult.size(); i++) 
+						{
+							Log.v("scanresult", ""+listResult.get(i).toString());
+							if( listResult.get(i).capabilities.equals("[ESS]") && listResult.get(i).SSID!="CMCC" && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+							{
+								Log.v("[ESS]", "[ESS]");
+								{
+									text_opens.add(listResult.get(i).SSID);
+								}
+							}
+							if( listResult.get(i).SSID.equals("CMCC"))
+							{
+								view_cmcc.setImageResource(R.drawable.wifi1);
+								to_cmcc.setImageResource(R.drawable.start_test2);
+							}
+							if( listResult.get(i).SSID.equals("CMCC-EDU"))
+							{
+								view_cmcc.setImageResource(R.drawable.wifi1);
+								to_cmccedu.setImageResource(R.drawable.start_test2);
+							}
+							if( listResult.get(i).SSID.equals("ChinaNet"))
+							{
+								view_cmcc.setImageResource(R.drawable.wifi1);
+								to_chinanet.setImageResource(R.drawable.start_test2);
+							}
+
+						}
+						
+						if(text_opens.size()!=0 && text_opens!=null)
+						{
+	
+							for(int text_num=0;text_num< text_opens.size();text_num++){
+								
+								text_open[0].setText("无");
+								text_open[1].setText("无");
+								text_open[2].setText("无");
+								text_open[3].setText("无");
+								text_open[4].setText("无");
+								view_open[0].setImageResource(R.drawable.wifi3);
+								view_open[1].setImageResource(R.drawable.wifi3);
+								view_open[2].setImageResource(R.drawable.wifi3);
+								view_open[3].setImageResource(R.drawable.wifi3);
+								view_open[4].setImageResource(R.drawable.wifi3);
+								to_open[0].setImageResource(R.drawable.start_test1);
+								to_open[1].setImageResource(R.drawable.start_test1);
+								to_open[2].setImageResource(R.drawable.start_test1);
+								to_open[3].setImageResource(R.drawable.start_test1);
+								to_open[4].setImageResource(R.drawable.start_test1);
+								Log.v("text_opens.get(text_num)", text_opens.get(text_num));
+								text_open[text_num].setText(text_opens.get(text_num));
+								view_open[text_num].setImageResource(R.drawable.wifi1);
+								to_open[text_num].setImageResource(R.drawable.start_test2);
+								to_open[text_num].setTag(text_num);
+								to_open[text_num].setOnClickListener(new OnClickListener() {
+									private ProgressDialog progressdialog;
+
+									@Override
+									public void onClick(View arg0) {
+										final int text_num = (Integer)arg0.getTag();
+										// TODO Auto-generated method stub
+										progressdialog = new ProgressDialog(MainActivity.this);  
+										progressdialog.setMessage("请稍候……"); 
+										progressdialog.show();
+										new Thread(new Runnable() {
+											public void run() {
+												mWifiAdmin.addApProfile("\""+text_opens.get(text_num)+"\"");
+												Log.v("addapprofile", "\""+text_opens.get(text_num)+"\"");
+												try {
+													Thread.sleep(5000);
+												} catch (InterruptedException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												
+												WifiManager mWifiManager = (WifiManager)MainActivity.this.getSystemService(Context.WIFI_SERVICE);
+												WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+											    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
+												if(isConnected)
+												{
+													Intent intent = new Intent();
+													progressdialog.dismiss();
+													intent.putExtra("step", "1");
+													intent.setClass(MainActivity.this, Browser.class);
+													startActivity(intent);
+												}
+												else{
+													MainActivity.this.runOnUiThread(new Runnable() {
+														@Override
+														public void run() {
+															progressdialog.dismiss();
+															Toast.makeText(MainActivity.this, "连接失败，请重试", Toast.LENGTH_LONG).show();
+														}
+													});
+												}
+												
+											};
+										}).start();
+
+									}
+								});
+
+							}
+						}
+//						if(text_opens.size()!=0 && text_opens!=null)
+						else{
+
+							text_open[0].setText("无");
+							text_open[1].setText("无");
+							text_open[2].setText("无");
+							text_open[3].setText("无");
+							text_open[4].setText("无");
+							view_open[0].setImageResource(R.drawable.wifi3);
+							view_open[1].setImageResource(R.drawable.wifi3);
+							view_open[2].setImageResource(R.drawable.wifi3);
+							view_open[3].setImageResource(R.drawable.wifi3);
+							view_open[4].setImageResource(R.drawable.wifi3);
+							to_open[0].setImageResource(R.drawable.start_test1);
+							to_open[1].setImageResource(R.drawable.start_test1);
+							to_open[2].setImageResource(R.drawable.start_test1);
+							to_open[3].setImageResource(R.drawable.start_test1);
+							to_open[4].setImageResource(R.drawable.start_test1);
+						}
+
+					
+					}
+//					if (listResult != null)
+					else{
+						view_cmcc.setImageResource(R.drawable.wifi3);
+						view_cmccedu.setImageResource(R.drawable.wifi3);
+						view_chinanet.setImageResource(R.drawable.wifi3);
+						to_cmcc.setImageResource(R.drawable.start_test1);
+						to_cmccedu.setImageResource(R.drawable.start_test1);
+						to_chinanet.setImageResource(R.drawable.start_test1);
+						text_open[0].setText("无");
+						text_open[1].setText("无");
+						text_open[2].setText("无");
+						text_open[3].setText("无");
+						text_open[4].setText("无");
+						view_open[0].setImageResource(R.drawable.wifi3);
+						view_open[1].setImageResource(R.drawable.wifi3);
+						view_open[2].setImageResource(R.drawable.wifi3);
+						view_open[3].setImageResource(R.drawable.wifi3);
+						view_open[4].setImageResource(R.drawable.wifi3);
+						to_open[0].setImageResource(R.drawable.start_test1);
+						to_open[1].setImageResource(R.drawable.start_test1);
+						to_open[2].setImageResource(R.drawable.start_test1);
+						to_open[3].setImageResource(R.drawable.start_test1);
+						to_open[4].setImageResource(R.drawable.start_test1);
+					}
+//				if (msg.what == 0){
+				}
+				
+				
+				
+				
+				
+				
+				
+			}
+		};
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		 new Timer().scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Message msg =new Message();
+				msg.what=0;
+				myhandler.sendMessage(msg);
+			}
+		}, 0, 60000);
 
 		
 
@@ -228,6 +452,12 @@ public class MainActivity extends Activity {
 			File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
 			if (filetotal.listFiles().length != 0) {
 				report_total.setText(""+filetotal.listFiles().length);
+				upload.setImageResource(R.drawable.upload);
+			}
+			else
+			{
+				report_total.setText(""+filetotal.listFiles().length);
+				upload.setImageResource(R.drawable.uploaded);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -237,12 +467,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void uploadLog() {
-		/*
-		 * progress = new ProgressDialog(context); progress.setTitle("上传日志");
-		 * progress.setMessage("正在上传，请等待...");
-		 * progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		 * progress.show();
-		 */
+
 		new Thread(new Runnable() {
 			private int i;
 			File file=new File(Environment.getExternalStorageDirectory()
@@ -298,6 +523,7 @@ public class MainActivity extends Activity {
 									else {
 										report_total.setText(""+"0");
 										progress.dismiss();
+										upload.setImageResource(R.drawable.uploaded);
 									}
 
 								}
@@ -353,6 +579,12 @@ public class MainActivity extends Activity {
 	                }
 	                return super.onKeyDown(keyCode, event);
 	        }
+	        
+	        
+	        
+	        
+	        
+	      
 	
 
 

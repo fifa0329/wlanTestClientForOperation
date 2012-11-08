@@ -32,6 +32,17 @@ public class WifiAdmin {
 				.getSystemService(Context.WIFI_SERVICE);
 		mWifiInfo = mWifiManager.getConnectionInfo();
 	}
+	
+	
+	
+	
+	
+	public WifiManager getWifiManager(){
+		return mWifiManager;
+	}
+	
+
+
 
 	/**
 	 * 打开Wifi网卡
@@ -115,8 +126,8 @@ public class WifiAdmin {
 	/**
 	 * 连接指定网络
 	 */
-	public void connect() {
-		mWifiInfo = mWifiManager.getConnectionInfo();
+	public WifiInfo getWifiInfoObject() {
+		return mWifiInfo = mWifiManager.getConnectionInfo();
 		
 	}
 

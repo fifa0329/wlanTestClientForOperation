@@ -1,5 +1,5 @@
 package ui;
-
+import com.example.testclient.R;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -11,7 +11,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.example.testclient.R;
 import com.nullwire.trace.ExceptionHandler;
 
 import android.app.Activity;
@@ -29,17 +28,20 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class Browser extends Activity {
     private Button complete;
     private WebView mWebView;
-	private MyApplication appState;
     private static String HTML_HOME = "/wlantest/current/html/";
-	
+	ImageView browser_step;
+	private String stepstring;
+	private int stepint;
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
     	init();
+    	
     }
     
 
@@ -48,6 +50,33 @@ public class Browser extends Activity {
     
     public void init(){
 
+    	browser_step=(ImageView) findViewById(R.id.browser_step);
+    	
+    	stepstring=getIntent().getStringExtra("step");
+    	stepint=Integer.parseInt(stepstring);
+    	switch (stepint) {
+		case 1:
+			browser_step.setImageResource(R.drawable.firststep);
+			break;
+		case 2:
+			browser_step.setImageResource(R.drawable.secondstep);
+			break;
+		case 3:
+			browser_step.setImageResource(R.drawable.thirdstep);
+			break;
+		case 4:
+			browser_step.setImageResource(R.drawable.fourthstep);
+			break;
+
+		default:
+			break;
+		}
+
+    	stepint=stepint+1;
+    	
+    	
+    	
+    	
     	complete=(Button) findViewById(R.id.complete);
     	complete.setOnClickListener(new OnClickListener() {
 			
@@ -55,6 +84,7 @@ public class Browser extends Activity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Intent intent=new Intent();
+				intent.putExtra("step", ""+stepint);
 				intent.setClass(Browser.this, Report.class);
 				startActivity(intent);
 			}

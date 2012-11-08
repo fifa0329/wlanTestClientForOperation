@@ -23,11 +23,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class Report extends Activity {
     Button save;
     ProgressDialog progressdialog;
-	private MyApplication appState;
+	private String stepstring;
+	private int stepint;
+	private ImageView report_step;
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +49,30 @@ public class Report extends Activity {
     
     
     public void init(){
-    	appState = (MyApplication)this.getApplication();
-        appState.addActivity(this);
+
+    	report_step=(ImageView) findViewById(R.id.report_step);
     	
+    	stepstring=getIntent().getStringExtra("step");
+    	stepint=Integer.parseInt(stepstring);
+    	switch (stepint) {
+		case 1:
+			report_step.setImageResource(R.drawable.firststep);
+			break;
+		case 2:
+			report_step.setImageResource(R.drawable.secondstep);
+			break;
+		case 3:
+			report_step.setImageResource(R.drawable.thirdstep);
+			break;
+		case 4:
+			report_step.setImageResource(R.drawable.fourthstep);
+			break;
+
+		default:
+			break;
+		}
+
+    	stepint=stepint+1;
     	
     	final EditText name=(EditText) findViewById(R.id.name);
     	final EditText address=(EditText) findViewById(R.id.address);

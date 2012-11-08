@@ -2,8 +2,6 @@ package ui;
 
 
 import com.example.testclient.R;
-import com.nullwire.trace.ExceptionHandler;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -14,7 +12,6 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableRow;
@@ -136,6 +133,7 @@ public class Login extends Activity{
 							mApp.setUser(account.getText().toString());
 							mApp.setPassword(password.getText().toString());
 							Intent intent=new Intent();
+							intent.putExtra("step", "2");
 							intent.setClass(Login.this, LoginProcess.class);
 							startActivity(intent);
 						}

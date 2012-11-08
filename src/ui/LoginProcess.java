@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,9 @@ public class LoginProcess extends Activity{
 	Button browser;
 	StringBuilder builder=new StringBuilder();
 	private MyApplication appState;
+	private ImageView login_process_step;
+	private String stepstring;
+	private int stepint;
 	
 	
 	
@@ -41,6 +45,29 @@ public class LoginProcess extends Activity{
 	
 	
 	public void init(){
+		login_process_step=(ImageView) findViewById(R.id.login_process_step);
+    	
+    	stepstring=getIntent().getStringExtra("step");
+    	stepint=Integer.parseInt(stepstring);
+    	switch (stepint) {
+		case 1:
+			login_process_step.setImageResource(R.drawable.firststep);
+			break;
+		case 2:
+			login_process_step.setImageResource(R.drawable.secondstep);
+			break;
+		case 3:
+			login_process_step.setImageResource(R.drawable.thirdstep);
+			break;
+		case 4:
+			login_process_step.setImageResource(R.drawable.fourthstep);
+			break;
+
+		default:
+			break;
+		}
+
+    	stepint=stepint+1;
 	show=(TextView) findViewById(R.id.show);
 	report=(Button) findViewById(R.id.report);
 	browser=(Button) findViewById(R.id.browser);
@@ -57,6 +84,7 @@ public class LoginProcess extends Activity{
 			// TODO Auto-generated method stub
 			Intent intent=new Intent();
 			intent.setClass(LoginProcess.this, Report.class);
+			intent.putExtra("step", ""+stepint);
 			startActivity(intent);
 		}
 	});
@@ -68,6 +96,7 @@ public class LoginProcess extends Activity{
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			Intent intent=new Intent();
+			intent.putExtra("step", ""+stepint);
 			intent.setClass(LoginProcess.this, Browser.class);
 			startActivity(intent);
 		}

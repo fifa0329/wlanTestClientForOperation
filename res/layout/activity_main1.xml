@@ -93,7 +93,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_cmcc"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -121,7 +121,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/start_cmcc"
+                     android:id="@+id/to_cmcc"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -189,7 +189,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_cmccedu"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -217,7 +217,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/start_cmccedu"
+                     android:id="@+id/to_cmccedu"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -262,7 +262,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_chinanet"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -290,7 +290,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/start_chinanet"
+                     android:id="@+id/to_chinanet"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -352,7 +352,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_open0"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -365,7 +365,7 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/text_open1"
+            android:id="@+id/text_open0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="开放1" 
@@ -380,7 +380,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/open1"
+                     android:id="@+id/to_open0"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -420,7 +420,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_open1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -433,7 +433,7 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/text_open2"
+            android:id="@+id/text_open1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="开放2" 
@@ -448,7 +448,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/open2"
+                     android:id="@+id/to_open1"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -487,7 +487,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_open2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -500,7 +500,7 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/text_open3"
+            android:id="@+id/text_open2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="开放3" 
@@ -515,7 +515,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/open3"
+                     android:id="@+id/to_open2"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -557,7 +557,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_open3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -570,7 +570,7 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/text_open4"
+            android:id="@+id/text_open3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="开放4" 
@@ -585,7 +585,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/open4"
+                     android:id="@+id/to_open3"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
@@ -628,7 +628,7 @@
         android:layout_weight="60" >
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/view_open4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/wifi1" />
@@ -641,7 +641,7 @@
         android:layout_weight="240" >
 
         <TextView
-            android:id="@+id/text_open5"
+            android:id="@+id/text_open4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="开放5" 
@@ -656,7 +656,7 @@
         android:layout_weight="120" >
 
                  <ImageView
-                     android:id="@+id/open5"
+                     android:id="@+id/to_open4"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
                      android:src="@drawable/start_test2" />
