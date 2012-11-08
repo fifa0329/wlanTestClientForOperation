@@ -146,18 +146,21 @@ public class AuthPortalCT {
 			}
 			action.append("button=Login&FNAME=0&OriginatingServer=http://www.akazam.com");
 			String province = getAccountLocation(user);
-			action.append("&UserName=").append(user).append("@").append(province);
 			action.append("&province=").append(province);
 			action.append("&Password=").append(password);
 			if (user.toUpperCase().startsWith("CH")) {
 				action.append("&UserType=1&isChCardUser=true&isWCardUser=false");
+				action.append("&UserName=").append(user).append("@").append(province);
 			} else if (user.toUpperCase().startsWith("W")) {
 				action.append("&UserType=1&isChCardUser=false&isWCardUser=true");
+				action.append("&UserName=").append(user).append("@").append(province);
 			} else {
 				if (Pattern.compile("(18[09]|13[35])\\d{8}").matcher(user).find()) {
 					action.append("&UserType=2");
+					action.append("&UserName=").append(user).append("@").append(province);
 				} else {
 					action.append("&UserType=3");
+					action.append("&UserName=").append(user);
 				}
 			}
 			return action.toString();
