@@ -68,7 +68,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main1);
 		init();
-//		ExceptionHandler.register(this);
+
+    	ExceptionHandler.register(this); 
 	}
 
 
@@ -444,6 +445,7 @@ public class MainActivity extends Activity {
 	public void onResume() {
 		
 		super.onResume();
+
 
 
 		try {

@@ -117,7 +117,7 @@ public class AuthPortalCT {
 	}
 	
 	public boolean testConnection() {
-		try {			
+		try {
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
 			String output = EntityUtils.toString(response.getEntity(), "GBK");
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
@@ -128,6 +128,7 @@ public class AuthPortalCT {
 				return true;
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return false;
@@ -145,18 +146,21 @@ public class AuthPortalCT {
 			}
 			action.append("button=Login&FNAME=0&OriginatingServer=http://www.akazam.com");
 			String province = getAccountLocation(user);
-			action.append("&UserName=").append(user).append("@").append(province);
 			action.append("&province=").append(province);
 			action.append("&Password=").append(password);
 			if (user.toUpperCase().startsWith("CH")) {
 				action.append("&UserType=1&isChCardUser=true&isWCardUser=false");
+				action.append("&UserName=").append(user).append("@").append(province);
 			} else if (user.toUpperCase().startsWith("W")) {
 				action.append("&UserType=1&isChCardUser=false&isWCardUser=true");
+				action.append("&UserName=").append(user).append("@").append(province);
 			} else {
 				if (Pattern.compile("(18[09]|13[35])\\d{8}").matcher(user).find()) {
 					action.append("&UserType=2");
+					action.append("&UserName=").append(user).append("@").append(province);
 				} else {
 					action.append("&UserType=3");
+					action.append("&UserName=").append(user);
 				}
 			}
 			return action.toString();
@@ -224,6 +228,7 @@ public class AuthPortalCT {
 				Logger.getInstance().writeLog("Can't get login page!");
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return RET_UNKNOWN;
@@ -245,6 +250,7 @@ public class AuthPortalCT {
 				return code;
 			}
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return RET_UNKNOWN;
@@ -262,6 +268,7 @@ public class AuthPortalCT {
 			Logger.getInstance().writeLog("getDynamicPassword result: " + output);
 			return true;
 		} catch (Exception e) {
+			Logger.getInstance().writeLog(e.toString());
 			e.printStackTrace();
 		}
 		return false;
@@ -280,6 +287,7 @@ public class AuthPortalCT {
 	        Bitmap bitmap = BitmapFactory.decodeStream(input);
 	        return bitmap;
 	    } catch (Exception e) {
+	    	Logger.getInstance().writeLog(e.toString());
 	        e.printStackTrace();
 	    }
 		return null;
