@@ -44,7 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
-	protected static final String UPLOAD_LOG_URL = "http://wuxiantao.sinaapp.com/wlanlog.php";
+	protected static final String UPLOAD_LOG_URL = "http://wuxiantao.sinaapp.com/devapi/report_submit.php";
 	ImageView to_cmcc;
 	ImageView to_chinanet;
 	ImageView to_cmccedu;
@@ -454,7 +454,7 @@ public class MainActivity extends Activity {
 			File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
 			if (filetotal.listFiles().length != 0) {
 				report_total.setText(""+filetotal.listFiles().length);
-				upload.setImageResource(R.drawable.upload);
+				upload.setImageResource(R.drawable.upload1);
 			}
 			else
 			{
@@ -535,7 +535,6 @@ public class MainActivity extends Activity {
 			    			Toast.makeText(MainActivity.this, "网络质量不佳", Toast.LENGTH_SHORT).show();
 						}
 						
-//						Toast.makeText(MainActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 						try {
 							Thread.sleep(2000);
 							

@@ -10,16 +10,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.nullwire.trace.ExceptionHandler;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.JsResult;
@@ -37,6 +36,7 @@ public class Browser extends Activity {
 	ImageView browser_step;
 	private String stepstring;
 	private int stepint;
+	private ImageView back;
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
@@ -49,7 +49,15 @@ public class Browser extends Activity {
     
     
     public void init(){
-
+		back=(ImageView) findViewById(R.id.back);
+		back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Browser.this.finish();
+			}
+		});
     	browser_step=(ImageView) findViewById(R.id.browser_step);
     	
     	stepstring=getIntent().getStringExtra("step");
@@ -230,17 +238,40 @@ public class Browser extends Activity {
 	
 
 	
-	
-	/*
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			
-		}
-		return true;
+	private void showTips(){
+		Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle("退出测试");
+		alertDialog.setMessage("确定退出本次测试？");
+		alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				Intent intent=new Intent();
+				intent.setClass(Browser.this, MainActivity.class);
+				startActivity(intent);
+			}
+		});
+		alertDialog.setNegativeButton("取消",new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				return;
+			}
+		});
+
 		
-	}
-	*/
+		alertDialog.create().show();;  //创建对话框
+		}
+		
+
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if(keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0){
+			this.showTips();
+			return false;
+			}
+			return false;
+			}
+
 	
     
 }

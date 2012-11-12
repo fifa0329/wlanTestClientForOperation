@@ -55,7 +55,7 @@
             android:id="@+id/upload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/upload" />
+            android:src="@drawable/upload_selector" />
         </TableRow>
     
     
@@ -124,7 +124,7 @@
                      android:id="@+id/to_cmcc"
                      android:layout_width="match_parent"
                      android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
+                     android:src="@drawable/start_test_selector" />
             
     </TableRow>
            

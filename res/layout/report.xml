@@ -19,9 +19,20 @@
         android:layout_weight="60">
         
 
+                <ImageView
+            android:layout_weight="1"
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/back_selector" />    
+            
+            
+        
+
         <ImageView
+            android:layout_weight="3"
             android:id="@+id/report_step"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:src="@drawable/fourthstep" />
 
@@ -57,6 +68,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="姓名"
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
@@ -76,6 +88,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="地址"
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
@@ -96,6 +109,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="描述"
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
@@ -118,11 +132,12 @@
         android:orientation="vertical"
         android:layout_weight="60"  >
 
-        <Button
+        <ImageView
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="保存报告" />
+            android:background="@drawable/save_selector"
+            android:layout_marginBottom="5dp" />
 
     </LinearLayout>
 

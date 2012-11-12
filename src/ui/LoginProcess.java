@@ -1,32 +1,30 @@
 package ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testclient.R;
-import com.nullwire.trace.ExceptionHandler;
-
 import engine.AuthPortalCMCC;
 import engine.AuthPortalCT;
 import engine.Logger;
 
 public class LoginProcess extends Activity{
 	TextView show;
-	Button report;
-	Button logout;
-	Button browser;
+	ImageView report;
+	ImageView logout;
+	ImageView browser;
+	ImageView back;
 	StringBuilder builder=new StringBuilder();
-	private MyApplication appState;
 	private ImageView login_process_step;
 	private String stepstring;
 	private int stepint;
@@ -45,8 +43,16 @@ public class LoginProcess extends Activity{
 	
 	
 	public void init(){
+		back=(ImageView) findViewById(R.id.back);
+		back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				LoginProcess.this.finish();
+			}
+		});
 		login_process_step=(ImageView) findViewById(R.id.login_process_step);
-    	
     	stepstring=getIntent().getStringExtra("step");
     	stepint=Integer.parseInt(stepstring);
     	switch (stepint) {
@@ -69,9 +75,9 @@ public class LoginProcess extends Activity{
 
     	stepint=stepint+1;
 	show=(TextView) findViewById(R.id.show);
-	report=(Button) findViewById(R.id.report);
-	browser=(Button) findViewById(R.id.browser);
-	logout=(Button) findViewById(R.id.logout);
+	report=(ImageView) findViewById(R.id.report);
+	browser=(ImageView) findViewById(R.id.browser);
+	logout=(ImageView) findViewById(R.id.logout);
 	builder.append("正在登录中。。。"+"\n");
 	show.setText(builder.toString());
 	Logger.getInstance().startLogger();
@@ -232,7 +238,40 @@ public class LoginProcess extends Activity{
 	};
 	
 
-	
+	private void showTips(){
+		Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle("退出测试");
+		alertDialog.setMessage("确定退出本次测试？");
+		alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				Intent intent=new Intent();
+				intent.setClass(LoginProcess.this, MainActivity.class);
+				startActivity(intent);
+			}
+		});
+		alertDialog.setNegativeButton("取消",new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				return;
+			}
+		});
+
+		
+		alertDialog.create().show();;  //创建对话框
+		}
+		
+
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if(keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0){
+			this.showTips();
+			return false;
+			}
+			return false;
+			}
+
 
 	
 	

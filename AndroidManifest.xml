@@ -21,10 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ui.Login"/>
-        <activity android:name="ui.LoginProcess"/>
-        <activity android:name="ui.Browser"/>
-        <activity android:name="ui.Report"/>
+        <activity android:name="ui.Login"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="ui.LoginProcess"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="ui.Browser"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity android:name="ui.Report"
+            android:theme="@android:style/Theme.NoTitleBar"/>
     </application>
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
