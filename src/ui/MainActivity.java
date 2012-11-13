@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main1);
 		init();
 
-    	ExceptionHandler.register(this); 
+//    	ExceptionHandler.register(this); 
 	}
 
 
@@ -252,7 +252,6 @@ public class MainActivity extends Activity {
 							Log.v("scanresult", ""+listResult.get(i).toString());
 							if( listResult.get(i).capabilities.equals("[ESS]") && listResult.get(i).SSID!="CMCC" && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
 							{
-								Log.v("[ESS]", "[ESS]");
 								{
 									text_opens.add(listResult.get(i).SSID);
 								}
@@ -278,75 +277,86 @@ public class MainActivity extends Activity {
 						if(text_opens.size()!=0 && text_opens!=null)
 						{
 	
-							for(int text_num=0;text_num< text_opens.size();text_num++){
-								
-								text_open[0].setText("无");
-								text_open[1].setText("无");
-								text_open[2].setText("无");
-								text_open[3].setText("无");
-								text_open[4].setText("无");
-								view_open[0].setImageResource(R.drawable.wifi3);
-								view_open[1].setImageResource(R.drawable.wifi3);
-								view_open[2].setImageResource(R.drawable.wifi3);
-								view_open[3].setImageResource(R.drawable.wifi3);
-								view_open[4].setImageResource(R.drawable.wifi3);
-								to_open[0].setImageResource(R.drawable.start_test1);
-								to_open[1].setImageResource(R.drawable.start_test1);
-								to_open[2].setImageResource(R.drawable.start_test1);
-								to_open[3].setImageResource(R.drawable.start_test1);
-								to_open[4].setImageResource(R.drawable.start_test1);
-								Log.v("text_opens.get(text_num)", text_opens.get(text_num));
-								text_open[text_num].setText(text_opens.get(text_num));
-								view_open[text_num].setImageResource(R.drawable.wifi1);
-								to_open[text_num].setImageResource(R.drawable.start_test2);
-								to_open[text_num].setTag(text_num);
-								to_open[text_num].setOnClickListener(new OnClickListener() {
-									private ProgressDialog progressdialog;
+							for(int text_num=0,text_opens_size=0;text_num< text_opens.size();text_num++,text_opens_size++){
+								if(text_opens_size<5)
+								{
+									text_open[0].setText("无");
+									text_open[1].setText("无");
+									text_open[2].setText("无");
+									text_open[3].setText("无");
+									text_open[4].setText("无");
+									view_open[0].setImageResource(R.drawable.wifi3);
+									view_open[1].setImageResource(R.drawable.wifi3);
+									view_open[2].setImageResource(R.drawable.wifi3);
+									view_open[3].setImageResource(R.drawable.wifi3);
+									view_open[4].setImageResource(R.drawable.wifi3);
+									to_open[0].setImageResource(R.drawable.start_test1);
+									to_open[1].setImageResource(R.drawable.start_test1);
+									to_open[2].setImageResource(R.drawable.start_test1);
+									to_open[3].setImageResource(R.drawable.start_test1);
+									to_open[4].setImageResource(R.drawable.start_test1);
+									Log.v("text_opens.get(text_num)", text_opens.get(text_num));
+									text_open[text_num].setText(text_opens.get(text_num));
+//									wifi1代表信号最强3代表没有信号
+									view_open[text_num].setImageResource(R.drawable.wifi1);
+									to_open[text_num].setImageResource(R.drawable.start_test2);
+									to_open[text_num].setTag(text_num);
+									to_open[text_num].setOnClickListener(new OnClickListener() {
+										private ProgressDialog progressdialog;
 
-									@Override
-									public void onClick(View arg0) {
-										final int text_num = (Integer)arg0.getTag();
-										// TODO Auto-generated method stub
-										progressdialog = new ProgressDialog(MainActivity.this);  
-										progressdialog.setMessage("请稍候……"); 
-										progressdialog.show();
-										new Thread(new Runnable() {
-											public void run() {
-												mWifiAdmin.addApProfile("\""+text_opens.get(text_num)+"\"");
-												Log.v("addapprofile", "\""+text_opens.get(text_num)+"\"");
-												try {
-													Thread.sleep(5000);
-												} catch (InterruptedException e) {
-													// TODO Auto-generated catch block
-													e.printStackTrace();
-												}
-												
-												WifiManager mWifiManager = (WifiManager)MainActivity.this.getSystemService(Context.WIFI_SERVICE);
-												WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-											    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
-												if(isConnected)
+										@Override
+										public void onClick(View arg0) {
+											final int text_num = (Integer)arg0.getTag();
+											// TODO Auto-generated method stub
+											progressdialog = new ProgressDialog(MainActivity.this);  
+											progressdialog.setMessage("请稍候……"); 
+											progressdialog.show();
+											new Thread(new Runnable() 
+											{
+												public void run() 
 												{
-													Intent intent = new Intent();
-													progressdialog.dismiss();
-													intent.putExtra("step", "1");
-													intent.setClass(MainActivity.this, Browser.class);
-													startActivity(intent);
-												}
-												else{
-													MainActivity.this.runOnUiThread(new Runnable() {
-														@Override
-														public void run() {
-															progressdialog.dismiss();
-															Toast.makeText(MainActivity.this, "连接失败，请重试", Toast.LENGTH_LONG).show();
-														}
-													});
-												}
-												
-											};
-										}).start();
+													mWifiAdmin.addApProfile("\""+text_opens.get(text_num)+"\"");
+													Log.v("addapprofile", "\""+text_opens.get(text_num)+"\"");
+													try 
+													{
+														Thread.sleep(5000);
+													} catch (InterruptedException e) 
+													{
+														// TODO Auto-generated catch block
+														e.printStackTrace();
+													}
+													
+													WifiManager mWifiManager = (WifiManager)MainActivity.this.getSystemService(Context.WIFI_SERVICE);
+													WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+												    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
+													if(isConnected)
+													{
+														Intent intent = new Intent();
+														progressdialog.dismiss();
+														intent.putExtra("step", "1");
+														intent.setClass(MainActivity.this, Browser.class);
+														startActivity(intent);
+													}
+													else
+													{
+														MainActivity.this.runOnUiThread(new Runnable() 
+														{
+															@Override
+															public void run() 
+															{
+																progressdialog.dismiss();
+																Toast.makeText(MainActivity.this, "连接失败，请重试", Toast.LENGTH_LONG).show();
+															}
+														});
+													}
+													
+												};
+											}).start();
 
-									}
-								});
+										}
+									});
+								}
+
 
 							}
 						}
@@ -484,7 +494,8 @@ public class MainActivity extends Activity {
 					
 					
 
-					for(i=0;i<files.length;i++){
+					for(i=0;i<files.length;i++)
+					{
 		    			Log.v("test", "" + files.length);
 
 						HttpURLConnection httpConn;
@@ -513,20 +524,27 @@ public class MainActivity extends Activity {
 							MainActivity.this.runOnUiThread(new Runnable() {
 								@Override
 								public void run() {
-									files[i].delete();
-									File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
-									if (filetotal.listFiles().length != 0) 
-									
-									{
-										report_total.setText(""+filetotal.listFiles().length);
-										Log.v("test", "" + filetotal.listFiles().length);	
+									try {
+										files[i].delete();
+										File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
+										if (filetotal.listFiles().length != 0) 
+										
+										{
+											report_total.setText(""+filetotal.listFiles().length);
+											Log.v("test", "" + filetotal.listFiles().length);	
+										}
+										
+										else {
+											report_total.setText(""+"0");
+											progress.dismiss();
+											upload.setImageResource(R.drawable.uploaded);
+										}
+									} catch (ArrayIndexOutOfBoundsException e) {
+										// TODO: handle exception
+										
+										
 									}
-									
-									else {
-										report_total.setText(""+"0");
-										progress.dismiss();
-										upload.setImageResource(R.drawable.uploaded);
-									}
+
 
 								}
 							});

@@ -28,6 +28,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Browser extends Activity {
     private Button complete;
@@ -37,6 +38,16 @@ public class Browser extends Activity {
 	private String stepstring;
 	private int stepint;
 	private ImageView back;
+	TextView tip;
+	TextView show_id;
+	TextView show_password;
+	Button clip_id;
+	Button clip_password;
+	MyApplication mApp;
+	String user;
+	String password;
+	
+	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
@@ -49,7 +60,54 @@ public class Browser extends Activity {
     
     
     public void init(){
-		back=(ImageView) findViewById(R.id.back);
+    	show_id=(TextView) findViewById(R.id.show_id);
+    	show_password=(TextView) findViewById(R.id.show_password);
+    	clip_id=(Button) findViewById(R.id.clip_id);
+    	clip_password=(Button) findViewById(R.id.clip_password);
+    	mApp=(MyApplication) getApplication();
+		user = mApp.getUser();
+		password = mApp.getPassword();
+		
+		
+		show_id.setText(user);
+		show_password.setText(password);
+		
+		clip_id.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+		 
+				     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
+				     clipboard.setText(user);
+				
+			}
+		});
+		
+		
+		
+		clip_password.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
+			     clipboard.setText(password);
+				
+				
+			}
+		});
+		
+
+		
+		
+    	
+    	
+    	
+    	
+    	
+    	back=(ImageView) findViewById(R.id.back);
 		back.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -59,21 +117,26 @@ public class Browser extends Activity {
 			}
 		});
     	browser_step=(ImageView) findViewById(R.id.browser_step);
+    	tip=(TextView) findViewById(R.id.tip);
     	
     	stepstring=getIntent().getStringExtra("step");
     	stepint=Integer.parseInt(stepstring);
     	switch (stepint) {
 		case 1:
 			browser_step.setImageResource(R.drawable.firststep);
+			tip.setText("使用浏览器,完成该开放网络的一次上线下线过程,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 		case 2:
 			browser_step.setImageResource(R.drawable.secondstep);
+			tip.setText("测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 		case 3:
 			browser_step.setImageResource(R.drawable.thirdstep);
+			tip.setText("测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 		case 4:
 			browser_step.setImageResource(R.drawable.fourthstep);
+			tip.setText("测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 
 		default:

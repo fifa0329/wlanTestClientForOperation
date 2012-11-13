@@ -129,20 +129,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
-
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_cmcc"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+    
             
             
             
@@ -225,20 +212,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
-
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_cmccedu"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+     
              
                 
                 
@@ -298,20 +272,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_chinanet"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
     </TableRow>
         
         
@@ -388,20 +349,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open1"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
     </TableRow>
                  
              <ImageView 
@@ -456,20 +404,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open2"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
     </TableRow>
     
          <ImageView 
@@ -523,20 +458,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
-
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open3"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+   
     </TableRow>
     
           <ImageView 
@@ -593,20 +515,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
-
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open4"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+     
     </TableRow>
     
                  
@@ -664,20 +573,7 @@
     </TableRow>
            
              
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open5"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
     </TableRow>
     
                  
