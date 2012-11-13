@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
 
 			public void onClick(View arg0) {
 				mApp.setCarrier(MyApplication.CMCC);
-				mWifiAdmin.addApProfile("\"CMCC\"");
+//				mWifiAdmin.addApProfile("\"CMCC\"");
 				Intent intent = new Intent();
 				intent.setClass(MainActivity.this, Login.class);
 				startActivity(intent);

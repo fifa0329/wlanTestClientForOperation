@@ -2,58 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@color/white">
-    
-    
-    
-        <TableRow
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80"
-        android:background="@drawable/a">
-        
+        android:background="@drawable/a" >
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        
-            
-                <ImageView
-            android:layout_weight="1"
-            android:id="@+id/back"
+            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/back_selector" />    
-            
-            
-        
+            android:layout_weight="60" >
 
-        <ImageView
-            android:layout_weight="3"
-            android:id="@+id/login_process_step"
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/back_selector" />
+
+            <ImageView
+                android:id="@+id/login_process_step"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:src="@drawable/fourthstep" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/fourthstep" />
-
+            android:layout_weight="120" >
         </TableRow>
-        
-        
-        
-        <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
-        >
-        
-        </TableRow>
-    
-    
     </TableRow>
-
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -66,11 +53,10 @@
             android:layout_height="wrap_content"
             android:text="正在登录。。。
                                                                      登录成功"
-            android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/black" />
     </LinearLayout>
-
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -86,25 +72,21 @@
                 android:id="@+id/button1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="返回" 
                 android:layout_weight="1"
-                android:visibility="invisible" />"
+                android:text="返回"
+                android:visibility="invisible" />
+"
 
-
-            <ImageView 
+            <ImageView
                 android:id="@+id/browser"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:visibility="invisible"
-                android:background="@drawable/browser_selector"/>
-
+                android:background="@drawable/browser_selector"
+                android:visibility="invisible" />
         </TableRow>
-        
-
     </LinearLayout>
-    
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -121,22 +103,17 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:visibility="invisible"
                 android:background="@drawable/logout_selector"
-                />
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/report"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:visibility="invisible"
-                android:background="@drawable/report_selector"/>
-
+                android:background="@drawable/report_selector"
+                android:visibility="invisible" />
         </TableRow>
-        
-
     </LinearLayout>
-    
 
 </LinearLayout>

@@ -2,143 +2,128 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
+    android:background="@color/white"
+    android:orientation="vertical" >
 
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="100"
-        android:background="@drawable/a">
-        
-        <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        
+        android:background="@drawable/a" >
 
-                <ImageView
-            android:layout_weight="1"
-            android:id="@+id/back"
+        <TableRow
+            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/back_selector" />    
-            
-            
-        
+            android:layout_weight="60" >
 
-        <ImageView
-            android:layout_weight="3"
-            android:id="@+id/report_step"
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/back_selector" />
+
+            <ImageView
+                android:id="@+id/report_step"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:src="@drawable/fourthstep" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/fourthstep" />
-
+            android:layout_weight="120" >
         </TableRow>
-        
-        
-        
-        <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
-        >
-        
-        </TableRow>
-    
-    
     </TableRow>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="500" >
-        
-            <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_weight="500"
+        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="姓名"
-            android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="阿猫阿狗" />
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="地址"
-            android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <EditText
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="常州新百" 
-            />
-    </TableRow>
-    
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="描述"
-            android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <EditText
-            android:id="@+id/comments"
+            android:id="@+id/tableRow1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="10"
-            android:hint="客户端登陆不了，使用浏览器可以登陆" >
+            android:layout_height="wrap_content" >
 
-            <requestFocus />
-        </EditText>
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="姓名"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black" />
 
-    </TableRow>
-        
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="阿猫阿狗" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="地址"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="常州新百" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="描述"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/comments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:hint="客户端登陆不了，使用浏览器可以登陆" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
     </LinearLayout>
-     
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="60"  >
+        android:layout_weight="60"
+        android:orientation="vertical" >
 
         <ImageView
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/save_selector"
-            android:layout_marginBottom="5dp" />
-
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/save_selector" />
     </LinearLayout>
 
 </LinearLayout>
