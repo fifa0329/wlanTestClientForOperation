@@ -109,6 +109,9 @@ public class AuthPortalCMCC {
 		case 17:
 			ret = "同一用户正在认证中";
 			break;
+		case 21:
+			ret = "账号不存在";
+			break;
 		case 26:
 			ret = "用户与在线用户名不一致";
 			break;
