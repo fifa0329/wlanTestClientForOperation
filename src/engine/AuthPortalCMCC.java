@@ -12,6 +12,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -190,10 +191,12 @@ public class AuthPortalCMCC {
 		this.user = user;
 		this.password = password;
 		try {
+			Log.v("========================================", getCurUrl());
+			
+			
 			final HttpParams params = new BasicHttpParams();
 			// This line causes CMCC-EDU no response.
 			//HttpProtocolParams.setUserAgent(params, "G3WLAN");
-			
 			// The following lines are for Guangdong AC bug.
 			SchemeRegistry schemeRegistry = new SchemeRegistry();
 			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
@@ -369,6 +372,35 @@ public class AuthPortalCMCC {
 	    }
 	}
 	
+	
+	
+	public String getCurUrl() {
+		String currentUrl = null;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(LOGIN_TEST_URL);
+		BasicHttpContext context = new BasicHttpContext();
+		HttpResponse response;
+		try {
+			response = httpClient.execute(httpget, context);
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+				throw new IOException(response.getStatusLine().toString());
+			HttpUriRequest currentReq = (HttpUriRequest) context
+					.getAttribute(ExecutionContext.HTTP_REQUEST);
+			HttpHost currentHost = (HttpHost) context
+					.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+			currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
+					.getURI().toString() : (currentHost.toURI() + currentReq
+					.getURI());
+
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentUrl;
+	}
 
 
 }

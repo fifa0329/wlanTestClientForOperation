@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -226,29 +227,45 @@ public class WifiAdmin {
 	
 //	自动连接想要的AP
 	public void addApProfile(String ssid) {
-		
-		for (WifiConfiguration config : mWifiManager.getConfiguredNetworks()) {
-			Log.v("测试", mWifiManager.getConfiguredNetworks().toString());
+		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+	    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
+	    if(isConnected && ("\""+mWifiInfo.getSSID()+"\"").equals((String)ssid))
+	    {
+	    	
+	    }
+	    else
+	    {
+	    	for (WifiConfiguration config : mWifiManager.getConfiguredNetworks()) {
+				Log.v("测试", mWifiManager.getConfiguredNetworks().toString());
 
-			if(config.SSID==null ){
-				mWifiManager.removeNetwork(config.networkId);
+				if(config.SSID==null ){
+					mWifiManager.removeNetwork(config.networkId);
+				}
+				if (config.SSID!=null&&config.SSID.equals(ssid)) {
+					mWifiManager.disconnect();
+					mWifiManager.enableNetwork(config.networkId, true);
+					mWifiManager.reconnect();
+					return;
+				}
 			}
-			if (config.SSID!=null&&config.SSID.equals(ssid)) {
-				mWifiManager.enableNetwork(config.networkId, true);
-				return;
-			}
-		}
-		
-		Log.i("WLANEngine", "addApProfile:" + ssid);
-		WifiConfiguration config = new WifiConfiguration();
-		config.SSID = ssid;
-		config.priority = 20;
-		config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-		
-		int networkId = mWifiManager.addNetwork(config);
-		if (networkId != -1) {
-			mWifiManager.enableNetwork(networkId, true);
+			
+			Log.i("WLANEngine", "addApProfile:" + ssid);
+			WifiConfiguration config = new WifiConfiguration();
+			config.SSID = ssid;
+			config.priority = 20;
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+			config.status=WifiConfiguration.Status.ENABLED;
+			int networkId = mWifiManager.addNetwork(config);
+			mWifiManager.setWifiEnabled(true);
 			mWifiManager.saveConfiguration();
-		}
+			
+			
+			if (networkId != -1) {
+				mWifiManager.disconnect();
+				mWifiManager.enableNetwork(networkId, true);
+				mWifiManager.reconnect();
+			}
+	    }
+	    
 	}
 }
