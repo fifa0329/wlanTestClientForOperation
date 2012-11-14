@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpHost;
@@ -29,21 +30,22 @@ import android.content.Context;
 import android.util.Log;
 
 public class AuthPortalStar {
-	private final static int RET_OTHER = -1;
-	private final static int RET_UNKNOWN = -2;
-	private final static int RET_ALREADY = -3;
+	private final static int RET_OTHER		= -1;
+	private final static int RET_UNKNOWN	= -2;
+	private final static int RET_ALREADY	= -3;
+	private final static int SUCCESS	= 1;
+	
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	private static String LOGIN_REQUEST_SIGNATURE = "在星巴克享受免费无线上网";
-	private static String LOGIN_PASSWORD_PATTERN_ACTION = "<form.*?action=\"(.*?)\".*?name=\"FormA\".*?>";
-	private static String LOGIN_SUBMIT_PATTERN_ACTION = "<form.*?action=\"(.*?)\".*?name=\"FormB\".*?>";
-	private static String GET_PASSWORD_ACTION = "/ck/";
-	private static String SUBMIT_ACTION = "/u/";
+	private static String LOGIN_SUCCESS_SIGNATURE = "星巴克江浙沪的微博";
+	private static String STARBUCKS_PATTERN="http://.*?/(.*?)";
+	private static String GET_PASSWORD_ACTION = "ck/";
+	private static String SUBMIT_ACTION = "u/";
 	private static AuthPortalStar instance = null;
-	private String user="";
-	private Pattern formPattern;
-	private Pattern inputPattern;
-	private String password="";
+	private Pattern starbucksPattern;
+	private String user;
+	private String password;
 	
 
 
@@ -51,8 +53,7 @@ public class AuthPortalStar {
 	
 	
 	private AuthPortalStar() {
-		formPattern = Pattern.compile(LOGIN_PASSWORD_PATTERN_ACTION, Pattern.DOTALL);
-		inputPattern = Pattern.compile(LOGIN_SUBMIT_PATTERN_ACTION, Pattern.DOTALL);
+		starbucksPattern=Pattern.compile(STARBUCKS_PATTERN,Pattern.DOTALL);
 	}
 
 	public static AuthPortalStar getInstance() {
@@ -65,23 +66,15 @@ public class AuthPortalStar {
 	public String getDescription(int code) {
 		String ret = "未知错误代码" + code;
 		switch (code) {
-		case RET_OTHER:
-			ret = "异常错误，请联系10086";
+
+		case RET_ALREADY:
+			ret =  "已经在线，无需重复登录（是否上次登录未下线？）";
+			break;
+		case SUCCESS:
+			ret = "通过星巴克后台登录成功";
 			break;
 		case RET_UNKNOWN:
-			ret = "未知网络错误";
-			break;
-		case RET_ALREADY:
-			ret = "已经在线，无需重复登录（是否上次登录未下线？）";
-			break;
-		case 0:
-			ret = "操作成功";
-			break;
-		case 1:
-			ret = "用户未注册该业务";
-			break;
-		case 2:
-			ret = "用户当前处于非正常状态";
+			ret = "未知错误";
 			break;
 
 		}
@@ -97,10 +90,11 @@ public class AuthPortalStar {
 	
 	
 
-	public int login(String user, String password, Context context) {
+	public int login(String user, String password) {
 		this.user = user;
 		this.password = password;
 		try {
+			
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = null;
 			String output = null;
@@ -133,8 +127,13 @@ public class AuthPortalStar {
 			          /* 添加请求参数到请求对象*/
 			        httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8)); 
 					response = client.execute(httpPost);
-					output = stream2String(response.getEntity().getContent());
+					output = EntityUtils.toString(response.getEntity(), "GBK");
 					Log.v("================================================================", output);
+					if(output.contains(LOGIN_SUCCESS_SIGNATURE)) 
+					{
+						Logger.getInstance().writeLog("Login success!");
+						return SUCCESS;
+					}
 					} 
 			        catch (Exception e) 
 				{
@@ -182,24 +181,28 @@ public class AuthPortalStar {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return currentUrl;
+		Matcher starbucksMatcher = starbucksPattern.matcher(currentUrl);
+		starbucksMatcher.find();
+		String Url=starbucksMatcher.group(0);
+		return Url;
 	}
 	
 	
 		
 	
 	
-	public void getDynamicPassword(String user,String curUrl) {
+	public void getDynamicPassword(String user) {
 		this.user=user;
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost httpPost=new HttpPost(curUrl+GET_PASSWORD_ACTION);
+			HttpPost httpPost=new HttpPost(getCurUrl()+GET_PASSWORD_ACTION);
 	        List <NameValuePair> params =new ArrayList <NameValuePair>(); 
 	        params.add(new BasicNameValuePair("Mobile", user)); 
 	          /* 添加请求参数到请求对象*/
 	        httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8)); 
 			HttpResponse response = client.execute(httpPost);
 			String output = stream2String(response.getEntity().getContent());
+			Logger.getInstance().writeLog(output);
 			Log.v("================================================================", output);
 			} 
 	        catch (Exception e) 
@@ -219,5 +222,6 @@ public class AuthPortalStar {
 		}
 		return total.toString();
 	}
+
 
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 
+	public static int STARBUCKS = 2;
 	public static int CMCC = 0;
 	public static int CHINANET = 1;
 

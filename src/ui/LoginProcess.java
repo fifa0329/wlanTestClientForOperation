@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.testclient.R;
 import engine.AuthPortalCMCC;
 import engine.AuthPortalCT;
+import engine.AuthPortalStar;
 import engine.Logger;
 
 public class LoginProcess extends Activity{
@@ -148,6 +149,12 @@ public class LoginProcess extends Activity{
 				code = AuthPortalCT.getInstance().login(user, password);
 				result = (code == 50);
 				description = AuthPortalCT.getInstance().getDescription(code);
+			}
+			else if(carrier == MyApplication.STARBUCKS)
+			{
+				code=AuthPortalStar.getInstance().login(user, password);
+				result = (code == 1);
+				description = AuthPortalStar.getInstance().getDescription(code);
 			}
 			final String desc = description;
 			final boolean connectionReady = AuthPortalCT.getInstance().testConnection();

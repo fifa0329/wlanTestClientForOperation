@@ -227,6 +227,11 @@ public class WifiAdmin {
 	
 //	自动连接想要的AP
 	public void addApProfile(String ssid) {
+		for (WifiConfiguration config : mWifiManager.getConfiguredNetworks())
+		{
+			mWifiManager.removeNetwork(config.networkId);
+		}
+		
 		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
 	    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
 	    if(isConnected && ("\""+mWifiInfo.getSSID()+"\"").equals((String)ssid))
@@ -241,7 +246,8 @@ public class WifiAdmin {
 				if(config.SSID==null ){
 					mWifiManager.removeNetwork(config.networkId);
 				}
-				if (config.SSID!=null&&config.SSID.equals(ssid)) {
+				if (config.SSID!=null && config.SSID.equals(ssid))
+				{
 					mWifiManager.disconnect();
 					mWifiManager.enableNetwork(config.networkId, true);
 					mWifiManager.reconnect();

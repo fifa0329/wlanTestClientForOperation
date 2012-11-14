@@ -60,6 +60,11 @@ public class AuthPortalCMCC {
 	private static String LOGIN_INPUT_PATTERN =  "<input.*?name=\"(.*?)\".*?value=\"(.*?)\".*?>";
 	private static String LOGIN_RESPONSE_CODE_PATTERN = "cmcccs\\|login_res\\|(.*?)\\|";
 	private static String LOGOUT_RESPONSE_CODE_PATTERN = "cmcccs\\|offline_res\\|(.*?)\\|";
+	private static String STARBUCKS_PATTERN="http://.*?/";
+	
+	
+	
+	
 	
 	private static AuthPortalCMCC instance = null;
 	private String nextAction = null;
@@ -69,12 +74,14 @@ public class AuthPortalCMCC {
 	private Pattern inputPattern = null;
 	private Pattern loginCodePattern = null;
 	private Pattern logoutCodePattern = null;
+	private Pattern starbucksPattern;
 	
 	private AuthPortalCMCC() {
 		formPattern = Pattern.compile(LOGIN_FORM_PATTERN, Pattern.DOTALL);
 		inputPattern = Pattern.compile(LOGIN_INPUT_PATTERN, Pattern.DOTALL);
 		loginCodePattern = Pattern.compile(LOGIN_RESPONSE_CODE_PATTERN, Pattern.DOTALL);
 		logoutCodePattern = Pattern.compile(LOGOUT_RESPONSE_CODE_PATTERN, Pattern.DOTALL);
+		starbucksPattern=Pattern.compile(STARBUCKS_PATTERN, Pattern.DOTALL);
 	}
 	
 	public static AuthPortalCMCC getInstance() {
@@ -191,7 +198,7 @@ public class AuthPortalCMCC {
 		this.user = user;
 		this.password = password;
 		try {
-			Log.v("========================================", getCurUrl());
+//			Log.v("==================================================================================================================================================================================================================================================================================================================================================================================", getCurUrl());
 			
 			
 			final HttpParams params = new BasicHttpParams();
@@ -399,7 +406,10 @@ public class AuthPortalCMCC {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return currentUrl;
+		Matcher starbucksMatcher = starbucksPattern.matcher(currentUrl);
+		starbucksMatcher.find();
+		String Url=starbucksMatcher.group(0);
+		return Url;
 	}
 
 

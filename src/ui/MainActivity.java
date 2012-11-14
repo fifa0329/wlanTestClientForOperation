@@ -13,7 +13,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.example.testclient.R;
-import com.nullwire.trace.ExceptionHandler;
 
 import engine.WifiAdmin;
 
@@ -27,9 +26,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -63,6 +60,7 @@ public class MainActivity extends Activity {
 	ImageView view_cmcc;
 	ImageView view_cmccedu;
 	ImageView view_chinanet;
+	ImageView to_starbucks;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,7 +74,18 @@ public class MainActivity extends Activity {
 
 	public void init() {
 
-		
+		to_starbucks=(ImageView) findViewById(R.id.to_starbucks);
+		to_starbucks.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				mApp.setCarrier(MyApplication.STARBUCKS);
+				Intent intent=new Intent();
+				intent.setClass(MainActivity.this, Login.class);
+				startActivity(intent);
+			}
+		});
 		
 		mWifiAdmin = new WifiAdmin(MainActivity.this);
 

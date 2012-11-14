@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 
 import com.example.testclient.R;
 
+import engine.AuthPortalStar;
 import engine.WifiAdmin;
 
 import android.app.Activity;
@@ -40,6 +41,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableRow;
@@ -60,6 +62,7 @@ public class Login extends Activity{
 	TextView password1;
 	TextView password2;
 	TextView password3;
+	Button get_password;
 	private ProgressDialog progressdialog;
 	private byte[] body;
 	private MyApplication mApp;
@@ -79,6 +82,15 @@ public class Login extends Activity{
 	
 	 
 	public void init(){
+		get_password=(Button) findViewById(R.id.get_password);
+		get_password.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				AuthPortalStar.getInstance().getDynamicPassword(account.getText().toString());
+			}
+		});
 		id1=(TextView) findViewById(R.id.id1);
 		id2=(TextView) findViewById(R.id.id2);
 		id3=(TextView) findViewById(R.id.id3);
@@ -273,7 +285,7 @@ public class Login extends Activity{
 		
 		login.setOnClickListener(new OnClickListener() {
 			
-			private ProgressDialog progressdialog;
+			
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
