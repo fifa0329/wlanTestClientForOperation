@@ -1,183 +1,115 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
-    
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60"
-        android:background="@drawable/a">
-        
-        <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        
+        android:background="@drawable/a" >
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/firststep" />
+            android:layout_weight="60" >
 
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/firststep" />
         </TableRow>
-        
-        
-        
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
-        >
-        
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
         </TableRow>
-    
-    
     </TableRow>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-        <TableRow
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="140"
-        android:background="@drawable/login_write">
-        
+        android:layout_marginTop="5sp"
+        android:background="@drawable/login_write" >
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        
-
-        
-
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60" >
         </TableRow>
-        
-        
-        
+
         <TableLayout
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
-        >
-        
-                    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:paddingLeft="5dp"
-        android:paddingBottom="5dp"
-        >
-        
-                        <EditText 
-                           android:id="@+id/account"
-                           android:layout_height="match_parent"
-                           android:layout_width="0dp" 
-                           android:layout_weight="1"
-                           
-                           />
-        
-                        
-                        
-                        
-        
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
 
-            
-            
-            
-        </TableRow>
-        
-                            <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="120"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-        android:paddingTop="5dp"
-        android:paddingLeft="5dp"
-        android:paddingBottom="5dp"
-        >
-        
-                                
-                                <EditText 
-                                   android:id="@+id/password"
-                                   android:layout_height="match_parent" 
-                                                              android:layout_width="0dp" 
-                           android:layout_weight="1"/>
-        
+                android:paddingTop="5dp" >
 
-            
-            
-            
-        </TableRow>
-        
+                <EditText
+                    android:id="@+id/account"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+            </TableRow>
 
-            
-            
-            
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="120"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp" >
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:inputType="textPassword" />
+            </TableRow>
         </TableLayout>
-    
-    
     </TableRow>
-    
-        
-        
-        
-        
-        
-         
-        <TableRow
-        
+
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="70"
-        android:background="@drawable/login1">
-                    <ImageView 
-                        
-                        
-        android:layout_height="match_parent"
-        android:layout_width="0dp"                
-         android:layout_weight="1"                  
-             android:id="@+id/login"           
-                        
-        android:background="@drawable/login1"/> 
+        android:layout_weight="70" 
+        android:layout_marginTop="5sp">
 
-    
-    
+        <ImageView
+            android:id="@+id/login"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/login_selector" />
     </TableRow>
 
-        
-        
-            <ImageView 
-        android:src="@drawable/cut_off_rule"/>    
-        
-            
-                 
-        
-        
-        <TableRow
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="70"
-        >
+        android:layout_weight="70" >
+
         <TextView
             android:id="@+id/textView1"
             android:layout_width="0dp"
@@ -185,284 +117,192 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="当前服务器为你预置的账号密码如下:          
-(点击即可自动填入)" />
+(点击即可自动填入)"
+            android:textColor="@color/black" />
+    </TableRow>
 
-    
-    
-    </TableRow>   
-    
-        
-        
-        
-        
-        
-        
-                 
-        <TableRow
+    <TableRow
         android:id="@+id/click1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80" 
-        android:background="@drawable/show_id">
-        
-                    <TableRow
-        
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80" >
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_weight="80"
+        android:background="@drawable/show_id_selector" >
 
-
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
-
-        <TextView
-            android:id="@+id/id1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TextView" 
-            android:textColor="@color/white"
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80" >
-
-                 
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="140" >
-
-                 <TextView
-                     android:id="@+id/password1"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:gravity="center"
-                     android:text="TextView"
-                     android:textColor="@color/white" />
-            
-    </TableRow>       
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-    </TableRow>   
-    
-            
-            
-        
-        
         <TableRow
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <TextView
+                android:id="@+id/id1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/white" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="140" >
+
+            <TextView
+                android:id="@+id/password1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
+        </TableRow>
+    </TableRow>
+
+    <TableRow
         android:id="@+id/click2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80" 
-        android:background="@drawable/show_id">
-        
-                    <TableRow
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80" >
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginTop="5sp"
+        android:layout_weight="80"
+        android:background="@drawable/show_id_selector" >
 
-
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
-
-        <TextView
-            android:id="@+id/id2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TextView" 
-            android:gravity="center"
-            android:textColor="@color/white"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80" >
-
-                 
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="140" >
-
-                 <TextView
-                     android:id="@+id/password2"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:gravity="center"
-                     android:text="TextView"
-                     android:textColor="@color/white" />
-            
-    </TableRow>       
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-    </TableRow>   
-    
-        
-        
-        
-        
         <TableRow
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <TextView
+                android:id="@+id/id2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/white" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="140" >
+
+            <TextView
+                android:id="@+id/password2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
+        </TableRow>
+    </TableRow>
+
+    <TableRow
         android:id="@+id/click3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="80" 
-        android:background="@drawable/show_id">
-        
-                    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80" >
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginTop="5sp"
+        android:layout_weight="80"
+        android:background="@drawable/show_id_selector" >
 
-
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
-
-        <TextView
-            android:id="@+id/id3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TextView" 
-            android:gravity="center"
-            android:textColor="@color/white"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="80" >
-
-                 
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="140" >
-
-                 <TextView
-                     android:id="@+id/password3"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:gravity="center"
-                     android:text="TextView" 
-                     android:textColor="@color/white"/>
-            
-    </TableRow>       
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-    </TableRow>   
-            
-                 
         <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <TextView
+                android:id="@+id/id3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/white" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="80" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="140" >
+
+            <TextView
+                android:id="@+id/password3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:inputType="textPassword"
+                android:textColor="@color/white" />
+        </TableRow>
+    </TableRow>
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginTop="5sp" 
         >
-             <ImageView 
-                 android:layout_weight="1"
-                 android:layout_width="0dp"
-                 android:layout_height="match_parent"
-                 android:background="@drawable/refresh1"/>
-            
-            
-            
-        
 
-    
-    
-    </TableRow>   
-    
-        
-    
-             
-        <TableRow
+        <ImageView
+            android:id="@+id/refresh"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/refresh_selector" />
+    </TableRow>
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="100"
-        >
-        
-
-    
-    
-    </TableRow>   
-    
-    
-    
-    
-    
+        android:layout_weight="100" >
+    </TableRow>
 
 </TableLayout>

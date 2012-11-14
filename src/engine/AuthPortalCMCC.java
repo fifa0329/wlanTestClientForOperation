@@ -1,21 +1,29 @@
 package engine;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
+import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionOperator;
 import org.apache.http.conn.OperatedClientConnection;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.DefaultClientConnection;
 import org.apache.http.impl.conn.DefaultClientConnectionOperator;
@@ -28,7 +36,9 @@ import org.apache.http.message.BasicLineParser;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 
@@ -36,6 +46,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class AuthPortalCMCC {
 	private final static int RET_OTHER		= -1;
@@ -183,10 +194,12 @@ public class AuthPortalCMCC {
 		this.user = user;
 		this.password = password;
 		try {
+			Log.v("========================================", getCurUrl());
+			
+			
 			final HttpParams params = new BasicHttpParams();
 			// This line causes CMCC-EDU no response.
 			//HttpProtocolParams.setUserAgent(params, "G3WLAN");
-			
 			// The following lines are for Guangdong AC bug.
 			SchemeRegistry schemeRegistry = new SchemeRegistry();
 			schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
@@ -202,6 +215,8 @@ public class AuthPortalCMCC {
 			HttpClient client = new DefaultHttpClient(connectionManager, params);
 			HttpResponse response = null;
 			String output = null;
+			
+			
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			String bssid = prefs.getString("lastBssid", null);
@@ -227,9 +242,9 @@ public class AuthPortalCMCC {
 			
 			response = client.execute(new HttpGet(LOGIN_TEST_URL));
 			output = EntityUtils.toString(response.getEntity(), "GBK");
+
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
-			
 			if (output.contains(LOGIN_TEST_SIGNATURE)) {
 				Logger.getInstance().writeLog("Already loginned!");
 				return RET_ALREADY;
@@ -359,5 +374,36 @@ public class AuthPortalCMCC {
 	        return new MyClientConnectionOperator(sr);
 	    }
 	}
+	
+	
+	
+	public String getCurUrl() {
+		String currentUrl = null;
+		HttpClient httpClient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(LOGIN_TEST_URL);
+		BasicHttpContext context = new BasicHttpContext();
+		HttpResponse response;
+		try {
+			response = httpClient.execute(httpget, context);
+			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
+				throw new IOException(response.getStatusLine().toString());
+			HttpUriRequest currentReq = (HttpUriRequest) context
+					.getAttribute(ExecutionContext.HTTP_REQUEST);
+			HttpHost currentHost = (HttpHost) context
+					.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+			currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
+					.getURI().toString() : (currentHost.toURI() + currentReq
+					.getURI());
+
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return currentUrl;
+	}
+
 
 }

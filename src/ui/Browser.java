@@ -10,16 +10,15 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-
-import com.nullwire.trace.ExceptionHandler;
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.JsResult;
@@ -29,6 +28,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class Browser extends Activity {
     private Button complete;
@@ -37,6 +37,17 @@ public class Browser extends Activity {
 	ImageView browser_step;
 	private String stepstring;
 	private int stepint;
+	private ImageView back;
+	TextView tip;
+	TextView show_id;
+	TextView show_password;
+	Button clip_id;
+	Button clip_password;
+	MyApplication mApp;
+	String user;
+	String password;
+	
+	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser);
@@ -49,23 +60,83 @@ public class Browser extends Activity {
     
     
     public void init(){
+    	show_id=(TextView) findViewById(R.id.show_id);
+    	show_password=(TextView) findViewById(R.id.show_password);
+    	clip_id=(Button) findViewById(R.id.clip_id);
+    	clip_password=(Button) findViewById(R.id.clip_password);
+    	mApp=(MyApplication) getApplication();
+		user = mApp.getUser();
+		password = mApp.getPassword();
+		
+		
+		show_id.setText(user);
+		show_password.setText(password);
+		
+		clip_id.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+		 
+				     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
+				     clipboard.setText(user);
+				
+			}
+		});
+		
+		
+		
+		clip_password.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
+			     clipboard.setText(password);
+				
+				
+			}
+		});
+		
 
+		
+		
+    	
+    	
+    	
+    	
+    	
+    	back=(ImageView) findViewById(R.id.back);
+		back.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Browser.this.finish();
+			}
+		});
     	browser_step=(ImageView) findViewById(R.id.browser_step);
+    	tip=(TextView) findViewById(R.id.tip);
     	
     	stepstring=getIntent().getStringExtra("step");
     	stepint=Integer.parseInt(stepstring);
     	switch (stepint) {
 		case 1:
 			browser_step.setImageResource(R.drawable.firststep);
+			tip.setText("使用浏览器,完成该开放网络的一次上线下线过程,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 		case 2:
 			browser_step.setImageResource(R.drawable.secondstep);
+			tip.setText("测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 		case 3:
 			browser_step.setImageResource(R.drawable.thirdstep);
+			tip.setText("测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 		case 4:
 			browser_step.setImageResource(R.drawable.fourthstep);
+			tip.setText("测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”");
 			break;
 
 		default:
@@ -230,17 +301,40 @@ public class Browser extends Activity {
 	
 
 	
-	
-	/*
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		if(keyCode == KeyEvent.KEYCODE_BACK) {
-			
-		}
-		return true;
+	private void showTips(){
+		Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setTitle("退出测试");
+		alertDialog.setMessage("确定退出本次测试？");
+		alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				Intent intent=new Intent();
+				intent.setClass(Browser.this, MainActivity.class);
+				startActivity(intent);
+			}
+		});
+		alertDialog.setNegativeButton("取消",new DialogInterface.OnClickListener() 
+		{
+			public void onClick(DialogInterface dialog, int which)
+			{
+				return;
+			}
+		});
+
 		
-	}
-	*/
+		alertDialog.create().show();;  //创建对话框
+		}
+		
+
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			if(keyCode==KeyEvent.KEYCODE_BACK && event.getRepeatCount()==0){
+			this.showTips();
+			return false;
+			}
+			return false;
+			}
+
 	
     
 }

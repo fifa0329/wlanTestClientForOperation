@@ -2,108 +2,150 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
+    android:background="@color/white"
+    android:orientation="vertical" >
 
-    
-        <TableRow
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60"
-        android:background="@drawable/a">
-        
-        <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        
+        android:background="@drawable/a" >
 
-        <ImageView
-            android:id="@+id/browser_step"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/fourthstep" />
+            android:layout_weight="60" >
 
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@drawable/back_selector" />
+
+            <ImageView
+                android:id="@+id/browser_step"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:src="@drawable/fourthstep" />
         </TableRow>
-        
-        
-        
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120"
-        >
-        
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
         </TableRow>
-    
-    
     </TableRow>
-    
+
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tip"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="80"
-        android:text="本页面旨在测试浏览器的登陆可行性,请将账号密码填入,完成“上线——下线”操作后点击“测试完成”"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-                <TableRow
+        android:layout_weight="90.92"
+        android:text="测试该无线网络通过浏览器登陆是否可行,根据网页提示操作,完成“上线——下线”操作后,点击“测试完成”"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/black" />
+
+    <TableRow
         android:id="@+id/tableRow1"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="0dp"
+        android:layout_weight="50" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="70dp"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="账号"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:layout_weight="50" >
 
-        <EditText
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:hint="139123456789" />
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50" >
+
+                <TextView
+                    android:id="@+id/show_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/black" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50" >
+
+                <Button
+                    android:id="@+id/clip_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="复制到粘贴板"
+                    android:textSize="8sp" />
+            </TableRow>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50" >
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50" >
+
+                <TextView
+                    android:id="@+id/show_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:inputType="textPassword"
+                    android:textColor="@color/black" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="50" >
+
+                <Button
+                    android:id="@+id/clip_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="复制到粘贴板"
+                    android:textSize="8sp" />
+            </TableRow>
+        </TableRow>
+    </TableRow>
+
+    <WebView
+        android:id="@+id/webView1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="400" />
+
+    <LinearLayout
+        android:id="@+id/button_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="60"
+        android:orientation="vertical" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/complete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="复制到粘贴板"
-            android:textSize="10sp" />
+            android:text="生成报告" />
+    </LinearLayout>
 
-    </TableRow>
-    
-                
-                <WebView
-                                    android:id="@+id/webView1"
-                                    android:layout_width="fill_parent"
-        							android:layout_height="0dp"
-        							android:layout_weight="400"
-                                     />
-                
-
-
-
-
-                                <LinearLayout
-                                    android:id="@+id/button_group"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0dp"
-                                    android:layout_weight="60"
-                                    android:orientation="vertical" >
-
-                                    <Button
-                                        android:id="@+id/complete"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent"
-                                        android:text="生成报告" />
-
-                                </LinearLayout>
-                                
-                                
 </LinearLayout>

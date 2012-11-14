@@ -40,6 +40,6 @@ public class G {
     public static String PHONE_MODEL 				= "unknown";
     public static String ANDROID_VERSION            = "unknown";
     // Where are the stack traces posted?
-	public static String URL						= "http://wuxiantao.sinaapp.com/remote_trace.php";
+	public static String URL						= "http://wuxiantao.sinaapp.com/devapi/remote_trace.php";
 	public static String TraceVersion				= "0.3.0";
 }

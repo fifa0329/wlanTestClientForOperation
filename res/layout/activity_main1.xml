@@ -9,56 +9,49 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60"
-        android:background="@drawable/a">
+        android:background="@drawable/a" >
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="当前报告数量："
-            android:gravity="center"
-            android:textColor="@color/white"
-        />
+            android:layout_weight="60" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="当前报告数量："
+                android:textColor="@color/white" />
         </TableRow>
-        
-        
-        
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60">
-        <TextView
-            android:id="@+id/report_total"
-            android:layout_width="match_parent"
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="0"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-        />
+            android:layout_weight="60" >
+
+            <TextView
+                android:id="@+id/report_total"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="0"
+                android:textColor="@color/white" />
         </TableRow>
-     
-        
-        
-        
-        
+
         <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60"
-        >
-        <ImageView
-            android:id="@+id/upload"
-            android:layout_width="match_parent"
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:src="@drawable/upload" />
+            android:layout_weight="60" >
+
+            <ImageView
+                android:id="@+id/upload"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload_selector" />
         </TableRow>
-    
-    
     </TableRow>
 
     <TableRow
@@ -73,254 +66,203 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="运营商热点" />
-
     </TableRow>
-        
-        
-        
-        
-        
-        <TableRow
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80" >
-        
-                    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_cmcc"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="CMCC" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_cmcc"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_cmcc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_cmcc"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="CMCC" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_cmcc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test_selector" />
+        </TableRow>
     </TableRow>
-    
-    <ImageView 
-        android:src="@drawable/cut_off_rule"/>    
-        
-        
-        
-        
-        
-        
-        
-    
-        
-        
-        
-        
-        
-        
-        
-            <TableRow
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-             
-                
-                 <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_cmccedu"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="CMCC-EDU" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_cmccedu"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_cmccedu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_cmccedu"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
-             
-                
-                
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="CMCC-EDU" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_cmccedu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
     </TableRow>
-            
-         <ImageView 
-        android:src="@drawable/cut_off_rule"/>          
-            
-            
-            
-            
-            <TableRow
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-              <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_chinanet"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60" >
+
+            <ImageView
+                android:id="@+id/view_chinanet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="ChinaNet" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_chinanet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
+    </TableRow>
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
     <TableRow
         android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="80" >
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="ChinaNet" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_chinanet"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_chinanet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_chinanet"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="StarBucks(仅供测试)" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_starbucks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
     </TableRow>
-        
-        
-        
-        
-        
-        
-        
-            <TableRow
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -332,363 +274,249 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="开放热点" />
-
     </TableRow>
-           
-                          
-                 
-                 
-                 
-                 
-                 <TableRow
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-              <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_open0"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/text_open0"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="开放1" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_open0"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_open0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open1"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/text_open0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="开放1" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_open0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
     </TableRow>
-                 
-             <ImageView 
-        android:src="@drawable/cut_off_rule"/>           
-            
-                 
-                 <TableRow
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-              <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_open1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/text_open1"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="开放2" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_open1"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_open1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open2"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/text_open1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="开放2" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_open1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
     </TableRow>
-    
-         <ImageView 
-        android:src="@drawable/cut_off_rule"/>               
-                 
-                 <TableRow
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-              <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_open2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/text_open2"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="开放3" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_open2"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_open2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open3"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/text_open2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="开放3" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_open2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
     </TableRow>
-    
-          <ImageView 
-        android:src="@drawable/cut_off_rule"/>              
-                 
-                 
-                 
-                 
-                 <TableRow
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-              <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_open3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/text_open3"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="开放4" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_open3"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_open3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open4"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:id="@+id/text_open3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="开放4" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_open3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
     </TableRow>
-    
-                 
-        <ImageView 
-        android:src="@drawable/cut_off_rule"/>                
-                 
-                 
-                 
-                 
-                 <TableRow
+
+    <ImageView android:src="@drawable/cut_off_rule" />
+
+    <TableRow
         android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
-              <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="60" >
 
-                        <ImageView
-                            android:id="@+id/view_open4"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/wifi1" />
-            
-    </TableRow>        
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="240" >
-
-        <TextView
-            android:id="@+id/text_open4"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="开放5" 
-            android:gravity="center"/>
-            
-    </TableRow>
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="120" >
+            android:layout_weight="60" >
 
-                 <ImageView
-                     android:id="@+id/to_open4"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/start_test2" />
-            
-    </TableRow>
-           
-             
-             <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="70" >
+            <ImageView
+                android:id="@+id/view_open4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/wifi1" />
+        </TableRow>
 
-                 <ImageView
-                     android:paddingLeft="5dp"
-                     android:id="@+id/check_open5"
-                     android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:src="@drawable/complete1" />
-            
-    </TableRow>       
-    </TableRow>
-    
-                 
-                 
-                 
-                 
-                 
-            
-            
-   
-        
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
 
+            <TextView
+                android:id="@+id/text_open4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="开放5" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_open4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
+    </TableRow>
 
 </TableLayout>
