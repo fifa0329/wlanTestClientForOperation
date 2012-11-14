@@ -103,6 +103,8 @@ public class Login extends Activity{
 			password1.setText(preferences.getString("cmcc_passwd0", ""));
 			password2.setText(preferences.getString("cmcc_passwd1", ""));
 			password3.setText(preferences.getString("cmcc_passwd2", ""));
+			account.setText(preferences.getString("cmcc_account", ""));
+			password.setText(preferences.getString("cmcc_passwd", ""));
 		}
 		if(mApp.getCarrier()==MyApplication.CHINANET)
 		{
@@ -112,6 +114,8 @@ public class Login extends Activity{
 			password1.setText(preferences.getString("chinanet_passwd0", ""));
 			password2.setText(preferences.getString("chinanet_passwd1", ""));
 			password3.setText(preferences.getString("chinanet_passwd2", ""));
+			account.setText(preferences.getString("chinanet_account", ""));
+			password.setText(preferences.getString("chinanet_passwd", ""));
 		}
 		
 		
@@ -247,74 +251,80 @@ public class Login extends Activity{
 //		具体多账号还可以再使用其他的东西
 		
 		
-		
-		/***
-		id2.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-		
-				int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-				 if (currentapiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB){
-				      android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
-				         ClipData clip = ClipData.newPlainText("label", "2");
-				         clipboard.setPrimaryClip(clip); 
-				 } else{
-				     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
-				     clipboard.setText("2");
-			
-				account.setText("13951681329");
-				password.setText("900329");
-			}
-		});
-		***/
-
-		
-		
+				
 		login.setOnClickListener(new OnClickListener() {
 			
 			private ProgressDialog progressdialog;
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				progressdialog = new ProgressDialog(Login.this);  
-				progressdialog.setMessage("正在登入，请稍候……"); 
-				progressdialog.show();
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-							Thread.sleep(3000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						WifiManager mWifiManager = (WifiManager)Login.this.getSystemService(Context.WIFI_SERVICE);
-						WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-					    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
-						if(isConnected)
-						{
-							MyApplication mApp = (MyApplication)getApplication();
-							mApp.setUser(account.getText().toString());
-							mApp.setPassword(password.getText().toString());
-							Intent intent=new Intent();
-							intent.putExtra("step", "2");
-							progressdialog.dismiss();
-							intent.setClass(Login.this, LoginProcess.class);
-							startActivity(intent);
-						}
-						else{
-							Login.this.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									progressdialog.dismiss();
-									Toast.makeText(Login.this, "连接失败，请检查WLAN是否开启", Toast.LENGTH_SHORT).show();
-								}
-							});
-						}
-						
-					};
-				}).start();
+				if(account.getText().toString().equals((String)""))
+				{
+					Toast toast=Toast.makeText(Login.this, "账号不能为空", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+				else if(password.getText().toString().equals((String)"") )
+				{
+					Toast toast=Toast.makeText(Login.this, "密码不能为空", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+				else
+				{
+					if(mApp.getCarrier()==MyApplication.CMCC)
+					{
+						Editor editor =preferences.edit();
+						editor.putString("cmcc_account",account.getText().toString());
+						editor.putString("cmcc_passwd",password.getText().toString());
+						editor.commit();
+					}
+					if(mApp.getCarrier()==MyApplication.CHINANET)
+					{
+						Editor editor =preferences.edit();
+						editor.putString("chinanet_account",account.getText().toString());
+						editor.putString("chinanet_passwd",password.getText().toString());
+						editor.commit();
+					}
+
+					progressdialog = new ProgressDialog(Login.this);  
+					progressdialog.setMessage("正在登入，请稍候……"); 
+					progressdialog.show();
+					new Thread(new Runnable() {
+						public void run() {
+							try {
+								Thread.sleep(3000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							WifiManager mWifiManager = (WifiManager)Login.this.getSystemService(Context.WIFI_SERVICE);
+							WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+						    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
+							if(isConnected)
+							{
+								MyApplication mApp = (MyApplication)getApplication();
+								mApp.setUser(account.getText().toString());
+								mApp.setPassword(password.getText().toString());
+								Intent intent=new Intent();
+								intent.putExtra("step", "2");
+								progressdialog.dismiss();
+								intent.setClass(Login.this, LoginProcess.class);
+								startActivity(intent);
+							}
+							else{
+								Login.this.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										progressdialog.dismiss();
+										Toast.makeText(Login.this, "连接失败，请检查WLAN是否开启", Toast.LENGTH_SHORT).show();
+									}
+								});
+							}
+							
+						};
+					}).start();
+				}
+
 					
 
 				
@@ -361,7 +371,6 @@ public class Login extends Activity{
 					if(e.getAttribute("type").equals((String)"CMCC") && cmcc<3)
 					{
 						Log.v("account", e.getAttribute("account"));
-						preferences =getPreferences(MODE_PRIVATE);
 						Editor editor =preferences.edit();
 						editor.putString("cmcc_account"+cmcc, e.getAttribute("account"));
 						editor.putString("cmcc_passwd"+cmcc, e.getAttribute("passwd"));
@@ -378,7 +387,6 @@ public class Login extends Activity{
 					if(e.getAttribute("type").equals((String)"ChinaNet") && chinanet<3)
 					{
 						Log.v("account", e.getAttribute("account"));
-						preferences =getPreferences(MODE_PRIVATE);
 						Editor editor =preferences.edit();
 						editor.putString("chinanet_account"+chinanet, e.getAttribute("account"));
 						editor.putString("chinanet_passwd"+chinanet, e.getAttribute("passwd"));

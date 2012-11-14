@@ -40,6 +40,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,9 @@ public class MainActivity extends Activity {
 	ImageView view_cmcc;
 	ImageView view_cmccedu;
 	ImageView view_chinanet;
+	TableRow[] tablerow=new TableRow[5];
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -75,7 +79,16 @@ public class MainActivity extends Activity {
 
 
 	public void init() {
-
+		
+		
+		
+		tablerow[0]=(TableRow) findViewById(R.id.tableRow0);
+		tablerow[1]=(TableRow) findViewById(R.id.tableRow1);
+		tablerow[2]=(TableRow) findViewById(R.id.tableRow2);
+		tablerow[3]=(TableRow) findViewById(R.id.tableRow3);
+		tablerow[4]=(TableRow) findViewById(R.id.tableRow4);
+		
+		
 		
 		
 		mWifiAdmin = new WifiAdmin(MainActivity.this);
@@ -89,7 +102,7 @@ public class MainActivity extends Activity {
 
 			public void onClick(View arg0) {
 				mApp.setCarrier(MyApplication.CMCC);
-//				mWifiAdmin.addApProfile("\"CMCC\"");
+				mWifiAdmin.addApProfile("\"CMCC\"");
 				Intent intent = new Intent();
 				intent.setClass(MainActivity.this, Login.class);
 				startActivity(intent);
@@ -233,6 +246,7 @@ public class MainActivity extends Activity {
 		
 		
 		final Handler myhandler=new Handler(){
+
 			public void handleMessage(Message msg) {
 				if (msg.what == 0){
 					WifiAdmin wifiadmin=new WifiAdmin(MainActivity.this);
@@ -245,12 +259,22 @@ public class MainActivity extends Activity {
 					to_cmcc.setImageResource(R.drawable.start_test1);
 					to_cmccedu.setImageResource(R.drawable.start_test1);
 					to_chinanet.setImageResource(R.drawable.start_test1);
+					tablerow[0].setVisibility(View.INVISIBLE);
+					tablerow[1].setVisibility(View.INVISIBLE);
+					tablerow[2].setVisibility(View.INVISIBLE);
+					tablerow[3].setVisibility(View.INVISIBLE);
+					tablerow[4].setVisibility(View.INVISIBLE);
+					
+					
+					
+					
+					
 					text_opens=new ArrayList<String>();
 					if (listResult != null) {
 						for (int i = 0; i < listResult.size(); i++) 
 						{
 							Log.v("scanresult", ""+listResult.get(i).toString());
-							if( listResult.get(i).capabilities.equals("[ESS]") && listResult.get(i).SSID!="CMCC" && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+							if( listResult.get(i).capabilities.equals("[ESS]") && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
 							{
 								{
 									text_opens.add(listResult.get(i).SSID);
@@ -280,6 +304,9 @@ public class MainActivity extends Activity {
 							for(int text_num=0,text_opens_size=0;text_num< text_opens.size();text_num++,text_opens_size++){
 								if(text_opens_size<5)
 								{
+
+									tablerow[text_opens_size].setVisibility(View.VISIBLE);
+									/*
 									text_open[0].setText("无");
 									text_open[1].setText("无");
 									text_open[2].setText("无");
@@ -295,7 +322,7 @@ public class MainActivity extends Activity {
 									to_open[2].setImageResource(R.drawable.start_test1);
 									to_open[3].setImageResource(R.drawable.start_test1);
 									to_open[4].setImageResource(R.drawable.start_test1);
-									Log.v("text_opens.get(text_num)", text_opens.get(text_num));
+									*/
 									text_open[text_num].setText(text_opens.get(text_num));
 //									wifi1代表信号最强3代表没有信号
 									view_open[text_num].setImageResource(R.drawable.wifi1);
@@ -362,7 +389,12 @@ public class MainActivity extends Activity {
 						}
 //						if(text_opens.size()!=0 && text_opens!=null)
 						else{
-
+							tablerow[0].setVisibility(View.INVISIBLE);
+							tablerow[1].setVisibility(View.INVISIBLE);
+							tablerow[2].setVisibility(View.INVISIBLE);
+							tablerow[3].setVisibility(View.INVISIBLE);
+							tablerow[4].setVisibility(View.INVISIBLE);
+							/*
 							text_open[0].setText("无");
 							text_open[1].setText("无");
 							text_open[2].setText("无");
@@ -378,6 +410,7 @@ public class MainActivity extends Activity {
 							to_open[2].setImageResource(R.drawable.start_test1);
 							to_open[3].setImageResource(R.drawable.start_test1);
 							to_open[4].setImageResource(R.drawable.start_test1);
+							*/
 						}
 
 					
@@ -390,6 +423,12 @@ public class MainActivity extends Activity {
 						to_cmcc.setImageResource(R.drawable.start_test1);
 						to_cmccedu.setImageResource(R.drawable.start_test1);
 						to_chinanet.setImageResource(R.drawable.start_test1);
+						tablerow[0].setVisibility(View.INVISIBLE);
+						tablerow[1].setVisibility(View.INVISIBLE);
+						tablerow[2].setVisibility(View.INVISIBLE);
+						tablerow[3].setVisibility(View.INVISIBLE);
+						tablerow[4].setVisibility(View.INVISIBLE);
+						/*
 						text_open[0].setText("无");
 						text_open[1].setText("无");
 						text_open[2].setText("无");
@@ -405,8 +444,8 @@ public class MainActivity extends Activity {
 						to_open[2].setImageResource(R.drawable.start_test1);
 						to_open[3].setImageResource(R.drawable.start_test1);
 						to_open[4].setImageResource(R.drawable.start_test1);
+						*/
 					}
-//				if (msg.what == 0){
 				}
 				
 				
@@ -538,6 +577,8 @@ public class MainActivity extends Activity {
 											report_total.setText(""+"0");
 											progress.dismiss();
 											upload.setImageResource(R.drawable.uploaded);
+											Toast toast=Toast.makeText(MainActivity.this, "上传成功", Toast.LENGTH_SHORT);
+											toast.show();
 										}
 									} catch (ArrayIndexOutOfBoundsException e) {
 										// TODO: handle exception

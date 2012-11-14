@@ -5,14 +5,12 @@
     android:background="@color/white" >
 
     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="60"
         android:background="@drawable/a" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -26,7 +24,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -41,7 +38,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -55,7 +51,6 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="50"
@@ -69,13 +64,11 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -88,7 +81,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -102,7 +94,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -118,13 +109,11 @@
     <ImageView android:src="@drawable/cut_off_rule" />
 
     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -137,7 +126,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -151,7 +139,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -167,13 +154,11 @@
     <ImageView android:src="@drawable/cut_off_rule" />
 
     <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -186,13 +171,11 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
 
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -200,7 +183,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -213,57 +195,11 @@
         </TableRow>
     </TableRow>
 
-    <ImageView android:src="@drawable/cut_off_rule" />
+
+
+
 
     <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="80" >
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="60" >
-
-            <ImageView
-                android:id="@+id/view_chinanet"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="240" >
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="StarBucks(仅供测试)" />
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="120" >
-
-            <ImageView
-                android:id="@+id/to_starbucks"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/start_test2" />
-        </TableRow>
-    </TableRow>
-
-    <TableRow
-        android:id="@+id/tableRow1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="50"
@@ -277,13 +213,12 @@
     </TableRow>
 
     <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/tableRow0"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -296,7 +231,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -310,7 +244,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -331,8 +264,8 @@
         android:layout_height="0dp"
         android:layout_weight="80" >
 
+        
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -345,7 +278,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -359,7 +291,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -375,13 +306,12 @@
     <ImageView android:src="@drawable/cut_off_rule" />
 
     <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/tableRow2"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -394,7 +324,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -408,7 +337,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -424,13 +352,12 @@
     <ImageView android:src="@drawable/cut_off_rule" />
 
     <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/tableRow3"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -443,7 +370,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -457,7 +383,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
@@ -473,13 +398,12 @@
     <ImageView android:src="@drawable/cut_off_rule" />
 
     <TableRow
-        android:id="@+id/tableRow1"
+        android:id="@+id/tableRow4"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="60" >
@@ -492,7 +416,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="240" >
@@ -506,7 +429,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRow1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="120" >
