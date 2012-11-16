@@ -235,13 +235,11 @@ public class WifiAdmin {
 	    }
 	    else
 	    {
-	    	for (WifiConfiguration config : mWifiManager.getConfiguredNetworks()) {
+	    	for (WifiConfiguration config : mWifiManager.getConfiguredNetworks()) 
+	    	{
 				Log.v("≤‚ ‘", mWifiManager.getConfiguredNetworks().toString());
 
-				if(config.SSID==null ){
-					mWifiManager.removeNetwork(config.networkId);
-				}
-				if (config.SSID!=null&&config.SSID.equals(ssid)) {
+				if (config.SSID.equals(ssid)) {
 					mWifiManager.disconnect();
 					mWifiManager.enableNetwork(config.networkId, true);
 					mWifiManager.reconnect();

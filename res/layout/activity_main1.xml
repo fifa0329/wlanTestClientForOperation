@@ -77,7 +77,7 @@
                 android:id="@+id/view_cmcc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
@@ -122,7 +122,7 @@
                 android:id="@+id/view_cmccedu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
@@ -167,7 +167,7 @@
                 android:id="@+id/view_chinanet"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
@@ -227,7 +227,7 @@
                 android:id="@+id/view_open0"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
@@ -274,7 +274,7 @@
                 android:id="@+id/view_open1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
@@ -320,7 +320,7 @@
                 android:id="@+id/view_open2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
@@ -366,7 +366,7 @@
                 android:id="@+id/view_open3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                />
         </TableRow>
 
         <TableRow
@@ -412,7 +412,7 @@
                 android:id="@+id/view_open4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/wifi1" />
+                 />
         </TableRow>
 
         <TableRow
