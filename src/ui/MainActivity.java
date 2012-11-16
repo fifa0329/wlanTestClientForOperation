@@ -259,7 +259,7 @@ public class MainActivity extends Activity {
 						for (int i = 0; i < listResult.size(); i++) 
 						{
 							Log.v("scanresult", ""+listResult.get(i).toString());
-							if( listResult.get(i).capabilities.equals("[ESS]") && listResult.get(i).SSID!="CMCC" && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+							if( (listResult.get(i).capabilities.equals("[ESS]")|| listResult.get(i).capabilities.equals("")) && listResult.get(i).SSID!="CMCC" && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
 							{
 								{
 									text_opens.add(listResult.get(i).SSID);

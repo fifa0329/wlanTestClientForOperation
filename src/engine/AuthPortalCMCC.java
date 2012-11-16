@@ -1,6 +1,11 @@
 package engine;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,8 +17,10 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
 import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
+import org.apache.http.ProtocolException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -38,6 +45,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
@@ -198,7 +206,7 @@ public class AuthPortalCMCC {
 		this.user = user;
 		this.password = password;
 		try {
-//			Log.v("==================================================================================================================================================================================================================================================================================================================================================================================", getCurUrl());
+			Log.v("=======================================================================================", getCurUrl());
 			
 			
 			final HttpParams params = new BasicHttpParams();
@@ -383,14 +391,49 @@ public class AuthPortalCMCC {
 	
 	public String getCurUrl() {
 		String currentUrl = null;
-		HttpClient httpClient = new DefaultHttpClient();
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		httpClient.setRedirectHandler(new RedirectHandler() { 
+            
+            @Override 
+            public boolean isRedirectRequested(HttpResponse response, HttpContext context) { 
+                    return false; 
+            } 
+            
+            @Override 
+            public URI getLocationURI(HttpResponse response, HttpContext context) 
+                            throws ProtocolException 
+            {
+                    return null; 
+            } 
+        });
+		
+		
+		
+		
+		
+		
+		
 		HttpGet httpget = new HttpGet(LOGIN_TEST_URL);
 		BasicHttpContext context = new BasicHttpContext();
 		HttpResponse response;
 		try {
-			response = httpClient.execute(httpget, context);
+			response = httpClient.execute(httpget,context);
+			String eurl = URLEncoder.encode(response.getFirstHeader("Location").getValue(),"utf-8"); 
+			eurl=eurl.replace("+", "%20");
+			
+			
+			Log.d("+++++++++++++++++++++++++++",response.getFirstHeader("Location").getValue()); 
+			Log.d("+++++++++++++++++++++++++++",eurl); 
+			
+			
+		    
+		    
 			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
 				throw new IOException(response.getStatusLine().toString());
+			
+			
+			
+		/*	
 			HttpUriRequest currentReq = (HttpUriRequest) context
 					.getAttribute(ExecutionContext.HTTP_REQUEST);
 			HttpHost currentHost = (HttpHost) context
@@ -398,6 +441,8 @@ public class AuthPortalCMCC {
 			currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
 					.getURI().toString() : (currentHost.toURI() + currentReq
 					.getURI());
+					*/
+
 
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -405,12 +450,36 @@ public class AuthPortalCMCC {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			
 		}
 		Matcher starbucksMatcher = starbucksPattern.matcher(currentUrl);
 		starbucksMatcher.find();
 		String Url=starbucksMatcher.group(0);
+        Log.d("+++++++++++++++++++++++++++",Url); 
 		return Url;
 	}
+	
+	
+	
+	
+
+	
+
+	private String stream2String(InputStream istream) throws IOException {
+		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
+		StringBuilder total = new StringBuilder();
+		String line;
+		while ((line = r.readLine()) != null) {
+			total.append(line);
+		}
+		return total.toString();
+	}
+
+	
+	
+	
+	
+
 
 
 }

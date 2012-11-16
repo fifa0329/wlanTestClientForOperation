@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 import com.example.testclient.R;
 
 import engine.AuthPortalStar;
+import engine.Logger;
 import engine.WifiAdmin;
 
 import android.app.Activity;
@@ -82,6 +83,7 @@ public class Login extends Activity{
 	
 	 
 	public void init(){
+		Logger.getInstance().startLogger();
 		get_password=(Button) findViewById(R.id.get_password);
 		get_password.setOnClickListener(new OnClickListener() {
 			

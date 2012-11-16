@@ -81,7 +81,7 @@ public class LoginProcess extends Activity{
 	logout=(ImageView) findViewById(R.id.logout);
 	builder.append("ÕýÔÚµÇÂ¼ÖÐ¡£¡£¡£"+"\n");
 	show.setText(builder.toString());
-	Logger.getInstance().startLogger();
+//		Logger.getInstance().startLogger();
 	new Thread(login_runnable).start();
 	
 	
