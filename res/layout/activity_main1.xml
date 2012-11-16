@@ -194,6 +194,53 @@
                 android:src="@drawable/start_test2" />
         </TableRow>
     </TableRow>
+    
+    
+    
+    <ImageView android:src="@drawable/cut_off_rule" />
+    
+    
+        <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="80" >
+
+        <TableRow
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60" >
+
+            <ImageView
+                android:id="@+id/view_chinanet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                 />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="240" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Starbucks" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="120" >
+
+            <ImageView
+                android:id="@+id/to_starbucks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/start_test2" />
+        </TableRow>
+    </TableRow>
 
 
 
