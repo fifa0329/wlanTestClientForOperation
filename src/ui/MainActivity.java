@@ -8,15 +8,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import com.example.testclient.R;
 
-import engine.WifiAdmin;
+import com.nullwire.trace.ExceptionHandler;
+import engine.Logger;
 
+import engine.WifiAdmin;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
@@ -37,6 +40,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,23 +60,29 @@ public class MainActivity extends Activity {
 	TextView[] text_open=new TextView[5];
 	ImageView[] to_open=new ImageView[5];
 	ImageView[] view_open=new ImageView[5];
-	ArrayList<String> text_opens;
+	ArrayList<HashMap<String, Object>> text_opens;
 	ImageView view_cmcc;
 	ImageView view_cmccedu;
 	ImageView view_chinanet;
+
 	ImageView to_starbucks;
+
+	TableRow[] tablerow=new TableRow[5];
+
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main1);
 		init();
-
-//    	ExceptionHandler.register(this); 
+    	ExceptionHandler.register(this); 
 	}
 
 
 
 	public void init() {
+
 
 		to_starbucks=(ImageView) findViewById(R.id.to_starbucks);
 		to_starbucks.setOnClickListener(new OnClickListener() {
@@ -86,9 +96,18 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-		
-		mWifiAdmin = new WifiAdmin(MainActivity.this);
 
+		Logger.getInstance().startLogger();
+		mWifiAdmin = new WifiAdmin(MainActivity.this);
+		mWifiAdmin.openNetCard();
+		tablerow[0]=(TableRow) findViewById(R.id.tableRow0);
+		tablerow[1]=(TableRow) findViewById(R.id.tableRow1);
+		tablerow[2]=(TableRow) findViewById(R.id.tableRow2);
+		tablerow[3]=(TableRow) findViewById(R.id.tableRow3);
+		tablerow[4]=(TableRow) findViewById(R.id.tableRow4);
+		
+
+		
 
 		mApp=(MyApplication) getApplication();
 		upload=(ImageView) findViewById(R.id.upload);
@@ -97,12 +116,15 @@ public class MainActivity extends Activity {
 		to_cmcc.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
-				mApp.setCarrier(MyApplication.CMCC);
-//				mWifiAdmin.addApProfile("\"CMCC\"");
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, Login.class);
-				startActivity(intent);
-
+				if((Boolean) arg0.getTag())
+				{
+					mWifiAdmin.openNetCard();
+					mApp.setCarrier(MyApplication.CMCC);
+					mWifiAdmin.addApProfile("\"CMCC\"");
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, Login.class);
+					startActivity(intent);
+				}
 			}
 		});
 		to_chinanet = (ImageView) findViewById(R.id.to_chinanet);
@@ -110,11 +132,16 @@ public class MainActivity extends Activity {
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				mApp.setCarrier(MyApplication.CHINANET);
-				mWifiAdmin.addApProfile("\"ChinaNet\"");
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, Login.class);
-				startActivity(intent);
+				if((Boolean) v.getTag())
+				{
+					mWifiAdmin.openNetCard();
+					mApp.setCarrier(MyApplication.CHINANET);
+					mWifiAdmin.addApProfile("\"ChinaNet\"");
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, Login.class);
+					startActivity(intent);
+				}
+
 
 			}
 		});
@@ -122,11 +149,15 @@ public class MainActivity extends Activity {
 		to_cmccedu.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View arg0) {
-				mApp.setCarrier(MyApplication.CMCC);
-				mWifiAdmin.addApProfile("\"CMCC-EDU\"");
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, Login.class);
-				startActivity(intent);
+				if((Boolean) arg0.getTag())
+				{
+					mWifiAdmin.openNetCard();
+					mApp.setCarrier(MyApplication.CMCC);
+					mWifiAdmin.addApProfile("\"CMCC-EDU\"");
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, Login.class);
+					startActivity(intent);
+				}
 
 			}
 		});
@@ -192,33 +223,49 @@ public class MainActivity extends Activity {
 					upload.setOnClickListener(new OnClickListener() {
 
 						@Override
-						public void onClick(View arg0) {
+						public void onClick(View arg0) 
+						{
 							// TODO Auto-generated method stub
-							final Builder builder = new AlertDialog.Builder(
-									MainActivity.this);
-							builder.setTitle("上传报告");
-							builder.setMessage("是否进行上传？");
-							builder.setPositiveButton("确定",
-									new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface dialog,
-												int which) {
-											// 进度对话框的秒显用法
-											progress = new ProgressDialog(MainActivity.this);  
-											progress.setMessage("请稍候……"); 
-											progress.show();
-											uploadLog();
-										}
+							if((Boolean) arg0.getTag())
+							{
+								final Builder builder = new AlertDialog.Builder(
+										MainActivity.this);
+								builder.setTitle("是否进行上传？");
+								builder.setMessage("你可在“设置”选择一个可联网的WIFI进行上传"+"\n"+"或者在“设置”中关闭wifi，选择数据流量上传");
+								builder.setPositiveButton("确定",
+										new DialogInterface.OnClickListener() {
+											public void onClick(DialogInterface dialog,
+													int which) {
+												// 进度对话框的秒显用法
+												progress = new ProgressDialog(MainActivity.this);  
+												progress.setMessage("请稍候……"); 
+												progress.show();
+												uploadLog();
+											}
 
-									});
-							builder.setNegativeButton("取消",
-									new DialogInterface.OnClickListener() {
-										public void onClick(DialogInterface dialog,
-												int which) {
-											return;
-										}
-									});
-							builder.create().show();
-							; // 创建对话框
+										});
+								builder.setNegativeButton("取消",
+										new DialogInterface.OnClickListener() {
+											public void onClick(DialogInterface dialog,
+													int which) {
+												return;
+											}
+										});
+								builder.setNeutralButton("设置", new DialogInterface.OnClickListener() {
+									
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										startActivity(new Intent(
+												android.provider.Settings.ACTION_WIFI_SETTINGS));
+									}
+								});
+								builder.create().show();
+								; // 创建对话框
+							}
+							
 						}
 					});
 				}
@@ -242,72 +289,115 @@ public class MainActivity extends Activity {
 		
 		
 		final Handler myhandler=new Handler(){
+
 			public void handleMessage(Message msg) {
 				if (msg.what == 0){
 					WifiAdmin wifiadmin=new WifiAdmin(MainActivity.this);
 					wifiadmin.scan();
 					List<ScanResult> listResult;
 					listResult = wifiadmin.getWifiManager().getScanResults();
-					view_cmcc.setImageResource(R.drawable.wifi3);
-					view_cmccedu.setImageResource(R.drawable.wifi3);
-					view_chinanet.setImageResource(R.drawable.wifi3);
+					view_cmcc.setImageResource(R.drawable.wifi_none);
+					view_cmccedu.setImageResource(R.drawable.wifi_none);
+					view_chinanet.setImageResource(R.drawable.wifi_none);
 					to_cmcc.setImageResource(R.drawable.start_test1);
 					to_cmccedu.setImageResource(R.drawable.start_test1);
 					to_chinanet.setImageResource(R.drawable.start_test1);
-					text_opens=new ArrayList<String>();
+					tablerow[0].setVisibility(View.INVISIBLE);
+					tablerow[1].setVisibility(View.INVISIBLE);
+					tablerow[2].setVisibility(View.INVISIBLE);
+					tablerow[3].setVisibility(View.INVISIBLE);
+					tablerow[4].setVisibility(View.INVISIBLE);
+//					设置tag判断可否点击
+					to_cmcc.setTag(false);
+					to_cmccedu.setTag(false);
+					to_chinanet.setTag(false);
+
+					
+					
+					text_opens=new ArrayList<HashMap<String, Object>>();
 					if (listResult != null) {
 						for (int i = 0; i < listResult.size(); i++) 
 						{
 							Log.v("scanresult", ""+listResult.get(i).toString());
-							if( (listResult.get(i).capabilities.equals("[ESS]")|| listResult.get(i).capabilities.equals("")) && listResult.get(i).SSID!="CMCC" && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+
+							if( listResult.get(i).capabilities.equals("[ESS]") && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+
 							{
-								{
-									text_opens.add(listResult.get(i).SSID);
-								}
+								HashMap<String, Object> result=new HashMap<String, Object>();
+								result.put("SSID", listResult.get(i).SSID);
+								result.put("level", listResult.get(i).level);
+								text_opens.add(result);
 							}
 							if( listResult.get(i).SSID.equals("CMCC"))
 							{
-								view_cmcc.setImageResource(R.drawable.wifi1);
+								
 								to_cmcc.setImageResource(R.drawable.start_test2);
+								to_cmcc.setTag(true);
+								if(listResult.get(i).level>-80)
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_strong);
+								}
+								else 
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_weak);
+								}
+								
+
 							}
 							if( listResult.get(i).SSID.equals("CMCC-EDU"))
 							{
-								view_cmcc.setImageResource(R.drawable.wifi1);
+								to_cmccedu.setTag(true);
 								to_cmccedu.setImageResource(R.drawable.start_test2);
+								if(listResult.get(i).level>-80)
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_strong);
+								}
+								else 
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_weak);
+								}
 							}
 							if( listResult.get(i).SSID.equals("ChinaNet"))
 							{
-								view_cmcc.setImageResource(R.drawable.wifi1);
+								to_chinanet.setTag(true);
 								to_chinanet.setImageResource(R.drawable.start_test2);
+								if(listResult.get(i).level>-80)
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_strong);
+								}
+								else 
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_weak);
+								}
 							}
 
 						}
 						
-						if(text_opens.size()!=0 && text_opens!=null)
+						if(text_opens.size()!=0)
 						{
 	
 							for(int text_num=0,text_opens_size=0;text_num< text_opens.size();text_num++,text_opens_size++){
 								if(text_opens_size<5)
 								{
-									text_open[0].setText("无");
-									text_open[1].setText("无");
-									text_open[2].setText("无");
-									text_open[3].setText("无");
-									text_open[4].setText("无");
-									view_open[0].setImageResource(R.drawable.wifi3);
-									view_open[1].setImageResource(R.drawable.wifi3);
-									view_open[2].setImageResource(R.drawable.wifi3);
-									view_open[3].setImageResource(R.drawable.wifi3);
-									view_open[4].setImageResource(R.drawable.wifi3);
-									to_open[0].setImageResource(R.drawable.start_test1);
-									to_open[1].setImageResource(R.drawable.start_test1);
-									to_open[2].setImageResource(R.drawable.start_test1);
-									to_open[3].setImageResource(R.drawable.start_test1);
-									to_open[4].setImageResource(R.drawable.start_test1);
-									Log.v("text_opens.get(text_num)", text_opens.get(text_num));
-									text_open[text_num].setText(text_opens.get(text_num));
-//									wifi1代表信号最强3代表没有信号
-									view_open[text_num].setImageResource(R.drawable.wifi1);
+
+									tablerow[text_opens_size].setVisibility(View.VISIBLE);
+
+									
+									text_open[text_num].setText((String)text_opens.get(text_num).get("SSID"));
+									
+									
+									if((Integer)text_opens.get(text_num).get("level")>-80)
+									{
+										view_open[text_num].setImageResource(R.drawable.wifi_strong);
+									}
+									else 
+									{
+										view_open[text_num].setImageResource(R.drawable.wifi_weak);
+									}
+									
+									
+									
+									
 									to_open[text_num].setImageResource(R.drawable.start_test2);
 									to_open[text_num].setTag(text_num);
 									to_open[text_num].setOnClickListener(new OnClickListener() {
@@ -324,6 +414,7 @@ public class MainActivity extends Activity {
 											{
 												public void run() 
 												{
+													mWifiAdmin.openNetCard();
 													mWifiAdmin.addApProfile("\""+text_opens.get(text_num)+"\"");
 													Log.v("addapprofile", "\""+text_opens.get(text_num)+"\"");
 													try 
@@ -369,53 +460,33 @@ public class MainActivity extends Activity {
 
 							}
 						}
-//						if(text_opens.size()!=0 && text_opens!=null)
+//						if(text_opens.size()!=0)
 						else{
+							tablerow[0].setVisibility(View.INVISIBLE);
+							tablerow[1].setVisibility(View.INVISIBLE);
+							tablerow[2].setVisibility(View.INVISIBLE);
+							tablerow[3].setVisibility(View.INVISIBLE);
+							tablerow[4].setVisibility(View.INVISIBLE);
 
-							text_open[0].setText("无");
-							text_open[1].setText("无");
-							text_open[2].setText("无");
-							text_open[3].setText("无");
-							text_open[4].setText("无");
-							view_open[0].setImageResource(R.drawable.wifi3);
-							view_open[1].setImageResource(R.drawable.wifi3);
-							view_open[2].setImageResource(R.drawable.wifi3);
-							view_open[3].setImageResource(R.drawable.wifi3);
-							view_open[4].setImageResource(R.drawable.wifi3);
-							to_open[0].setImageResource(R.drawable.start_test1);
-							to_open[1].setImageResource(R.drawable.start_test1);
-							to_open[2].setImageResource(R.drawable.start_test1);
-							to_open[3].setImageResource(R.drawable.start_test1);
-							to_open[4].setImageResource(R.drawable.start_test1);
 						}
 
 					
 					}
 //					if (listResult != null)
 					else{
-						view_cmcc.setImageResource(R.drawable.wifi3);
-						view_cmccedu.setImageResource(R.drawable.wifi3);
-						view_chinanet.setImageResource(R.drawable.wifi3);
+						view_cmcc.setImageResource(R.drawable.wifi_none);
+						view_cmccedu.setImageResource(R.drawable.wifi_none);
+						view_chinanet.setImageResource(R.drawable.wifi_none);
 						to_cmcc.setImageResource(R.drawable.start_test1);
 						to_cmccedu.setImageResource(R.drawable.start_test1);
 						to_chinanet.setImageResource(R.drawable.start_test1);
-						text_open[0].setText("无");
-						text_open[1].setText("无");
-						text_open[2].setText("无");
-						text_open[3].setText("无");
-						text_open[4].setText("无");
-						view_open[0].setImageResource(R.drawable.wifi3);
-						view_open[1].setImageResource(R.drawable.wifi3);
-						view_open[2].setImageResource(R.drawable.wifi3);
-						view_open[3].setImageResource(R.drawable.wifi3);
-						view_open[4].setImageResource(R.drawable.wifi3);
-						to_open[0].setImageResource(R.drawable.start_test1);
-						to_open[1].setImageResource(R.drawable.start_test1);
-						to_open[2].setImageResource(R.drawable.start_test1);
-						to_open[3].setImageResource(R.drawable.start_test1);
-						to_open[4].setImageResource(R.drawable.start_test1);
+						tablerow[0].setVisibility(View.INVISIBLE);
+						tablerow[1].setVisibility(View.INVISIBLE);
+						tablerow[2].setVisibility(View.INVISIBLE);
+						tablerow[3].setVisibility(View.INVISIBLE);
+						tablerow[4].setVisibility(View.INVISIBLE);
+
 					}
-//				if (msg.what == 0){
 				}
 				
 				
@@ -467,6 +538,7 @@ public class MainActivity extends Activity {
 
 
 
+
 		try {
 			new File(Environment.getExternalStorageDirectory() + "/wlantest/report/").mkdirs();
 			new File(Environment.getExternalStorageDirectory() + "/wlantest/current/").mkdirs();
@@ -474,6 +546,7 @@ public class MainActivity extends Activity {
 			if (filetotal.listFiles().length != 0) {
 				report_total.setText(""+filetotal.listFiles().length);
 				upload.setImageResource(R.drawable.upload1);
+				upload.setTag(true);
 			}
 			else
 			{
@@ -496,88 +569,110 @@ public class MainActivity extends Activity {
 			File[] files=file.listFiles();
 
 			@Override
-			public void run() {
+			public void run() 
+			{
 				try {
-					URL url;
-					url = new URL(UPLOAD_LOG_URL);
 					
 					
-
-					for(i=0;i<files.length;i++)
+					if (isNetworkConnected(MainActivity.this)==true)
 					{
-		    			Log.v("test", "" + files.length);
+						URL url;
+						url = new URL(UPLOAD_LOG_URL);
+						for(i=0;i<files.length;i++)
+						{
+			    			Log.v("test", "" + files.length);
 
-						HttpURLConnection httpConn;
-						httpConn = (HttpURLConnection)url.openConnection();
-						httpConn.setDoOutput(true);
-						httpConn.setDoInput(true);
-						httpConn.setUseCaches(false);
-						httpConn.setRequestMethod("POST");
-						
-						FileInputStream inputStream = new FileInputStream(files[i].getCanonicalFile());  
-			            byte[] b = new byte[inputStream.available()];  
-			            inputStream.read(b);
-
-			    		httpConn.setRequestProperty("Content-length", Integer.toString(b.length));
-			    		httpConn.setRequestProperty("Content-Type", "application/x-zip-compressed");
-			    		httpConn.setRequestProperty("Connection", "Keep-Alive");
-
-			    		//建立输出流，并写入数据
-			    		OutputStream outputStream = httpConn.getOutputStream();
-			    		outputStream.write(b);
-			    		outputStream.close();
-			    		//获得响应状态
-			    		int responseCode = httpConn.getResponseCode();
-			    		if(HttpURLConnection.HTTP_OK == responseCode){
-			    			Log.v("test", "" + responseCode);
-							MainActivity.this.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										files[i].delete();
-										File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
-										if (filetotal.listFiles().length != 0) 
-										
-										{
-											report_total.setText(""+filetotal.listFiles().length);
-											Log.v("test", "" + filetotal.listFiles().length);	
-										}
-										
-										else {
-											report_total.setText(""+"0");
-											progress.dismiss();
-											upload.setImageResource(R.drawable.uploaded);
-										}
-									} catch (ArrayIndexOutOfBoundsException e) {
-										// TODO: handle exception
-										
-										
-									}
-
-
-								}
-							});
-			    		}
-			    		else {
-			    			Toast.makeText(MainActivity.this, "网络质量不佳", Toast.LENGTH_SHORT).show();
-						}
-						
-						try {
-							Thread.sleep(2000);
+							HttpURLConnection httpConn;
+							httpConn = (HttpURLConnection)url.openConnection();
+							httpConn.setDoOutput(true);
+							httpConn.setDoInput(true);
+							httpConn.setUseCaches(false);
+							httpConn.setRequestMethod("POST");
 							
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							FileInputStream inputStream = new FileInputStream(files[i].getCanonicalFile());  
+				            byte[] b = new byte[inputStream.available()];  
+				            inputStream.read(b);
+
+				    		httpConn.setRequestProperty("Content-length", Integer.toString(b.length));
+				    		httpConn.setRequestProperty("Content-Type", "application/x-zip-compressed");
+				    		httpConn.setRequestProperty("Connection", "Keep-Alive");
+
+				    		//建立输出流，并写入数据
+				    		OutputStream outputStream = httpConn.getOutputStream();
+				    		outputStream.write(b);
+				    		outputStream.close();
+				    		//获得响应状态
+				    		int responseCode = httpConn.getResponseCode();
+//				    		对于单个文件的上传过程如下：
+				    		if(HttpURLConnection.HTTP_OK == responseCode){
+				    			Logger.getInstance().writeLog("上传成功");
+//				    			用于一个文件上传成功后修改UI实现动画显示
+				    			MainActivity.this.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											files[i].delete();
+											File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
+											if (filetotal.listFiles().length != 0) 
+											
+											{
+												report_total.setText(""+filetotal.listFiles().length);
+												Log.v("test", "" + filetotal.listFiles().length);	
+											}
+//											关键一步，上传完所有文件的显示
+											else {
+												report_total.setText(""+"0");
+												progress.dismiss();
+												upload.setImageResource(R.drawable.uploaded);
+												Toast toast=Toast.makeText(MainActivity.this, "上传成功", Toast.LENGTH_SHORT);
+												toast.show();
+												upload.setTag(false);
+											}
+										} catch (ArrayIndexOutOfBoundsException e) {
+											// TODO: handle exception
+											Logger.getInstance().writeLog(e.toString()+"原因未知");
+										}
+
+
+									}
+								});
+				    		}
+				    		else {
+				    			Logger.getInstance().writeLog("未知错误，导致response不是200");
+							}
+							
+							try {
+								Thread.sleep(2000);
+								
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								Logger.getInstance().writeLog(e.toString());
+							}
+							
 						}
-						
 					}
+//					一旦发现当前没有网络连接的处理方法
+					else
+					{
+						MainActivity.this.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(MainActivity.this, "当前网络不可用，请检查GPRS后再试", Toast.LENGTH_SHORT).show();
+								progress.dismiss();
+							}
+						});
+					}
+
 
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					Logger.getInstance().writeLog(e.toString());
 				}catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					Logger.getInstance().writeLog(e.toString());
 				}
 				
 			}
@@ -610,7 +705,17 @@ public class MainActivity extends Activity {
 	        
 	        
 	        
-	        
+	        public boolean isNetworkConnected(Context context) {  
+	            if (context != null) {  
+	                ConnectivityManager mConnectivityManager = (ConnectivityManager) context  
+	                        .getSystemService(Context.CONNECTIVITY_SERVICE);  
+	                NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();  
+	                if (mNetworkInfo != null) {  
+	                    return mNetworkInfo.isAvailable();  
+	                }  
+	            }  
+	            return false;  
+	        }
 	        
 	      
 	

@@ -22,10 +22,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import android.net.NetworkInfo;
 
 import com.example.testclient.R;
 
+
 import engine.AuthPortalStar;
+
 import engine.Logger;
 import engine.WifiAdmin;
 
@@ -35,6 +38,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
 import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -84,6 +88,7 @@ public class Login extends Activity{
 	 
 	public void init(){
 		Logger.getInstance().startLogger();
+
 		get_password=(Button) findViewById(R.id.get_password);
 		get_password.setOnClickListener(new OnClickListener() {
 			
@@ -93,6 +98,7 @@ public class Login extends Activity{
 				AuthPortalStar.getInstance().getDynamicPassword(account.getText().toString());
 			}
 		});
+
 		id1=(TextView) findViewById(R.id.id1);
 		id2=(TextView) findViewById(R.id.id2);
 		id3=(TextView) findViewById(R.id.id3);
@@ -117,6 +123,8 @@ public class Login extends Activity{
 			password1.setText(preferences.getString("cmcc_passwd0", ""));
 			password2.setText(preferences.getString("cmcc_passwd1", ""));
 			password3.setText(preferences.getString("cmcc_passwd2", ""));
+			account.setText(preferences.getString("cmcc_account", ""));
+			password.setText(preferences.getString("cmcc_passwd", ""));
 		}
 		if(mApp.getCarrier()==MyApplication.CHINANET)
 		{
@@ -126,6 +134,8 @@ public class Login extends Activity{
 			password1.setText(preferences.getString("chinanet_passwd0", ""));
 			password2.setText(preferences.getString("chinanet_passwd1", ""));
 			password3.setText(preferences.getString("chinanet_passwd2", ""));
+			account.setText(preferences.getString("chinanet_account", ""));
+			password.setText(preferences.getString("chinanet_passwd", ""));
 		}
 		
 		
@@ -142,7 +152,7 @@ public class Login extends Activity{
 			{
 				
 				progressdialog = new ProgressDialog(Login.this);  
-				progressdialog.setMessage("正在获取账号密码，请稍候……\n长时间获取不了请检查GPRS开关"); 
+				progressdialog.setMessage("正在获取账号密码，请稍候……"); 
 				progressdialog.show();
 				// TODO Auto-generated method stub
 				
@@ -157,33 +167,47 @@ public class Login extends Activity{
 							try {
 								WifiAdmin wifiadmin=new WifiAdmin(Login.this);
 								wifiadmin.closeNetCard();
-								HttpClient client = new DefaultHttpClient();
-								HttpGet get=new HttpGet(GET_ID_URL);
-								HttpResponse response =client.execute(get);
-								if (response.getStatusLine().getStatusCode() == 200) 
+								if(isNetworkConnected(Login.this)==false)
 								{
-
-									HttpEntity entity=response.getEntity();
-									if(entity!=null)
+									Login.this.runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											Toast.makeText(Login.this, "当前网络不可用，请检查GPRS开启与否", Toast.LENGTH_SHORT).show();
+											progressdialog.dismiss();
+										}
+									});
+								}
+								else
+								{
+									HttpClient client = new DefaultHttpClient();
+									HttpGet get=new HttpGet(GET_ID_URL);
+									HttpResponse response =client.execute(get);
+									if (response.getStatusLine().getStatusCode() == 200) 
 									{
-										InputStream istream = response.getEntity().getContent();
-										body = toByteArray(istream);
-										parseID(body);
-										
+
+										HttpEntity entity=response.getEntity();
+										if(entity!=null)
+										{
+											InputStream istream = response.getEntity().getContent();
+											body = toByteArray(istream);
+											parseID(body);
+											
+										}
+									}
+									wifiadmin.openNetCard();
+									
+									mApp=(MyApplication) getApplication();
+									
+									if(mApp.getCarrier()==MyApplication.CHINANET)
+									{
+										wifiadmin.addApProfile("\"ChinaNet\"");
+									}
+									if(mApp.getCarrier()==MyApplication.CMCC)
+									{
+										wifiadmin.addApProfile("\"CMCC\"");
 									}
 								}
-								wifiadmin.openNetCard();
-								
-								mApp=(MyApplication) getApplication();
-								
-								if(mApp.getCarrier()==MyApplication.CHINANET)
-								{
-									wifiadmin.addApProfile("\"ChinaNet\"");
-								}
-								if(mApp.getCarrier()==MyApplication.CMCC)
-								{
-									wifiadmin.addApProfile("\"CMCC\"");
-								}
+
 								
 
 									
@@ -261,74 +285,102 @@ public class Login extends Activity{
 //		具体多账号还可以再使用其他的东西
 		
 		
-		
-		/***
-		id2.setOnClickListener(new OnClickListener() {
-			
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-		
-				int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-				 if (currentapiVersion >= android.os.Build.VERSION_CODES.HONEYCOMB){
-				      android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE); 
-				         ClipData clip = ClipData.newPlainText("label", "2");
-				         clipboard.setPrimaryClip(clip); 
-				 } else{
-				     android.text.ClipboardManager clipboard = (android.text.ClipboardManager)getSystemService(CLIPBOARD_SERVICE); 
-				     clipboard.setText("2");
-			
-				account.setText("13951681329");
-				password.setText("900329");
-			}
-		});
-		***/
-
-		
-		
+				
 		login.setOnClickListener(new OnClickListener() {
 			
-			
+
+			private ProgressDialog progressdialog;
+			private String flag;
+
 
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				progressdialog = new ProgressDialog(Login.this);  
-				progressdialog.setMessage("正在登入，请稍候……"); 
-				progressdialog.show();
-				new Thread(new Runnable() {
-					public void run() {
-						try {
-							Thread.sleep(3000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
-						WifiManager mWifiManager = (WifiManager)Login.this.getSystemService(Context.WIFI_SERVICE);
-						WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-					    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
-						if(isConnected)
-						{
-							MyApplication mApp = (MyApplication)getApplication();
-							mApp.setUser(account.getText().toString());
-							mApp.setPassword(password.getText().toString());
-							Intent intent=new Intent();
-							intent.putExtra("step", "2");
-							progressdialog.dismiss();
-							intent.setClass(Login.this, LoginProcess.class);
-							startActivity(intent);
-						}
-						else{
-							Login.this.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
+				if(account.getText().toString().equals((String)""))
+				{
+					Toast toast=Toast.makeText(Login.this, "账号不能为空", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+				else if(password.getText().toString().equals((String)"") )
+				{
+					Toast toast=Toast.makeText(Login.this, "密码不能为空", Toast.LENGTH_SHORT);
+					toast.show();
+				}
+				else
+				{
+					if(mApp.getCarrier()==MyApplication.CMCC)
+					{
+						Editor editor =preferences.edit();
+						editor.putString("cmcc_account",account.getText().toString());
+						editor.putString("cmcc_passwd",password.getText().toString());
+						editor.commit();
+						flag="CMCC";
+					}
+					if(mApp.getCarrier()==MyApplication.CHINANET)
+					{
+						Editor editor =preferences.edit();
+						editor.putString("chinanet_account",account.getText().toString());
+						editor.putString("chinanet_passwd",password.getText().toString());
+						editor.commit();
+						flag="ChinaNet";
+					}
+
+					progressdialog = new ProgressDialog(Login.this);  
+					progressdialog.setMessage("正在登入，请稍候……"); 
+					progressdialog.show();
+					new Thread(new Runnable() {
+						public void run() {
+							try {
+								Thread.sleep(3000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							WifiManager mWifiManager = (WifiManager)Login.this.getSystemService(Context.WIFI_SERVICE);
+							WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+							
+							if(!mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED))
+							{
+								Login.this.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										progressdialog.dismiss();
+										Toast.makeText(Login.this, "还未彻底连接好，请再试", Toast.LENGTH_SHORT).show();
+									}
+								});
+							}
+							else if(mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED))
+							{
+								if(mWifiInfo.getSSID().equals((String)flag))
+								{
 									progressdialog.dismiss();
-									Toast.makeText(Login.this, "连接失败，请检查WLAN是否开启", Toast.LENGTH_SHORT).show();
+									MyApplication mApp = (MyApplication)getApplication();
+									mApp.setUser(account.getText().toString());
+									mApp.setPassword(password.getText().toString());
+									Intent intent=new Intent();
+									intent.putExtra("step", "2");
+									progressdialog.dismiss();
+									intent.setClass(Login.this, LoginProcess.class);
+									startActivity(intent);
 								}
-							});
-						}
-						
-					};
-				}).start();
+								else if(!mWifiInfo.getSSID().equals((String)flag))
+								{
+									Login.this.runOnUiThread(new Runnable() {
+										@Override
+										public void run() {
+											progressdialog.dismiss();
+											Toast.makeText(Login.this, "连接失败,您当前连接的网络与要求测试的不一致", Toast.LENGTH_LONG).show();
+										}
+									});
+								}
+
+							}
+							
+							
+						};
+					}).start();
+				}
+
 					
 
 				
@@ -375,7 +427,6 @@ public class Login extends Activity{
 					if(e.getAttribute("type").equals((String)"CMCC") && cmcc<3)
 					{
 						Log.v("account", e.getAttribute("account"));
-						preferences =getPreferences(MODE_PRIVATE);
 						Editor editor =preferences.edit();
 						editor.putString("cmcc_account"+cmcc, e.getAttribute("account"));
 						editor.putString("cmcc_passwd"+cmcc, e.getAttribute("passwd"));
@@ -392,7 +443,6 @@ public class Login extends Activity{
 					if(e.getAttribute("type").equals((String)"ChinaNet") && chinanet<3)
 					{
 						Log.v("account", e.getAttribute("account"));
-						preferences =getPreferences(MODE_PRIVATE);
 						Editor editor =preferences.edit();
 						editor.putString("chinanet_account"+chinanet, e.getAttribute("account"));
 						editor.putString("chinanet_passwd"+chinanet, e.getAttribute("passwd"));
@@ -443,6 +493,20 @@ public class Login extends Activity{
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+    public boolean isNetworkConnected(Context context) {  
+        if (context != null) {  
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context  
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);  
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();  
+            if (mNetworkInfo != null) {  
+                return mNetworkInfo.isAvailable();  
+            }  
+        }  
+        return false;  
+    }
 
 
 
