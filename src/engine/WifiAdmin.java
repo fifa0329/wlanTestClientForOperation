@@ -192,16 +192,7 @@ public class WifiAdmin {
 		return mWifiConfiguration;
 	}
 
-	// 指定配置好的网络进行连接
-	public void connectConfiguration(int index) {
-		// 索引大于配置好的网络索引返回
-		if (index >= mWifiConfiguration.size()) {
-			return;
-		}
-		// 连接配置好的指定ID的网络
-		mWifiManager.enableNetwork(mWifiConfiguration.get(index).networkId,
-				true);
-	}
+
 
 	// 得到MAC地址
 	public String getMacAddress() {
@@ -218,12 +209,7 @@ public class WifiAdmin {
 		return (mWifiInfo == null) ? "NULL" : mWifiInfo.toString();
 	}
 
-	// 添加一个网络并连接
-	public int addNetwork(WifiConfiguration wcg) {
-		int wcgID = mWifiManager.addNetwork(mWifiConfiguration.get(3));
-		mWifiManager.enableNetwork(wcgID, true);
-		return wcgID;
-	}
+
 	
 //	自动连接想要的AP
 	public void addApProfile(String ssid) {
@@ -242,7 +228,6 @@ public class WifiAdmin {
 				if (config.SSID.equals(ssid)) {
 					mWifiManager.disconnect();
 					mWifiManager.enableNetwork(config.networkId, true);
-					mWifiManager.reconnect();
 					return;
 				}
 			}
@@ -261,7 +246,6 @@ public class WifiAdmin {
 			if (networkId != -1) {
 				mWifiManager.disconnect();
 				mWifiManager.enableNetwork(networkId, true);
-				mWifiManager.reconnect();
 			}
 	    }
 	    
