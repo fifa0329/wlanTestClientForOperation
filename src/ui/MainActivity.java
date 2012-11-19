@@ -320,7 +320,7 @@ public class MainActivity extends Activity {
 						{
 							Log.v("scanresult", ""+listResult.get(i).toString());
 
-							if( listResult.get(i).capabilities.equals("[ESS]") && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+							if( (listResult.get(i).capabilities.equals("[ESS]")  || listResult.get(i).capabilities.equals("")) && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
 
 							{
 								HashMap<String, Object> result=new HashMap<String, Object>();
@@ -415,11 +415,12 @@ public class MainActivity extends Activity {
 												public void run() 
 												{
 													mWifiAdmin.openNetCard();
-													mWifiAdmin.addApProfile("\""+text_opens.get(text_num)+"\"");
-													Log.v("addapprofile", "\""+text_opens.get(text_num)+"\"");
+													mWifiAdmin.addApProfile("\""+text_opens.get(text_num).get("SSID")+"\"");
+													Log.v("addapprofile", "\""+text_opens.get(text_num).get("SSID")+"\"");
+													
 													try 
 													{
-														Thread.sleep(5000);
+														Thread.sleep(6000);
 													} catch (InterruptedException e) 
 													{
 														// TODO Auto-generated catch block
@@ -605,7 +606,6 @@ public class MainActivity extends Activity {
 				    		int responseCode = httpConn.getResponseCode();
 //				    		对于单个文件的上传过程如下：
 				    		if(HttpURLConnection.HTTP_OK == responseCode){
-				    			Logger.getInstance().writeLog("上传成功");
 //				    			用于一个文件上传成功后修改UI实现动画显示
 				    			MainActivity.this.runOnUiThread(new Runnable() {
 									@Override
@@ -630,7 +630,6 @@ public class MainActivity extends Activity {
 											}
 										} catch (ArrayIndexOutOfBoundsException e) {
 											// TODO: handle exception
-											Logger.getInstance().writeLog(e.toString()+"原因未知");
 										}
 
 
@@ -638,7 +637,6 @@ public class MainActivity extends Activity {
 								});
 				    		}
 				    		else {
-				    			Logger.getInstance().writeLog("未知错误，导致response不是200");
 							}
 							
 							try {
@@ -647,7 +645,6 @@ public class MainActivity extends Activity {
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-								Logger.getInstance().writeLog(e.toString());
 							}
 							
 						}
@@ -668,11 +665,9 @@ public class MainActivity extends Activity {
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					Logger.getInstance().writeLog(e.toString());
 				}catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					Logger.getInstance().writeLog(e.toString());
 				}
 				
 			}

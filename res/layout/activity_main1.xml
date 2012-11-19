@@ -76,8 +76,7 @@
             <ImageView
                 android:id="@+id/view_cmcc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -121,8 +120,7 @@
             <ImageView
                 android:id="@+id/view_cmccedu"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -166,8 +164,7 @@
             <ImageView
                 android:id="@+id/view_chinanet"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -242,10 +239,6 @@
         </TableRow>
     </TableRow>
 
-
-
-
-
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -273,8 +266,7 @@
             <ImageView
                 android:id="@+id/view_open0"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -311,7 +303,6 @@
         android:layout_height="0dp"
         android:layout_weight="80" >
 
-        
         <TableRow
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -320,8 +311,7 @@
             <ImageView
                 android:id="@+id/view_open1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -366,8 +356,7 @@
             <ImageView
                 android:id="@+id/view_open2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -412,8 +401,7 @@
             <ImageView
                 android:id="@+id/view_open3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
@@ -458,8 +446,7 @@
             <ImageView
                 android:id="@+id/view_open4"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow
