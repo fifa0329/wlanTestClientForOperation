@@ -124,13 +124,7 @@ public class WifiAdmin {
 		return mStringBuffer.toString();
 	}
 
-	/**
-	 * 连接指定网络
-	 */
-	public WifiInfo getWifiInfoObject() {
-		return mWifiInfo = mWifiManager.getConnectionInfo();
-		
-	}
+
 
 	/**
 	 * 断开当前连接的网络
@@ -213,7 +207,7 @@ public class WifiAdmin {
 	
 //	自动连接想要的AP
 	public void addApProfile(String ssid) {
-		WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
+		mWifiInfo = mWifiManager.getConnectionInfo();
 	    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
 	    if(isConnected && ("\""+mWifiInfo.getSSID()+"\"").equals((String)ssid))
 	    {
@@ -221,14 +215,13 @@ public class WifiAdmin {
 	    }
 	    else
 	    {
+
 	    	for (WifiConfiguration config : mWifiManager.getConfiguredNetworks()) 
 	    	{
 				Log.v("测试", mWifiManager.getConfiguredNetworks().toString());
 
-				if (config.SSID.equals(ssid)) {
-					mWifiManager.disconnect();
-					mWifiManager.enableNetwork(config.networkId, true);
-					return;
+				if (config.SSID.equals((String)ssid)) {
+			        mWifiManager.removeNetwork(config.networkId);   
 				}
 			}
 			
@@ -250,4 +243,8 @@ public class WifiAdmin {
 	    }
 	    
 	}
+	
+	
+	
+	
 }

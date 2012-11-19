@@ -297,7 +297,7 @@ public class MainActivity extends Activity {
 						for (int i = 0; i < listResult.size(); i++) 
 						{
 							Log.v("scanresult", ""+listResult.get(i).toString());
-							if( listResult.get(i).capabilities.equals("[ESS]") && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+							if( (listResult.get(i).capabilities.equals("[ESS]")  || listResult.get(i).capabilities.equals("")) && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
 							{
 								HashMap<String, Object> result=new HashMap<String, Object>();
 								result.put("SSID", listResult.get(i).SSID);
@@ -391,8 +391,9 @@ public class MainActivity extends Activity {
 												public void run() 
 												{
 													mWifiAdmin.openNetCard();
-													mWifiAdmin.addApProfile("\""+text_opens.get(text_num)+"\"");
-													Log.v("addapprofile", "\""+text_opens.get(text_num)+"\"");
+													mWifiAdmin.addApProfile("\""+text_opens.get(text_num).get("SSID")+"\"");
+													Log.v("addapprofile", "\""+text_opens.get(text_num).get("SSID")+"\"");
+													
 													try 
 													{
 														Thread.sleep(5000);
