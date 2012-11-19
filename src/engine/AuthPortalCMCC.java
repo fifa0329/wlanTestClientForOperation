@@ -124,6 +124,9 @@ public class AuthPortalCMCC {
 			ret = "Í¬Ò»ÓÃ»§ÕıÔÚÈÏÖ¤ÖĞ";
 
 			break;
+		case 21:
+			ret = "è´¦å·ä¸å­˜åœ¨";
+			break;
 		case 26:
 			ret = "ÓÃ»§ÓëÔÚÏßÓÃ»§Ãû²»Ò»ÖÂ";
 
