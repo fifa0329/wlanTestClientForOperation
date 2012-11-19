@@ -58,7 +58,6 @@ public class AuthPortalCMCC {
 	private final static int RET_OTHER = -1;
 	private final static int RET_UNKNOWN = -2;
 	private final static int RET_ALREADY = -3;
-
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	private static String LOGIN_REQUEST_SIGNATURE = "cmcccs|login_req";

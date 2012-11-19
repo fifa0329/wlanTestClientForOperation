@@ -12,6 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import com.example.testclient.R;
 
 import com.nullwire.trace.ExceptionHandler;
@@ -46,6 +55,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	protected static final String UPLOAD_LOG_URL = "http://wuxiantao.sinaapp.com/devapi/report_submit.php";
+	private static String LOGIN_TEST_URL = "http://www.baidu.com";
+	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	ImageView to_cmcc;
 	ImageView to_chinanet;
 	ImageView to_cmccedu;
@@ -68,6 +79,7 @@ public class MainActivity extends Activity {
 	ImageView to_starbucks;
 
 	TableRow[] tablerow=new TableRow[5];
+	private ImageView view_starbucks;
 
 
 
@@ -83,19 +95,6 @@ public class MainActivity extends Activity {
 
 	public void init() {
 
-
-		to_starbucks=(ImageView) findViewById(R.id.to_starbucks);
-		to_starbucks.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				mApp.setCarrier(MyApplication.STARBUCKS);
-				Intent intent=new Intent();
-				intent.setClass(MainActivity.this, Login.class);
-				startActivity(intent);
-			}
-		});
 
 		Logger.getInstance().startLogger();
 		mWifiAdmin = new WifiAdmin(MainActivity.this);
@@ -161,7 +160,21 @@ public class MainActivity extends Activity {
 
 			}
 		});
-		
+
+
+		to_starbucks=(ImageView) findViewById(R.id.to_starbucks);
+
+		to_starbucks.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				mApp.setCarrier(MyApplication.STARBUCKS);
+				Intent intent=new Intent();
+				intent.setClass(MainActivity.this, Login.class);
+				startActivity(intent);
+			}
+		});
 		
 		
 		
@@ -196,7 +209,7 @@ public class MainActivity extends Activity {
 		view_cmcc =(ImageView) findViewById(R.id.view_cmcc);
 		view_cmccedu =(ImageView) findViewById(R.id.view_cmccedu);
 		view_chinanet =(ImageView) findViewById(R.id.view_chinanet);
-
+		view_starbucks=(ImageView) findViewById(R.id.view_starbucks);
 		
 
 
@@ -299,9 +312,11 @@ public class MainActivity extends Activity {
 					view_cmcc.setImageResource(R.drawable.wifi_none);
 					view_cmccedu.setImageResource(R.drawable.wifi_none);
 					view_chinanet.setImageResource(R.drawable.wifi_none);
+					view_starbucks.setImageResource(R.drawable.wifi_none);
 					to_cmcc.setImageResource(R.drawable.start_test1);
 					to_cmccedu.setImageResource(R.drawable.start_test1);
 					to_chinanet.setImageResource(R.drawable.start_test1);
+					to_starbucks.setImageResource(R.drawable.start_test1);
 					tablerow[0].setVisibility(View.INVISIBLE);
 					tablerow[1].setVisibility(View.INVISIBLE);
 					tablerow[2].setVisibility(View.INVISIBLE);
@@ -311,7 +326,7 @@ public class MainActivity extends Activity {
 					to_cmcc.setTag(false);
 					to_cmccedu.setTag(false);
 					to_chinanet.setTag(false);
-
+					to_starbucks.setTag(false);
 					
 					
 					text_opens=new ArrayList<HashMap<String, Object>>();
@@ -361,6 +376,20 @@ public class MainActivity extends Activity {
 							{
 								to_chinanet.setTag(true);
 								to_chinanet.setImageResource(R.drawable.start_test2);
+								if(listResult.get(i).level>-80)
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_strong);
+								}
+								else 
+								{
+									view_cmcc.setImageResource(R.drawable.wifi_weak);
+								}
+							}
+							if( listResult.get(i).SSID.equals("ChinaNet-Starbucks"))
+							{
+								
+								to_starbucks.setTag(true);
+								to_starbucks.setImageResource(R.drawable.start_test2);
 								if(listResult.get(i).level>-80)
 								{
 									view_cmcc.setImageResource(R.drawable.wifi_strong);
@@ -432,11 +461,40 @@ public class MainActivity extends Activity {
 												    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
 													if(isConnected)
 													{
-														Intent intent = new Intent();
-														progressdialog.dismiss();
-														intent.putExtra("step", "1");
-														intent.setClass(MainActivity.this, Browser.class);
-														startActivity(intent);
+														DefaultHttpClient client = new DefaultHttpClient();
+														HttpResponse response;
+														try {
+															response = client.execute(new HttpGet(LOGIN_TEST_URL));
+															String output = EntityUtils.toString(response.getEntity(), "GBK");
+															if (output.contains(LOGIN_TEST_SIGNATURE))
+															{
+																MainActivity.this.runOnUiThread(new Runnable() 
+																{
+																	@Override
+																	public void run() 
+																	{
+																		progressdialog.dismiss();
+																		Toast.makeText(MainActivity.this, "可以直接接入网络的热点就不需要测试啦！", Toast.LENGTH_LONG).show();
+																	}
+																});
+															}
+															else
+															{
+																Intent intent = new Intent();
+																progressdialog.dismiss();
+																intent.putExtra("step", "1");
+																intent.setClass(MainActivity.this, Browser.class);
+																startActivity(intent);
+															}
+
+														} catch (ClientProtocolException e1) {
+															// TODO Auto-generated catch block
+															e1.printStackTrace();
+														} catch (IOException e1) {
+															// TODO Auto-generated catch block
+															e1.printStackTrace();
+														}
+
 													}
 													else
 													{
@@ -478,9 +536,11 @@ public class MainActivity extends Activity {
 						view_cmcc.setImageResource(R.drawable.wifi_none);
 						view_cmccedu.setImageResource(R.drawable.wifi_none);
 						view_chinanet.setImageResource(R.drawable.wifi_none);
+						view_starbucks.setImageResource(R.drawable.wifi_none);
 						to_cmcc.setImageResource(R.drawable.start_test1);
 						to_cmccedu.setImageResource(R.drawable.start_test1);
 						to_chinanet.setImageResource(R.drawable.start_test1);
+						to_starbucks.setImageResource(R.drawable.start_test1);
 						tablerow[0].setVisibility(View.INVISIBLE);
 						tablerow[1].setVisibility(View.INVISIBLE);
 						tablerow[2].setVisibility(View.INVISIBLE);
