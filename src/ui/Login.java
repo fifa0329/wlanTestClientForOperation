@@ -335,28 +335,33 @@ public class Login extends Activity{
 							}
 							else if(mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED))
 							{
-								if(mWifiInfo.getSSID().equals((String)flag))
-								{
-									progressdialog.dismiss();
-									MyApplication mApp = (MyApplication)getApplication();
-									mApp.setUser(account.getText().toString());
-									mApp.setPassword(password.getText().toString());
-									Intent intent=new Intent();
-									intent.putExtra("step", "2");
-									progressdialog.dismiss();
-									intent.setClass(Login.this, LoginProcess.class);
-									startActivity(intent);
+								try{
+									if(mWifiInfo.getSSID().equals((String)flag))  
+									{
+										progressdialog.dismiss();
+										MyApplication mApp = (MyApplication)getApplication();
+										mApp.setUser(account.getText().toString());
+										mApp.setPassword(password.getText().toString());
+										Intent intent=new Intent();
+										intent.putExtra("step", "2");
+										progressdialog.dismiss();
+										intent.setClass(Login.this, LoginProcess.class);
+										startActivity(intent);
+									}
+									else if(!mWifiInfo.getSSID().equals((String)flag))
+									{
+										Login.this.runOnUiThread(new Runnable() {
+											@Override
+											public void run() {
+												progressdialog.dismiss();
+												Toast.makeText(Login.this, "连接失败,您当前连接的网络与要求测试的不一致", Toast.LENGTH_LONG).show();
+											}
+										});
+									}
+								}catch (NullPointerException e) {
+									// TODO: handle exception
 								}
-								else if(!mWifiInfo.getSSID().equals((String)flag))
-								{
-									Login.this.runOnUiThread(new Runnable() {
-										@Override
-										public void run() {
-											progressdialog.dismiss();
-											Toast.makeText(Login.this, "连接失败,您当前连接的网络与要求测试的不一致", Toast.LENGTH_LONG).show();
-										}
-									});
-								}
+								
 
 							}
 							
