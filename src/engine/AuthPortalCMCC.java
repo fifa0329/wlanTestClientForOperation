@@ -38,15 +38,12 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.ExecutionContext;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class AuthPortalCMCC {
 	private final static int RET_OTHER = -1;
@@ -125,7 +122,7 @@ public class AuthPortalCMCC {
 
 			break;
 		case 21:
-			ret = "Ë¥¶Âè∑‰∏çÂ≠òÂú®";
+			ret = "’À∫≈≤ª¥Ê‘⁄";
 			break;
 		case 26:
 			ret = "”√ªß”Î‘⁄œﬂ”√ªß√˚≤ª“ª÷¬";
@@ -206,7 +203,7 @@ public class AuthPortalCMCC {
 		this.user = user;
 		this.password = password;
 		try {
-			Log.v("========================================", getCurUrl());
+//			Log.v("========================================", getCurUrl());
 
 			final HttpParams params = new BasicHttpParams();
 			// This line causes CMCC-EDU no response.

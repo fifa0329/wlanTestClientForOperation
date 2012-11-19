@@ -142,6 +142,25 @@ public class LoginProcess extends Activity{
 			String password = mApp.getPassword();
 			if (carrier == MyApplication.CMCC) {
 				code = AuthPortalCMCC.getInstance().login(user, password, LoginProcess.this);
+				if(code==-3)
+				{
+					Builder alertDialog = new AlertDialog.Builder(LoginProcess.this);
+					alertDialog.setTitle("注意！！！账号已经在线");
+					alertDialog.setMessage("您的账号在线中，请先注销上次登录，然后再次进行测试");
+					alertDialog.setPositiveButton("继续", new DialogInterface.OnClickListener() 
+					{
+						public void onClick(DialogInterface dialog, int which)
+						{
+							LoginProcess.this.finish();
+						}
+					});
+
+					alertDialog.create().show(); 
+				}
+				
+				
+				
+				
 				result = (code == 0);
 				description = AuthPortalCMCC.getInstance().getDescription(code);
 			} else if (carrier == MyApplication.CHINANET) {
