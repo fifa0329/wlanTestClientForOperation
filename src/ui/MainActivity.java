@@ -443,9 +443,12 @@ public class MainActivity extends Activity {
 											{
 												public void run() 
 												{
+//???这里有个问题 如果是直接已经连好的话，应该怎样的逻辑实现
+//先只是使用强制休眠，免得麻烦													
 													mWifiAdmin.openNetCard();
 													mWifiAdmin.addApProfile("\""+text_opens.get(text_num).get("SSID")+"\"");
 													Log.v("addapprofile", "\""+text_opens.get(text_num).get("SSID")+"\"");
+													
 													
 													try 
 													{
@@ -455,7 +458,10 @@ public class MainActivity extends Activity {
 														// TODO Auto-generated catch block
 														e.printStackTrace();
 													}
-													
+//???如何防止虽然completed，但是不是想要的SSID
+//													1没开网卡 强制开启，然后连接该AP
+//													2网卡开启 不同AP 连接休眠6s 合理
+//													3网卡开启 就是此AP addApProfile不费时，不过多余了强制6s
 													WifiManager mWifiManager = (WifiManager)MainActivity.this.getSystemService(Context.WIFI_SERVICE);
 													WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
 												    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
@@ -508,6 +514,10 @@ public class MainActivity extends Activity {
 															}
 														});
 													}
+													
+													
+
+													
 													
 												};
 											}).start();
@@ -639,6 +649,7 @@ public class MainActivity extends Activity {
 					{
 						URL url;
 						url = new URL(UPLOAD_LOG_URL);
+//???上传模块需要进行一下调试 具体理解过程
 						for(i=0;i<files.length;i++)
 						{
 			    			Log.v("test", "" + files.length);
@@ -696,7 +707,18 @@ public class MainActivity extends Activity {
 									}
 								});
 				    		}
-				    		else {
+				    		else 
+				    		{
+								Logger.getInstance().writeLog(""+responseCode);
+				    			MainActivity.this.runOnUiThread(new Runnable() {
+									@Override
+									public void run() {
+										Toast.makeText(MainActivity.this, "该文件上传失败，与服务器失去连接", Toast.LENGTH_SHORT).show();
+										progress.dismiss();
+									}
+								});
+				    			break;
+//				    			用于第一个文件上传失败后退出循环体，且给予用户提示，是服务器端的问题
 							}
 							
 							try {
@@ -707,7 +729,7 @@ public class MainActivity extends Activity {
 								e.printStackTrace();
 							}
 							
-						}
+						}//for循环体
 					}
 //					一旦发现当前没有网络连接的处理方法
 					else

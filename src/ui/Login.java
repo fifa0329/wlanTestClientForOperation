@@ -339,7 +339,7 @@ public class Login extends Activity{
 							WifiManager mWifiManager = (WifiManager)Login.this.getSystemService(Context.WIFI_SERVICE);
 							WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
 							
-							if(!mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED))
+							if(!mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED) || mWifiInfo.getSSID()==null)
 							{
 								Login.this.runOnUiThread(new Runnable() {
 									@Override
@@ -360,7 +360,6 @@ public class Login extends Activity{
 										mApp.setPassword(password.getText().toString());
 										Intent intent=new Intent();
 										intent.putExtra("step", "2");
-										progressdialog.dismiss();
 										intent.setClass(Login.this, LoginProcess.class);
 										startActivity(intent);
 									}
