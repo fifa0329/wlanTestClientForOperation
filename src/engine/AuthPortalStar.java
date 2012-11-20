@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -40,11 +39,11 @@ public class AuthPortalStar {
 	private final static int RET_ALREADY = -3;
 	private final static int SUCCESS = 1;
 
-	private static String LOGIN_TEST_URL = "http://172.13.0.1:80/s_1/";
+	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	private static String LOGIN_REQUEST_SIGNATURE = "在星巴克享受免费无线上网";
 	private static String LOGIN_SUCCESS_SIGNATURE = "星巴克江浙沪的微博";
-	private static String STARBUCKS_PATTERN = "http://.*?/(.*?)";
+	private static String STARBUCKS_PATTERN = "http://.*?/";
 	private static String GET_PASSWORD_ACTION = "ck/";
 	private static String SUBMIT_ACTION = "u/";
 	private static AuthPortalStar instance = null;
@@ -91,7 +90,7 @@ public class AuthPortalStar {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = null;
 			String output = null;
-			response = client.execute(new HttpGet(LOGIN_TEST_URL));
+			response = client.execute(new HttpGet(getCurUrl(LOGIN_TEST_URL)+SUBMIT_ACTION));
 			output = EntityUtils.toString(response.getEntity(), "GBK");
 
 			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
@@ -108,7 +107,7 @@ public class AuthPortalStar {
 
 				try {
 
-					HttpPost httpPost = new HttpPost(getCurUrl()
+					HttpPost httpPost = new HttpPost(getCurUrl(LOGIN_TEST_URL)
 							+ SUBMIT_ACTION);
 					List<NameValuePair> params = new ArrayList<NameValuePair>();
 					params.add(new BasicNameValuePair("Mobile", user));
@@ -139,7 +138,11 @@ public class AuthPortalStar {
 		return RET_UNKNOWN;
 	}
 
-	public String getCurUrl() {
+	
+	
+	
+	
+	public String getCurUrl(String next) {
 		String currentUrl = null;
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		httpClient.setRedirectHandler(new RedirectHandler() {
@@ -157,31 +160,56 @@ public class AuthPortalStar {
 			}
 		});
 
-		HttpGet httpget = new HttpGet(LOGIN_TEST_URL);
+		HttpGet httpget = new HttpGet(next);
 		BasicHttpContext context = new BasicHttpContext();
 		HttpResponse response;
 		try {
 			response = httpClient.execute(httpget, context);
-			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_MOVED_TEMPORARILY) 
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) 
 			{
-				String eurl = URLEncoder.encode(response.getFirstHeader("Location").getValue(),"utf-8"); 
-				eurl=eurl.replace("+", "%20");
-				HttpGet httpget_redirect = new HttpGet(eurl);
+				String location=response.getFirstHeader("Location").getValue();
+//				http://*
+				if(location.contains("://"))
+				{
+					next=response.getFirstHeader("Location").getValue().replace(" ", "%20");
+					getCurUrl(next);
+				}
+//				/abc/*
+				else if(location.startsWith("/"))
+				{
+					HttpHost currentHost = (HttpHost) context
+							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+					next =currentHost.toURI() + response.getFirstHeader("Location").getValue().replace(" ", "%20");
+					getCurUrl(next);
+				}
+//				abc/*
+				else
+				{
+					HttpUriRequest currentReq = (HttpUriRequest) context
+							.getAttribute(ExecutionContext.HTTP_REQUEST);
+					HttpHost currentHost = (HttpHost) context
+							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+					currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
+							.getURI().toString() : (currentHost.toURI() + currentReq
+							.getURI());
+					int flag=lastIndex(currentUrl);
+					next=currentUrl.substring(0, flag);
+					next=next+response.getFirstHeader("Location").getValue().replace(" ", "%20");
+					getCurUrl(next);
+				}
+				
 				
 
 			}
 
-			else if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
-				throw new IOException(response.getStatusLine().toString());
+			else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+			{
+				
+			}
+
 			
 			
-			HttpUriRequest currentReq = (HttpUriRequest) context
-					.getAttribute(ExecutionContext.HTTP_REQUEST);
-			HttpHost currentHost = (HttpHost) context
-					.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-			currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
-					.getURI().toString() : (currentHost.toURI() + currentReq
-					.getURI());
+
 
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -190,17 +218,28 @@ public class AuthPortalStar {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Matcher starbucksMatcher = starbucksPattern.matcher(currentUrl);
-		starbucksMatcher.find();
-		String Url = starbucksMatcher.group(0);
-		return Url;
+		return next;
+
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void getDynamicPassword(String user) {
 		this.user = user;
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(getCurUrl() + GET_PASSWORD_ACTION);
+			HttpPost httpPost = new HttpPost(getCurUrl(LOGIN_TEST_URL) + GET_PASSWORD_ACTION);
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("Mobile", user));
 			/* 添加请求参数到请求对象 */
@@ -216,6 +255,20 @@ public class AuthPortalStar {
 
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	private String stream2String(InputStream istream) throws IOException {
 		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
 		StringBuilder total = new StringBuilder();
@@ -228,22 +281,47 @@ public class AuthPortalStar {
 	
 	
 	
-	public static String IsOK()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public int lastIndex(String s)
 	{
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		return null;
-		
+		int index=-1;
+		int len = s.length();
+		for (int i = 0; i < len; i++) 
+		{
+			
+			if(s.charAt(i)=='/')
+			{
+				index=i;
+			}
+		}
+		return index;
 	}
+	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
 
 }

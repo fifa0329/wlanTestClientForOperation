@@ -216,7 +216,7 @@ public class AuthPortalCMCC {
 		this.password = password;
 		try {
 
-//			Log.v("========================================", getCurUrl());
+			Log.v("========================================", getCurUrl(LOGIN_TEST_URL));
 
 			final HttpParams params = new BasicHttpParams();
 			// This line causes CMCC-EDU no response.
@@ -416,59 +416,81 @@ public class AuthPortalCMCC {
 		}
 	}
 
-	public String getCurUrl() {
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public String getCurUrl(String next) {
 		String currentUrl = null;
 		DefaultHttpClient httpClient = new DefaultHttpClient();
-		httpClient.setRedirectHandler(new RedirectHandler() { 
-            
-            @Override 
-            public boolean isRedirectRequested(HttpResponse response, HttpContext context) { 
-                    return false; 
-            } 
-            
-            @Override 
-            public URI getLocationURI(HttpResponse response, HttpContext context) 
-                            throws ProtocolException 
-            {
-                    return null; 
-            } 
-        });
-		
-		
-		
-		
-		
-		
-		
-		HttpGet httpget = new HttpGet(LOGIN_TEST_URL);
+		httpClient.setRedirectHandler(new RedirectHandler() {
+
+			@Override
+			public boolean isRedirectRequested(HttpResponse response,
+					HttpContext context) {
+				return false;
+			}
+
+			@Override
+			public URI getLocationURI(HttpResponse response, HttpContext context)
+					throws ProtocolException {
+				return null;
+			}
+		});
+
+		HttpGet httpget = new HttpGet(next);
 		BasicHttpContext context = new BasicHttpContext();
 		HttpResponse response;
 		try {
-			response = httpClient.execute(httpget,context);
-			String eurl = URLEncoder.encode(response.getFirstHeader("Location").getValue(),"utf-8"); 
-			eurl=eurl.replace("+", "%20");
+			response = httpClient.execute(httpget, context);
+			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) 
+			{
+//				http://*
+				if(response.getFirstHeader("Location").getValue().contains("://"))
+				{
+					next=response.getFirstHeader("Location").getValue().replace(" ", "%20");
+					getCurUrl(next);
+				}
+//				/abc/*
+				else if(response.getFirstHeader("Location").getValue().startsWith("/"))
+				{
+					HttpHost currentHost = (HttpHost) context
+							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+					next =currentHost.toURI() + response.getFirstHeader("Location").getValue().replace(" ", "%20");
+					getCurUrl(next);
+				}
+//				abc/*
+				else
+				{
+					HttpUriRequest currentReq = (HttpUriRequest) context
+							.getAttribute(ExecutionContext.HTTP_REQUEST);
+					HttpHost currentHost = (HttpHost) context
+							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
+					currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
+							.getURI().toString() : (currentHost.toURI() + currentReq
+							.getURI());
+					int flag=lastIndex(currentUrl);
+					next=currentUrl.substring(0, flag);
+					next=next+response.getFirstHeader("Location").getValue().replace(" ", "%20");
+					getCurUrl(next);
+				}
+				
+				
+
+			}
+
+			else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+			{
+			}
+
 			
 			
-			Log.d("+++++++++++++++++++++++++++",response.getFirstHeader("Location").getValue()); 
-			Log.d("+++++++++++++++++++++++++++",eurl); 
-			
-			
-		    
-		    
-			if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK)
-				throw new IOException(response.getStatusLine().toString());
-			
-			
-			
-		/*	
-			HttpUriRequest currentReq = (HttpUriRequest) context
-					.getAttribute(ExecutionContext.HTTP_REQUEST);
-			HttpHost currentHost = (HttpHost) context
-					.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-			currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
-					.getURI().toString() : (currentHost.toURI() + currentReq
-					.getURI());
-					*/
 
 
 		} catch (ClientProtocolException e) {
@@ -477,19 +499,13 @@ public class AuthPortalCMCC {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			
 		}
-		Matcher starbucksMatcher = starbucksPattern.matcher(currentUrl);
+		Matcher starbucksMatcher = starbucksPattern.matcher(next);
 		starbucksMatcher.find();
-		String Url=starbucksMatcher.group(0);
-        Log.d("+++++++++++++++++++++++++++",Url); 
-		return Url;
+		return starbucksMatcher.group(0);
 	}
-	
-	
-	
-	
-
+		
+		
 	
 
 	private String stream2String(InputStream istream) throws IOException {
@@ -500,6 +516,27 @@ public class AuthPortalCMCC {
 			total.append(line);
 		}
 		return total.toString();
+	}
+	
+	
+	
+	
+	
+	
+	
+	public int lastIndex(String s)
+	{
+		int index=-1;
+		int len = s.length();
+		for (int i = 0; i < len; i++) 
+		{
+			
+			if(s.charAt(i)=='/')
+			{
+				index=i;
+			}
+		}
+		return index;
 	}
 
 
