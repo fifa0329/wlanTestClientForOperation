@@ -47,7 +47,7 @@ public class Report extends Activity {
     
     
     public void init(){
-    	preferences=getSharedPreferences("report", MODE_PRIVATE);
+    	preferences=getPreferences(MODE_PRIVATE);
 
 		back=(ImageView) findViewById(R.id.back);
 		back.setOnClickListener(new OnClickListener() {

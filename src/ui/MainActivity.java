@@ -12,20 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-
 import com.example.testclient.R;
-
 import com.nullwire.trace.ExceptionHandler;
-import engine.Logger;
 
+import engine.Downloader;
+import engine.Logger;
 import engine.WifiAdmin;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -39,13 +35,18 @@ import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -55,8 +56,11 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	protected static final String UPLOAD_LOG_URL = "http://wuxiantao.sinaapp.com/devapi/report_submit.php";
+	private static final int MENU_UPDATE_DB = 0;
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
+	public static final String REPORT_DIR = "/wlantest/report/";
+	public static final String CURRENT_DIR = "/wlantest/current/";
 	ImageView to_cmcc;
 	ImageView to_chinanet;
 	ImageView to_cmccedu;
@@ -75,11 +79,12 @@ public class MainActivity extends Activity {
 	ImageView view_cmcc;
 	ImageView view_cmccedu;
 	ImageView view_chinanet;
-
 	ImageView to_starbucks;
-
 	TableRow[] tablerow=new TableRow[5];
 	private ImageView view_starbucks;
+	private Downloader downloader;
+	protected int db_version;
+	protected SharedPreferences preferences;
 
 
 
@@ -229,11 +234,10 @@ public class MainActivity extends Activity {
 		try {
 			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 			{
-				new File(Environment.getExternalStorageDirectory() + "/wlantest/report/").mkdirs();
-				new File(Environment.getExternalStorageDirectory() + "/wlantest/current/").mkdirs();
+				new File(Environment.getExternalStorageDirectory() + REPORT_DIR).mkdirs();
+				new File(Environment.getExternalStorageDirectory() + CURRENT_DIR).mkdirs();
 
-				File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/"
-						+ "/report/");
+				File filetotal = new File(Environment.getExternalStorageDirectory() + REPORT_DIR);
 
 				if (filetotal.listFiles().length != 0) 
 				{
@@ -305,7 +309,7 @@ public class MainActivity extends Activity {
 			
 		
 		
-		
+//		动态刷新公共AP
 		final Handler myhandler=new Handler(){
 
 			public void handleMessage(Message msg) {
@@ -449,30 +453,22 @@ public class MainActivity extends Activity {
 											{
 												public void run() 
 												{
-//???这里有个问题 如果是直接已经连好的话，应该怎样的逻辑实现
-//先只是使用强制休眠，免得麻烦													
 													mWifiAdmin.openNetCard();
 													mWifiAdmin.addApProfile("\""+text_opens.get(text_num).get("SSID")+"\"");
 													Log.v("addapprofile", "\""+text_opens.get(text_num).get("SSID")+"\"");
-													
-													
-													try 
+												    boolean isConnected=((WifiManager) MainActivity.this.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSupplicantState().equals(SupplicantState.COMPLETED);
+													while(isConnected==false)
 													{
-														Thread.sleep(6000);
-													} catch (InterruptedException e) 
-													{
-														// TODO Auto-generated catch block
-														e.printStackTrace();
+														try {
+															Thread.sleep(1000);
+															isConnected=((WifiManager) MainActivity.this.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getSupplicantState().equals(SupplicantState.COMPLETED);
+														} catch (InterruptedException e) {
+															// TODO Auto-generated catch block
+															e.printStackTrace();
+														}
 													}
-//???如何防止虽然completed，但是不是想要的SSID
-//													1没开网卡 强制开启，然后连接该AP
-//													2网卡开启 不同AP 连接休眠6s 合理
-//													3网卡开启 就是此AP addApProfile不费时，不过多余了强制6s
-													WifiManager mWifiManager = (WifiManager)MainActivity.this.getSystemService(Context.WIFI_SERVICE);
-													WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-												    boolean isConnected=mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED);
-													if(isConnected)
-													{
+												    
+
 														DefaultHttpClient client = new DefaultHttpClient();
 														HttpResponse response;
 														try {
@@ -506,25 +502,6 @@ public class MainActivity extends Activity {
 															// TODO Auto-generated catch block
 															e1.printStackTrace();
 														}
-
-													}
-													else
-													{
-														MainActivity.this.runOnUiThread(new Runnable() 
-														{
-															@Override
-															public void run() 
-															{
-																progressdialog.dismiss();
-																Toast.makeText(MainActivity.this, "连接失败，请重试", Toast.LENGTH_LONG).show();
-															}
-														});
-													}
-													
-													
-
-													
-													
 												};
 											}).start();
 
@@ -582,7 +559,7 @@ public class MainActivity extends Activity {
 		
 		
 		
-		
+//		定时任务的点火器，每60s执行任务
 		 new Timer().scheduleAtFixedRate(new TimerTask() {
 			
 			@Override
@@ -608,18 +585,13 @@ public class MainActivity extends Activity {
 	
 	
 	
-	// 用来监听wifi的变化，改变标题栏的报告数量
+	// 用来监听wifi的变化，改变标题栏的报告数量，用来判断是否存在初始数据库
 	public void onResume() {
-		
 		super.onResume();
-
-
-
-
 		try {
-			new File(Environment.getExternalStorageDirectory() + "/wlantest/report/").mkdirs();
-			new File(Environment.getExternalStorageDirectory() + "/wlantest/current/").mkdirs();
-			File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
+			new File(Environment.getExternalStorageDirectory() + REPORT_DIR).mkdirs();
+			new File(Environment.getExternalStorageDirectory() + CURRENT_DIR).mkdirs();
+			File filetotal = new File(Environment.getExternalStorageDirectory() + REPORT_DIR);
 			if (filetotal.listFiles().length != 0) {
 				report_total.setText(""+filetotal.listFiles().length);
 				upload.setImageResource(R.drawable.upload1);
@@ -630,13 +602,39 @@ public class MainActivity extends Activity {
 				report_total.setText(""+filetotal.listFiles().length);
 				upload.setImageResource(R.drawable.uploaded);
 			}
+			downloader = new Downloader(MainActivity.this);
+			if (downloader.isDatabaseExisted()==false) {
+				Dialog dialog = new AlertDialog.Builder(MainActivity.this)
+					.setTitle("数据下载")
+					.setMessage("未找到数据库，是否下载？")
+					.setPositiveButton("下载", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							downloader.downloadDatabase();
+							db_version=1;
+							preferences =getSharedPreferences("version", MODE_PRIVATE);
+							Editor edit=preferences.edit();
+							edit.putInt("db_version", db_version);
+							edit.commit();
+						}})
+					.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}})
+					.create();
+				dialog.show();
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
-
 	}
 
+	
+	
+	
+//	上传当前手机内部已有报告的模块
 	public void uploadLog() {
 
 		new Thread(new Runnable() {
@@ -644,13 +642,10 @@ public class MainActivity extends Activity {
 			File file=new File(Environment.getExternalStorageDirectory()
 					+ "/wlantest/" + "/report/");
 			File[] files=file.listFiles();
-
 			@Override
 			public void run() 
 			{
 				try {
-					
-					
 					if (isNetworkConnected(MainActivity.this)==true)
 					{
 						URL url;
@@ -689,9 +684,8 @@ public class MainActivity extends Activity {
 									public void run() {
 										try {
 											files[i].delete();
-											File filetotal = new File(Environment.getExternalStorageDirectory() + "/wlantest/report/");
+											File filetotal = new File(Environment.getExternalStorageDirectory() + REPORT_DIR);
 											if (filetotal.listFiles().length != 0) 
-											
 											{
 												report_total.setText(""+filetotal.listFiles().length);
 												Log.v("test", "" + filetotal.listFiles().length);	
@@ -729,7 +723,6 @@ public class MainActivity extends Activity {
 							
 							try {
 								Thread.sleep(2000);
-								
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -764,22 +757,22 @@ public class MainActivity extends Activity {
 
 
 
-
+//连按两下返回键退出程序
 	        public boolean onKeyDown(int keyCode, KeyEvent event) {
-	                if (keyCode == KeyEvent.KEYCODE_BACK) {
-	                        if ((System.currentTimeMillis() - mExitTime) > 2000) {
+	                if (keyCode == KeyEvent.KEYCODE_BACK) 
+	                {
+	                        if ((System.currentTimeMillis() - mExitTime) > 2000) 
+	                        {
 	                                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
 	                                mExitTime = System.currentTimeMillis();
-
-	                        } else {
-	                        	
+	                        }
+//	                        相当于点击了“HOME”
+	                        else
+	                        {
 	                        	Intent intent=new Intent(Intent.ACTION_MAIN);
 	                        	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//android提示 如果是服务里调用，必须用new task标示;
 	                        	intent.addCategory(Intent.CATEGORY_HOME);//新建一个主屏幕的Intent就可以;
 	                        	startActivity(intent);
-
-	
-
 	                        }
 	                        return true;
 	                }
@@ -787,7 +780,8 @@ public class MainActivity extends Activity {
 	        }
 	        
 	        
-	        
+//	       判断此时是否可以连入网络
+//	        连入网络，是否代表可以正常进行上网？？连入CMCC返回的是什么？
 	        public boolean isNetworkConnected(Context context) {  
 	            if (context != null) {  
 	                ConnectivityManager mConnectivityManager = (ConnectivityManager) context  
@@ -802,6 +796,22 @@ public class MainActivity extends Activity {
 	        
 	      
 	
+	        
+	        
+//	        左软键的目录弹出
+	    	public boolean onCreateOptionsMenu(Menu menu) {
+	    		menu.add(Menu.NONE, MENU_UPDATE_DB, Menu.NONE, "检查更新");
+	    		return super.onCreateOptionsMenu(menu);
+	    	}
+	    	
+	        public boolean onOptionsItemSelected(MenuItem item) {
+	    		switch (item.getItemId()) {
+	        	case MENU_UPDATE_DB:
+	        		downloader.checkDBVersion(preferences.getInt("db_version", 1));
+	        		break;
+	        	}
+	        	return false;
+	        }
 
 
 }

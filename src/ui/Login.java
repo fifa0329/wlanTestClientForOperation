@@ -331,15 +331,14 @@ public class Login extends Activity{
 					new Thread(new Runnable() {
 						public void run() {
 							try {
+//								用户在这个页面上磨蹭的时间+3s，希望刚刚能够让wifi连接上，这样就能做到无感知完成任务
 								Thread.sleep(3000);
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							
 							WifiManager mWifiManager = (WifiManager)Login.this.getSystemService(Context.WIFI_SERVICE);
 							WifiInfo mWifiInfo = mWifiManager.getConnectionInfo();
-							
 							if(!mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED) || mWifiInfo.getSSID()==null)
 							{
 								Login.this.runOnUiThread(new Runnable() {
@@ -352,7 +351,6 @@ public class Login extends Activity{
 							}
 							else if(mWifiInfo.getSupplicantState().equals(SupplicantState.COMPLETED))
 							{
-								try{
 									if(mWifiInfo.getSSID().equals((String)flag))  
 									{
 										progressdialog.dismiss();
@@ -374,11 +372,6 @@ public class Login extends Activity{
 											}
 										});
 									}
-								}catch (NullPointerException e) {
-									// TODO: handle exception
-								}
-								
-
 							}
 							
 							
