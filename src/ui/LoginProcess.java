@@ -17,7 +17,6 @@ import com.example.testclient.R;
 import engine.AuthPortalCMCC;
 import engine.AuthPortalCT;
 import engine.AuthPortalStar;
-import engine.Logger;
 
 public class LoginProcess extends Activity{
 	TextView show;
@@ -178,7 +177,7 @@ public class LoginProcess extends Activity{
 			else if(carrier == MyApplication.STARBUCKS)
 			{
 				code=AuthPortalStar.getInstance().login(user, password);
-				result = (code == 1);
+				result = (code == -1);
 				description = AuthPortalStar.getInstance().getDescription(code);
 			}
 			final String desc = description;

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,16 +28,20 @@ import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
-
-import android.content.Context;
 import android.util.Log;
 
 public class AuthPortalStar {
-	private final static int RET_OTHER = -1;
+	private static final int LOGIN_FAILED = 0;
+	private final static int LOGIN_SUCCESS = -1;
 	private final static int RET_UNKNOWN = -2;
 	private final static int RET_ALREADY = -3;
-	private final static int SUCCESS = 1;
+	private static final int EXCEPTION_FAILED = -4;
+	private static final int GET_PASSWORD_SUCCESS = 1;
+	private static final int GET_PASSWORD_UNKNOWN = 2;
+	private static final int GET_PASSWORD_EXCEPTION = 3;
+	private static final int GET_PASSWORD_FAILED = 4                                        ;
 
+//如果我在百度后面多加了一个杠，可行吗？？？
 	private static String LOGIN_TEST_URL = "http://www.baidu.com";
 	private static String LOGIN_TEST_SIGNATURE = "news.baidu.com";
 	private static String LOGIN_REQUEST_SIGNATURE = "在星巴克享受免费无线上网";
@@ -47,7 +50,8 @@ public class AuthPortalStar {
 	private static String GET_PASSWORD_ACTION = "ck/";
 	private static String SUBMIT_ACTION = "u/";
 	private static AuthPortalStar instance = null;
-	private Pattern starbucksPattern;
+	private static String aimUrl;
+	private static Pattern starbucksPattern;
 	private String user;
 	private String password;
 
@@ -58,7 +62,9 @@ public class AuthPortalStar {
 	public static AuthPortalStar getInstance() {
 		if (instance == null) {
 			instance = new AuthPortalStar();
+			
 		}
+		aimUrl=getAimUrl(LOGIN_TEST_URL);
 		return instance;
 	}
 
@@ -69,13 +75,18 @@ public class AuthPortalStar {
 		case RET_ALREADY:
 			ret = "已经在线，无需重复登录（是否上次登录未下线？）";
 			break;
-		case SUCCESS:
+		case LOGIN_SUCCESS:
 			ret = "通过星巴克后台登录成功";
 			break;
 		case RET_UNKNOWN:
 			ret = "未知错误";
 			break;
-
+		case LOGIN_FAILED:
+			ret="登陆失败,是否输出了密码？";
+			break;
+		case EXCEPTION_FAILED:
+			ret="程序出现异常";
+			break;
 		}
 		Logger.getInstance().writeLog(
 				"Get description " + ret + " for code " + code);
@@ -90,10 +101,10 @@ public class AuthPortalStar {
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse response = null;
 			String output = null;
-			response = client.execute(new HttpGet(getCurUrl(LOGIN_TEST_URL)+SUBMIT_ACTION));
+			response = client.execute(new HttpGet(aimUrl));
 			output = EntityUtils.toString(response.getEntity(), "GBK");
 
-			Logger.getInstance().writeLog("Http Request:\n" + LOGIN_TEST_URL);
+			Logger.getInstance().writeLog("Http Request:\n" + aimUrl);
 			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 
 			if (output.contains(LOGIN_TEST_SIGNATURE)) {
@@ -101,13 +112,15 @@ public class AuthPortalStar {
 				return RET_ALREADY;
 			}
 
-			if (output.contains(LOGIN_REQUEST_SIGNATURE)) {
+			else if (output.contains(LOGIN_REQUEST_SIGNATURE) )
+			{
 
 				Logger.getInstance().writeLog("HTTP Response:\n" + output);
 
-				try {
-
-					HttpPost httpPost = new HttpPost(getCurUrl(LOGIN_TEST_URL)
+					Matcher starbucksMatcher = starbucksPattern.matcher(aimUrl);
+					starbucksMatcher.find();
+					String host = starbucksMatcher.group(0);
+					HttpPost httpPost = new HttpPost(host
 							+ SUBMIT_ACTION);
 					List<NameValuePair> params = new ArrayList<NameValuePair>();
 					params.add(new BasicNameValuePair("Mobile", user));
@@ -118,23 +131,31 @@ public class AuthPortalStar {
 							HTTP.UTF_8));
 					response = client.execute(httpPost);
 					output = EntityUtils.toString(response.getEntity(), "GBK");
-					Log.v("================================================================",
-							output);
+					Logger.getInstance().writeLog("Http Request:\n" + host
+							+ SUBMIT_ACTION);
+					Logger.getInstance().writeLog(output);
 					if (output.contains(LOGIN_SUCCESS_SIGNATURE)) {
 						Logger.getInstance().writeLog("Login success!");
-						return SUCCESS;
+						return LOGIN_SUCCESS;
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					else if(output.contains(LOGIN_REQUEST_SIGNATURE))
+					{
+						Logger.getInstance().writeLog("Login failed!");
+						return LOGIN_FAILED;
+//						典型：账号密码输错
+					}
 
-			} else {
+			}
+			else 
+			{
 				Logger.getInstance().writeLog("Can't get login page!");
 			}
 		} catch (Exception e) {
-			Logger.getInstance().writeLog(e.toString());
+			Logger.getInstance().writeLog("因为异常导致登陆失败"+e.toString());
 			e.printStackTrace();
+			return EXCEPTION_FAILED;
 		}
+		Logger.getInstance().writeLog("未知原因导致登陆失败");
 		return RET_UNKNOWN;
 	}
 
@@ -142,7 +163,7 @@ public class AuthPortalStar {
 	
 	
 	
-	public String getCurUrl(String next) {
+	public static String getAimUrl(String next) {
 		String currentUrl = null;
 		DefaultHttpClient httpClient = new DefaultHttpClient();
 		httpClient.setRedirectHandler(new RedirectHandler() {
@@ -167,20 +188,19 @@ public class AuthPortalStar {
 			response = httpClient.execute(httpget, context);
 			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) 
 			{
-				String location=response.getFirstHeader("Location").getValue();
 //				http://*
-				if(location.contains("://"))
+				if(response.getFirstHeader("Location").getValue().contains("://"))
 				{
-					next=response.getFirstHeader("Location").getValue().replace(" ", "%20");
-					getCurUrl(next);
+					next=MyUrlEncode.URLencoding(response.getFirstHeader("Location").getValue(),"utf-8");
+					getAimUrl(next);
 				}
 //				/abc/*
-				else if(location.startsWith("/"))
+				else if(response.getFirstHeader("Location").getValue().startsWith("/"))
 				{
 					HttpHost currentHost = (HttpHost) context
 							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-					next =currentHost.toURI() + response.getFirstHeader("Location").getValue().replace(" ", "%20");
-					getCurUrl(next);
+					next=MyUrlEncode.URLencoding(currentHost.toURI() + response.getFirstHeader("Location").getValue(),"utf-8");
+					getAimUrl(next);
 				}
 //				abc/*
 				else
@@ -192,19 +212,15 @@ public class AuthPortalStar {
 					currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
 							.getURI().toString() : (currentHost.toURI() + currentReq
 							.getURI());
-					int flag=lastIndex(currentUrl);
-					next=currentUrl.substring(0, flag);
-					next=next+response.getFirstHeader("Location").getValue().replace(" ", "%20");
-					getCurUrl(next);
+					next=currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+					next=MyUrlEncode.URLencoding(next+response.getFirstHeader("Location").getValue(),"utf-8");
+					getAimUrl(next);
 				}
-				
-				
-
 			}
 
 			else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 			{
-				
+				Logger.getInstance().writeLog("获得了一次终极目标");
 			}
 
 			
@@ -218,8 +234,12 @@ public class AuthPortalStar {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		/*
+		Matcher starbucksMatcher = starbucksPattern.matcher(next);
+		starbucksMatcher.find();
+		return starbucksMatcher.group(0);
+		*/
 		return next;
-
 	}
 
 	
@@ -235,89 +255,70 @@ public class AuthPortalStar {
 	
 	
 	
-	public void getDynamicPassword(String user) {
+	public int getDynamicPassword(String user) 
+	{
 		this.user = user;
 		try {
 			HttpClient client = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(getCurUrl(LOGIN_TEST_URL) + GET_PASSWORD_ACTION);
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("Mobile", user));
-			/* 添加请求参数到请求对象 */
-			httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-			HttpResponse response = client.execute(httpPost);
-			String output = stream2String(response.getEntity().getContent());
-			Logger.getInstance().writeLog(output);
-			Log.v("================================================================",
-					output);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			HttpResponse response = null;
+			String output = null;
+			response = client.execute(new HttpGet(aimUrl));
+			output = EntityUtils.toString(response.getEntity(), "GBK");
 
-	}
+			Logger.getInstance().writeLog("Http Request:\n" + aimUrl);
+			Logger.getInstance().writeLog("HTTP Response:\n" + output);
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	private String stream2String(InputStream istream) throws IOException {
-		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
-		StringBuilder total = new StringBuilder();
-		String line;
-		while ((line = r.readLine()) != null) {
-			total.append(line);
-		}
-		return total.toString();
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public int lastIndex(String s)
-	{
-		int index=-1;
-		int len = s.length();
-		for (int i = 0; i < len; i++) 
-		{
-			
-			if(s.charAt(i)=='/')
-			{
-				index=i;
+			if (output.contains(LOGIN_TEST_SIGNATURE)) {
+				Logger.getInstance().writeLog("Already loginned!Can't get portal page to get password!");
+				return RET_ALREADY;
 			}
+			else if (output.contains(LOGIN_REQUEST_SIGNATURE) )
+			{
+				Logger.getInstance().writeLog("HTTP Response:\n" + output);
+
+
+					Matcher starbucksMatcher = starbucksPattern.matcher(aimUrl);
+					starbucksMatcher.find();
+					String host = starbucksMatcher.group(0);
+					HttpPost httpPost = new HttpPost(host + GET_PASSWORD_ACTION);
+					List<NameValuePair> params = new ArrayList<NameValuePair>();
+					params.add(new BasicNameValuePair("Mobile", user));
+					/* 添加请求参数到请求对象 */
+					httpPost.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+			        response = client.execute(httpPost);
+			        output = EntityUtils.toString(response.getEntity(), "GBK");
+			        Logger.getInstance().writeLog(output);
+//			???首先我觉得这里这样判断获取密码成功有问题
+			        if(output.contains(LOGIN_REQUEST_SIGNATURE))
+			        {
+			        	Logger.getInstance().writeLog("获得密码成功！！！");
+			        	return GET_PASSWORD_SUCCESS;
+			        }
+//			        不出意外获得密码失败也是一样的返回页面
+			        else
+			        {
+			        	Logger.getInstance().writeLog("获得密码失败！！！");
+			        	return GET_PASSWORD_FAILED;
+			        }
+			}
+			else 
+			{
+				Logger.getInstance().writeLog("Can't get login page!");
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			Logger.getInstance().writeLog("因异常未能成功获取密码！！！"+e.toString());
+			return GET_PASSWORD_EXCEPTION;
 		}
-		return index;
+		Logger.getInstance().writeLog("因未知原因未能成功获取密码！！！");
+		return GET_PASSWORD_UNKNOWN;
 	}
+
 	
-		
-		
-		
-		
-		
-		
-		
-		
+	
+	
+	
 		
 		
 		

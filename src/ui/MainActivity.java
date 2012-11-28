@@ -167,12 +167,17 @@ public class MainActivity extends Activity {
 		to_starbucks.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				mApp.setCarrier(MyApplication.STARBUCKS);
-				Intent intent=new Intent();
-				intent.setClass(MainActivity.this, Login.class);
-				startActivity(intent);
+			public void onClick(View arg0) 
+			{
+				if((Boolean) arg0.getTag())
+				{
+					// TODO Auto-generated method stub
+					mApp.setCarrier(MyApplication.STARBUCKS);
+					Intent intent=new Intent();
+					intent.setClass(MainActivity.this, Login.class);
+					startActivity(intent);
+				}
+
 			}
 		});
 		
@@ -334,8 +339,8 @@ public class MainActivity extends Activity {
 						for (int i = 0; i < listResult.size(); i++) 
 						{
 							Log.v("scanresult", ""+listResult.get(i).toString());
-
-							if( (listResult.get(i).capabilities.equals("[ESS]")  || listResult.get(i).capabilities.equals("")) && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet"))
+//扫描不为公共运营商的AP
+							if( (listResult.get(i).capabilities.equals("[ESS]")  || listResult.get(i).capabilities.equals("")) && !listResult.get(i).SSID.equals((String)"CMCC") && !listResult.get(i).SSID.equals((String)"CMCC-EDU") && !listResult.get(i).SSID.equals((String)"ChinaNet") && !listResult.get(i).SSID.equals((String)"ChinaUnicom"))
 
 							{
 								HashMap<String, Object> result=new HashMap<String, Object>();
@@ -343,6 +348,7 @@ public class MainActivity extends Activity {
 								result.put("level", listResult.get(i).level);
 								text_opens.add(result);
 							}
+//							几大公共运营商
 							if( listResult.get(i).SSID.equals("CMCC"))
 							{
 								
@@ -401,7 +407,7 @@ public class MainActivity extends Activity {
 							}
 
 						}
-						
+//						以下是用来处理开放热点的情况的
 						if(text_opens.size()!=0)
 						{
 	

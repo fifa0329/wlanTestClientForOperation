@@ -116,6 +116,8 @@ public class AuthPortalCT {
 		return ret;
 	}
 	
+	
+//	用来判断是否可以正常连接百度
 	public boolean testConnection() {
 		try {
 			HttpResponse response = httpClient.execute(new HttpGet(LOGIN_TEST_URL));
@@ -273,7 +275,7 @@ public class AuthPortalCT {
 		}
 		return false;
 	}
-	
+	//验证码图片
 	public Bitmap getVerifyCodeImage() {
 		try {
 	        URL url = new URL("http://118.85.203.210:9010/wlan/img_code.jpg");

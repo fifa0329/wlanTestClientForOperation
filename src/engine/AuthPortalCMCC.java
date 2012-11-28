@@ -216,8 +216,8 @@ public class AuthPortalCMCC {
 		this.password = password;
 		try {
 
-			Log.v("========================================", getCurUrl(LOGIN_TEST_URL));
-
+//			Log.v("========================================", getCurUrl(LOGIN_TEST_URL));
+//			Log.v("========================================", getCurUrl("http://172.13.0.1:80/auth_index.php?client_mac=%20%200%2038187%2030%2081151&gate_ip=172.13.0.1&pre_url=http%3A%2F%2Fwww.baidu.com%2F"));
 			final HttpParams params = new BasicHttpParams();
 			// This line causes CMCC-EDU no response.
 			// HttpProtocolParams.setUserAgent(params, "G3WLAN");
@@ -444,6 +444,9 @@ public class AuthPortalCMCC {
 			}
 		});
 
+//		org.apache.http.client.methods.HttpGet.HttpGet(String uri)
+//		uri，在電腦术语中，统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。
+//		是字符串，但是是特殊的字符串，不能有invalid的字符
 		HttpGet httpget = new HttpGet(next);
 		BasicHttpContext context = new BasicHttpContext();
 		HttpResponse response;
@@ -475,8 +478,7 @@ public class AuthPortalCMCC {
 					currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
 							.getURI().toString() : (currentHost.toURI() + currentReq
 							.getURI());
-					int flag=lastIndex(currentUrl);
-					next=currentUrl.substring(0, flag);
+					next=currentUrl.substring(0, currentUrl.lastIndexOf('/'));
 					next=next+response.getFirstHeader("Location").getValue().replace(" ", "%20");
 					getCurUrl(next);
 				}
@@ -504,40 +506,10 @@ public class AuthPortalCMCC {
 		starbucksMatcher.find();
 		return starbucksMatcher.group(0);
 	}
-		
-		
-	
-
-	private String stream2String(InputStream istream) throws IOException {
-		BufferedReader r = new BufferedReader(new InputStreamReader(istream));
-		StringBuilder total = new StringBuilder();
-		String line;
-		while ((line = r.readLine()) != null) {
-			total.append(line);
-		}
-		return total.toString();
-	}
 	
 	
 	
 	
-	
-	
-	
-	public int lastIndex(String s)
-	{
-		int index=-1;
-		int len = s.length();
-		for (int i = 0; i < len; i++) 
-		{
-			
-			if(s.charAt(i)=='/')
-			{
-				index=i;
-			}
-		}
-		return index;
-	}
 
 
 }

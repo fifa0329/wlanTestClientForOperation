@@ -72,7 +72,6 @@ public class Login extends Activity{
 	private byte[] body;
 	private MyApplication mApp;
 	SharedPreferences preferences;
-
 	protected static final String GET_ID_URL="http://wuxiantao.sinaapp.com/devapi/getaccount.php";
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +88,8 @@ public class Login extends Activity{
 	public void init(){
 		Logger.getInstance().startLogger();
 
+		
+//		星巴克获取密码模块
 		get_password=(Button) findViewById(R.id.get_password);
 		get_password.setOnClickListener(new OnClickListener() {
 			
