@@ -8,19 +8,10 @@ public class MyApplication extends Application {
 	public static int CMCC = 0;
 	public static int CHINANET = 1;
 
-	
-
 	private int carrier;
 	private String user;
 	private String password;
 
-	
-	
-	
-	
-	
-	
-	
 	public int getCarrier() {
 		return carrier;
 	}
@@ -28,7 +19,6 @@ public class MyApplication extends Application {
 	public void setCarrier(int carrier) {
 		this.carrier = carrier;
 	}
-	
 
 	public String getUser() {
 		return user;
@@ -45,11 +35,5 @@ public class MyApplication extends Application {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-
-
-	
-	
-	
 
 }

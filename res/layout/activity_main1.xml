@@ -191,13 +191,10 @@
                 android:src="@drawable/start_test2" />
         </TableRow>
     </TableRow>
-    
-    
-    
+
     <ImageView android:src="@drawable/cut_off_rule" />
-    
-    
-        <TableRow
+
+    <TableRow
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="80" >
@@ -210,8 +207,7 @@
             <ImageView
                 android:id="@+id/view_starbucks"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                 />
+                android:layout_height="match_parent" />
         </TableRow>
 
         <TableRow

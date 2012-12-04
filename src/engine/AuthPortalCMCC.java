@@ -1,36 +1,20 @@
 package engine;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseFactory;
-import org.apache.http.HttpStatus;
 import org.apache.http.ParseException;
-import org.apache.http.ProtocolException;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.RedirectHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionOperator;
 import org.apache.http.conn.OperatedClientConnection;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.DefaultClientConnection;
 import org.apache.http.impl.conn.DefaultClientConnectionOperator;
@@ -43,16 +27,12 @@ import org.apache.http.message.BasicLineParser;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
-
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class AuthPortalCMCC {
 	private final static int RET_OTHER = -1;
@@ -65,9 +45,7 @@ public class AuthPortalCMCC {
 	private static String LOGIN_INPUT_PATTERN = "<input.*?name=\"(.*?)\".*?value=\"(.*?)\".*?>";
 	private static String LOGIN_RESPONSE_CODE_PATTERN = "cmcccs\\|login_res\\|(.*?)\\|";
 	private static String LOGOUT_RESPONSE_CODE_PATTERN = "cmcccs\\|offline_res\\|(.*?)\\|";
-
 	private static String STARBUCKS_PATTERN="http://.*?/";
-
 	private static AuthPortalCMCC instance = null;
 	private String nextAction = null;
 	private String user = "";
@@ -76,8 +54,7 @@ public class AuthPortalCMCC {
 	private Pattern inputPattern = null;
 	private Pattern loginCodePattern = null;
 	private Pattern logoutCodePattern = null;
-
-	private Pattern starbucksPattern;
+	private Pattern starbucksPattern=null;
 	
 	private AuthPortalCMCC() {
 		formPattern = Pattern.compile(LOGIN_FORM_PATTERN, Pattern.DOTALL);
@@ -418,97 +395,7 @@ public class AuthPortalCMCC {
 
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	public String getCurUrl(String next) {
-		String currentUrl = null;
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		httpClient.setRedirectHandler(new RedirectHandler() {
-
-			@Override
-			public boolean isRedirectRequested(HttpResponse response,
-					HttpContext context) {
-				return false;
-			}
-
-			@Override
-			public URI getLocationURI(HttpResponse response, HttpContext context)
-					throws ProtocolException {
-				return null;
-			}
-		});
-
-//		org.apache.http.client.methods.HttpGet.HttpGet(String uri)
-//		uri，在電腦术语中，统一资源标识符（Uniform Resource Identifier，或URI)是一个用于标识某一互联网资源名称的字符串。
-//		是字符串，但是是特殊的字符串，不能有invalid的字符
-		HttpGet httpget = new HttpGet(next);
-		BasicHttpContext context = new BasicHttpContext();
-		HttpResponse response;
-		try {
-			response = httpClient.execute(httpget, context);
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_MOVED_TEMPORARILY) 
-			{
-//				http://*
-				if(response.getFirstHeader("Location").getValue().contains("://"))
-				{
-					next=response.getFirstHeader("Location").getValue().replace(" ", "%20");
-					getCurUrl(next);
-				}
-//				/abc/*
-				else if(response.getFirstHeader("Location").getValue().startsWith("/"))
-				{
-					HttpHost currentHost = (HttpHost) context
-							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-					next =currentHost.toURI() + response.getFirstHeader("Location").getValue().replace(" ", "%20");
-					getCurUrl(next);
-				}
-//				abc/*
-				else
-				{
-					HttpUriRequest currentReq = (HttpUriRequest) context
-							.getAttribute(ExecutionContext.HTTP_REQUEST);
-					HttpHost currentHost = (HttpHost) context
-							.getAttribute(ExecutionContext.HTTP_TARGET_HOST);
-					currentUrl = (currentReq.getURI().isAbsolute()) ? currentReq
-							.getURI().toString() : (currentHost.toURI() + currentReq
-							.getURI());
-					next=currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-					next=next+response.getFirstHeader("Location").getValue().replace(" ", "%20");
-					getCurUrl(next);
-				}
-				
-				
-
-			}
-
-			else if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-			{
-			}
-
-			
-			
-
-
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Matcher starbucksMatcher = starbucksPattern.matcher(next);
-		starbucksMatcher.find();
-		return starbucksMatcher.group(0);
-	}
-	
-	
-	
+		
 	
 
 
