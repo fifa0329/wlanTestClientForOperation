@@ -55,7 +55,6 @@ public class AuthPortalGen {
 		hostPattern = Pattern.compile(HOST_PATTERN, Pattern.DOTALL);
 		Logger.getInstance().writeLog("此时执行了构造函数");
 		aimUrl = getAimUrl(LOGIN_TEST_URL);
-//		aimURL 就是 host
 		Matcher hostMatcher = hostPattern.matcher(aimUrl);
 		hostMatcher.find();
 		host=hostMatcher.group(0);
